@@ -1,0 +1,13 @@
+{
+  "name": "@strata/mediawiki-skin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "STRATA skin for MediaWiki 1.39+ — reading-first, LaTeX-editorial",
+  "scripts": {
+    "sync:tokens": "node scripts/sync-tokens.mjs",
+    "build": "node scripts/sync-tokens.mjs"
+  },
+  "dependencies": {
+    "@strata/tokens": "workspace:*"
+  }
+}

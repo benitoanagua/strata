@@ -1,0 +1,69 @@
+{
+  "name": "Strata",
+  "version": "1.0.0",
+  "author": ["STRATA Design System"],
+  "url": "https://github.com/strata-design-system",
+  "descriptionmsg": "strata-skin-desc",
+  "namemsg": "skinname-strata",
+  "license-name": "MIT",
+  "type": "skin",
+  "requires": {
+    "MediaWiki": ">= 1.39.0"
+  },
+  "ValidSkinNames": {
+    "strata": {
+      "class": "SkinMustache",
+      "args": [
+        {
+          "name": "strata",
+          "responsive": true,
+          "menus": [
+            "user-page",
+            "notifications",
+            "associated-pages",
+            "variants",
+            "views",
+            "actions",
+            "user-interface-preferences",
+            "languages"
+          ],
+          "messages": [
+            "sitetitle",
+            "search",
+            "otherlanguages",
+            "tagline",
+            "navigation-heading"
+          ],
+          "styles": ["skins.strata.styles"]
+        }
+      ]
+    }
+  },
+  "MessagesDirs": {
+    "Strata": ["i18n"]
+  },
+  "ResourceModules": {
+    "skins.strata.styles": {
+      "class": "MediaWiki\\ResourceLoader\\SkinModule",
+      "targets": ["desktop", "mobile"],
+      "features": {
+        "normalize": true,
+        "elements": true,
+        "content-tables": true,
+        "content-links": true,
+        "content-media": true,
+        "toc": true
+      },
+      "styles": [
+        "resources/strata-fonts.css",
+        "resources/strata-tokens.css",
+        "resources/skin.css"
+      ]
+    }
+  },
+  "ResourceFileModulePaths": {
+    "localBasePath": "",
+    "remoteSkinPath": "Strata"
+  },
+  "manifest_version": 2
+}

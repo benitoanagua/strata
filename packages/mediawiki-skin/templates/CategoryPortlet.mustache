@@ -1,0 +1,20 @@
+{{#is-article}}
+<div id="catlinks" class="catlinks" data-mw="interface">
+	{{#data-category-normal}}
+	<div id="{{id}}" class="{{class}} strata-catlinks">
+		<span class="strata-catlinks-label">{{msg-categories}}</span>
+		<ul>{{#array-items}}{{>ListItem}}{{/array-items}}</ul>
+		{{{html-after-portal}}}
+	</div>
+	{{/data-category-normal}}
+	{{^data-category-normal}}
+	<p class="strata-catlinks strata-catlinks--empty">{{msg-strata-no-categories}}</p>
+	{{/data-category-normal}}
+	{{#data-category-hidden}}
+	<div id="{{id}}" class="{{class}} strata-catlinks">
+		<ul>{{#array-items}}{{>ListItem}}{{/array-items}}</ul>
+		{{{html-after-portal}}}
+	</div>
+	{{/data-category-hidden}}
+</div>
+{{/is-article}}

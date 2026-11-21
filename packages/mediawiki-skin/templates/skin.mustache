@@ -1,0 +1,77 @@
+<div id="mw-wrapper" class="strata-skin">
+	<header id="mw-header" class="strata-header">
+		<div id="p-logo" class="mw-portlet" role="banner">
+			<a href="{{link-mainpage}}" class="strata-brand">
+			{{#data-logos}}
+				{{#icon}}<img src="{{.}}" width="40" height="40" alt="">{{/icon}}
+				{{#wordmark}}<img src="{{src}}" width="{{width}}" height="{{height}}">{{/wordmark}}
+				{{^wordmark}}<span class="strata-site-name">{{msg-sitetitle}}</span>{{/wordmark}}
+			{{/data-logos}}
+			</a>
+			{{#visual-header}}
+			<p class="strata-tagline">{{{.}}}</p>
+			{{/visual-header}}
+			{{^visual-header}}
+			<p class="strata-tagline">{{msg-tagline}}</p>
+			{{/visual-header}}
+		</div>
+		{{#data-search-box}}
+		<form action="{{form-action}}" role="search" class="mw-portlet" id="p-search">
+			<input type="hidden" name="title" value="{{page-title}}">
+			<label class="screen-reader-only" for="searchInput">{{msg-search}}</label>
+			{{{html-input}}}
+			{{{html-button-search}}}
+		</form>
+		{{/data-search-box}}
+		<nav id="strata-topnav" aria-label="{{msg-navigation-heading}}">
+			{{#data-portlets-sidebar.data-portlets-first}}{{>Portlet}}{{/data-portlets-sidebar.data-portlets-first}}
+		</nav>
+	</header>
+
+	<div class="strata-body">
+		<aside id="mw-navigation" class="strata-sidebar" aria-label="{{msg-navigation-heading}}">
+			{{#data-portlets-sidebar.array-portlets-rest}}{{>Portlet}}{{/data-portlets-sidebar.array-portlets-rest}}
+			{{#data-portlets.data-languages}}{{>Portlet}}{{/data-portlets.data-languages}}
+		</aside>
+
+		<main class="strata-content">
+			<div id="siteNotice">{{{html-site-notice}}}</div>
+			{{{html-user-message}}}
+			<div class="mw-indicators mw-body-content">
+			{{#array-indicators}}
+			<div id="{{id}}" class="{{class}}">{{{html}}}</div>
+			{{/array-indicators}}
+			</div>
+			{{{html-title-heading}}}
+			<div id="siteSub" class="strata-subtitle">{{{html-subtitle}}}{{{html-undelete-link}}}</div>
+			<div class="mw-body-content">
+				{{{html-body-content}}}
+				<div class="visualClear"></div>
+				{{#data-portlets}}
+				{{>CategoryPortlet}}
+				{{/data-portlets}}
+			</div>
+			{{{html-after-content}}}
+
+			<footer id="strata-footer" class="strata-footer">
+				<div id="user-tools-footer">
+					{{#data-portlets}}
+					{{#data-user-page}}{{>Portlet}}{{/data-user-page}}
+					{{#data-notifications}}{{>Portlet}}{{/data-notifications}}
+					{{#data-user-interface-preferences}}{{>Portlet}}{{/data-user-interface-preferences}}
+					{{#data-user-menu}}{{>Portlet}}{{/data-user-menu}}
+					{{/data-portlets}}
+				</div>
+				<div id="page-tools-footer">
+					{{#data-portlets}}
+					{{#data-associated-pages}}{{>Portlet}}{{/data-associated-pages}}
+					{{#data-variants}}{{>Portlet}}{{/data-variants}}
+					{{#data-views}}{{>Portlet}}{{/data-views}}
+					{{#data-actions}}{{>Portlet}}{{/data-actions}}
+					{{/data-portlets}}
+				</div>
+				{{#data-footer}}{{>Footer}}{{/data-footer}}
+			</footer>
+		</main>
+	</div>
+</div>
