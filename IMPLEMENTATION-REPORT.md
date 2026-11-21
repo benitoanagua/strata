@@ -1,132 +1,28 @@
-# STRATA Design System — Informe de implementación
+# STRATA Design System — Implementation report
 
-> Estado: proyecto funcional de extremo a extremo, con validaciones automatizadas y controles de calidad integrados.
+## Current architecture
 
----
+- pnpm + Turborepo monorepo.
+- `@strata/tokens` is the source of design tokens and generated CSS.
+- `@strata/core` contains shared contracts and theme utilities.
+- `@strata/components` contains publishable Lit Web Components and declaration files.
+- `apps/catalog-svelte` is the internal Svelte playground.
+- `@strata/testing` contains unit, contract, browser and accessibility tests.
 
-## Implementado
+## Component catalog
 
-### Estructura / build
+The Svelte app consumes the existing `@strata/components` package and canonical `STRATA_COMPONENT_CATALOG`. Its typed registry describes examples and control metadata; it does not implement component behavior or copy component styles.
 
-- `@strata/components` emite archivos `.d.ts` mediante `vite-plugin-dts`.
-- La configuración de Vite está consolidada en `vite.config.mts`.
-- Storybook resuelve `@strata/tokens/styles.css` mediante el paquete publicado, sin alias frágiles.
-- No se mantienen capas de compatibilidad sin consumidores.
+The canvas mounts the registered custom element and assigns properties directly to its DOM node. This preserves booleans and typed property values rather than serializing them into attributes. The controls support text, boolean, number and select types, with reset to defaults, background/surface modes and responsive viewports.
 
-### Tokens
+## STRATA visual laws
 
-- Añadidos los tokens semánticos faltantes: `actionPrimary`, `surfaceDefault`, `surfaceSubtle` en light y dark.
-- Normalizada la nomenclatura de grises (`gray-100`, `gray-200`, etc.).
-- `Divider` y `StrataFoundation` utilizan tokens de escala definidos.
-- Las referencias tipográficas utilizan `--strata-font-sans` y `--strata-font-mono`.
-- El validador comprueba que todos los tokens estructurales cumplan las leyes del sistema.
+- Monochrome establishes structure; spectrum colors remain semantic.
+- Source Sans 3 is the UI family; Source Code Pro is reserved for data and numeric alignment.
+- Component geometry follows the Scale Law.
+- The catalog imports the published token stylesheet and component stylesheet, and uses the existing semantic CSS variables.
+- Carbon via `iconify-icon` remains the only permitted icon collection.
 
-### Componentes / tipado
+## Validation
 
-- Corregido `HTMLElementTagNameMap` y el mapa de exports de componentes.
-- Corregidas rutas e imports de los item-components.
-- `TitleRenderer` genera declaraciones correctamente; se eliminó la capa de tema redundante porque los tokens CSS se heredan directamente.
-- `RadioGroup` se expone como `StrataRadioGroup`.
-- Los colores de interacción de componentes se resuelven mediante tokens STRATA.
-- Eliminado código de compatibilidad sin consumidores, mixins sin uso, tipos internos huérfanos y herramientas de migración que ya no forman parte del producto.
-
-### Storybook
-
-- Storybook usa `@storybook/web-components-vite` como framework y `@storybook/web-components` como renderer nativo.
-- Las stories usan tagged template literals de Lit (`html`) y custom elements directamente.
-- Los bindings de propiedades complejas/booleanas se realizan mediante property bindings de Lit.
-- El Shadow DOM de los componentes se conserva intacto; Storybook no depende de estilos inyectados en el documento para representar los componentes.
-- Las pruebas de Playwright esperan la finalización de `updateComplete` antes de validar accesibilidad o regresión visual.
-- Las stories de componentes contenedores incluyen contenido real en sus slots; no se consideran válidas stories que rendericen únicamente un contenedor visualmente vacío.
-
-- Catálogo canónico de 48 componentes.
-- 105 historias indexadas.
-- Addons de Storybook declarados explícitamente según las capacidades utilizadas: accesibilidad, backgrounds, controls, docs, toolbars y viewport.
-- Eliminada la dependencia de `@storybook/addon-actions` a través de `addon-essentials`, evitando la cadena que introducía `uuid@9.0.1`.
-
-### Testing
-
-- Tests unitarios de registro y comportamiento básico de componentes.
-- Tests de contratos para Scale Law y otros invariantes del sistema.
-- Playwright apunta directamente al iframe de cada historia.
-- El proyecto mobile utiliza Chromium para mantener la ejecución reproducible en CI.
-- El test de iconografía espera la hidratación de custom elements.
-- Accesibilidad automatizada sobre las historias de componentes, no únicamente sobre la página de introducción.
-- Regresión visual para introducción, Scale Law y catálogo de componentes.
-
-### CI / calidad
-
-- Pipeline de CI: auditoría, seguridad de dependencias, formato, lint, typecheck, tests, build, Storybook, accesibilidad, regresión visual y changesets.
-- `pnpm audit --audit-level=high` bloquea vulnerabilidades altas o críticas sin convertir advisories moderadas no explotables en fallos de build.
-- `format:check` forma parte del pipeline obligatorio.
-- Changesets configurado para versionado y publicación.
-
----
-
-## Cierre de gaps
-
-### Seguridad de dependencias
-
-El único advisory moderado identificado en el informe original procedía de `uuid@9.0.1`, arrastrado por `@storybook/addon-actions` mediante `@storybook/addon-essentials`. La configuración fue simplificada para declarar explícitamente solo los addons utilizados y eliminar esa cadena de dependencias.
-
-### Accesibilidad
-
-La cobertura dejó de limitarse a la introducción. El test consulta el índice de Storybook y ejecuta axe sobre todas las historias de componentes disponibles, fallando ante cualquier violación de impacto `critical`.
-
-### Calidad de formato
-
-El formato ahora es un criterio explícito de CI mediante `pnpm format:check`. Los archivos fuente deben permanecer formateables sin depender de exclusiones específicas de componentes.
-
-### Código y configuración
-
-Se eliminaron archivos, scripts, referencias y dependencias sin consumidores. El árbol de configuración queda orientado únicamente al flujo actual de STRATA.
-
-### Regresión visual
-
-La estrategia de snapshots sigue separada del código fuente: los baselines se generan con `pnpm test:visual:update` cuando cambia intencionalmente la representación visual. El CI ejecuta la regresión contra los baselines disponibles y no genera snapshots silenciosamente durante una validación normal.
-
----
-
-## Catálogo y madurez
-
-- **48 entradas canónicas** en `STRATA_COMPONENT_CATALOG`.
-- La madurez de los componentes se determina mediante `docs/COMPONENT-STATUS.md`.
-- Los componentes complejos requieren completar el checklist antes de promoverse.
-
----
-
-## Leyes STRATA
-
-- **Scale Law:** validada mediante tokens y tests.
-- **Typography:** Source Sans 3 + Source Code Pro, con numerales tabulares en `.mono`.
-- **Monochrome:** base monocromática con color semántico reservado.
-- **Spectrum:** siete familias semánticas.
-- **Borders:** exclusivamente mediante tokens.
-- **Elevation:** sombras convencionales definidas por tokens.
-- **Navigation:** estado activo mediante color, tipografía y `aria-current`.
-- **Iconography:** `@iconify-json/carbon` mediante `iconify-icon`.
-
----
-
-## Comandos de validación
-
-```bash
-pnpm install
-pnpm format:check
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
-pnpm build:storybook
-pnpm test:a11y
-pnpm test:visual
-pnpm audit
-pnpm check
-pnpm test:all
-```
-
----
-
-## Nota de ejecución
-
-La estructura y configuración fueron revisadas durante esta limpieza. La ejecución completa de los comandos depende de instalar las dependencias con `pnpm install`; el entorno de trabajo utilizado para esta revisión no dispone de acceso al registry necesario para descargar el gestor y sus dependencias.
+The repository has CI tasks for audit, lint, typecheck, unit/contract tests, build, browser checks and accessibility. The full local validation has not been executed in this environment because outbound access to the package registry is unavailable; the CI run is the verification gate.
