@@ -9,7 +9,8 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "pnpm --filter @strata/catalog dev -- --host 127.0.0.1",
+    command:
+      "pnpm --filter @strata/catalog preview --host 127.0.0.1 --port 5174 --strictPort",
     url: "http://127.0.0.1:5174",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

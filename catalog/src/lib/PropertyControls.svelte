@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ControlValue, PropControl } from "./registry";
+  import type { ControlValue, PropControl } from "./componentRegistry";
   let { controls, values, onValueChange, onReset }: {
     controls: readonly PropControl[];
     values: Record<string, ControlValue>;
@@ -26,7 +26,7 @@
         </select>
       {:else}
         <input id={"prop-" + control.name} type={control.type} value={String(values[control.name])}
-          onchange={(event) => onValueChange(control.name, control.type === "number" ? Number(event.currentTarget.value) : event.currentTarget.value)} />
+          oninput={(event) => onValueChange(control.name, control.type === "number" ? Number(event.currentTarget.value) : event.currentTarget.value)} />
       {/if}
     </div>
   {/each}

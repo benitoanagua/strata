@@ -4,7 +4,9 @@ test.describe("STRATA responsive layout", () => {
   test("catalog canvas remains usable at mobile width", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
-    await expect(page.getByRole("navigation", { name: "Component navigation" })).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "Component navigation" }),
+    ).toBeVisible();
     await expect(page.locator(".preview-stage strata-button")).toBeVisible();
     await expect(page.locator("body")).toHaveJSProperty("scrollWidth", 390);
   });
