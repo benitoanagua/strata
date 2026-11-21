@@ -14,22 +14,23 @@ STRATA is a contemporary editorial design system for mobile-first interfaces. It
 ## Architecture
 
 ```text
-apps/storybook
+apps/catalog-svelte
 packages/tokens
 packages/core
 packages/components
 packages/testing
 tooling
 docs
-tests
 ```
 
 ## Commands
 
 ```bash
 pnpm install
-pnpm storybook
+pnpm catalog
 pnpm check
 pnpm test:visual
 pnpm test:a11y
 ```
+
+The Svelte catalog is a development-only workspace app. Published Web Components remain in `@strata/components`.
