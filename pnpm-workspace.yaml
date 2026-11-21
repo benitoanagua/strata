@@ -1,4 +1,4 @@
 packages:
-  - apps/*
+  - catalog
   - packages/*
   - tooling/*

@@ -6,7 +6,7 @@
 - `@strata/tokens` is the source of design tokens and generated CSS.
 - `@strata/core` contains shared contracts and theme utilities.
 - `@strata/components` contains publishable Lit Web Components and declaration files.
-- `apps/catalog-svelte` is the internal Svelte playground.
+- `catalog` is the internal Svelte playground.
 - `@strata/testing` contains unit, contract, browser and accessibility tests.
 
 ## Component catalog

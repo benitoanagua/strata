@@ -18,7 +18,8 @@
     previewHost.replaceChildren();
     const element = document.createElement(selectedEntry.tagName) as HTMLElement & Record<string, unknown>;
     for (const [name, value] of Object.entries(values)) element[name] = value;
-    if (selectedEntry.slotContent) element.textContent = selectedEntry.slotContent;
+    if (selectedEntry.slotHtml) element.innerHTML = selectedEntry.slotHtml;
+    else if (selectedEntry.slotContent) element.textContent = selectedEntry.slotContent;
     previewHost.append(element);
   }
   $effect(() => { selectedId; values; if (previewHost) renderPreview(); });

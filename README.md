@@ -33,4 +33,4 @@ pnpm test:visual
 pnpm test:a11y
 ```
 
-The Svelte catalog is a private development tool at the repository root. Published Web Components remain in `@strata/components`. Published Web Components remain in `@strata/components`.
+The Svelte catalog is a private development tool at the repository root. Published Web Components remain in `@strata/components`.
