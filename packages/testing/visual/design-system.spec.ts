@@ -1,35 +1,33 @@
-import { waitForStoryReady } from "./story-ready.js";
 import { test, expect } from "@playwright/test";
 
-test.describe("STRATA visual contracts", () => {
-  test("scale law presentation is available", async ({ page }) => {
-    await page.goto(
-      "/iframe.html?id=foundations-scale-law--structural&viewMode=story",
-    );
-    await expect(
-      page.getByText("Physical scale determines structural weight."),
-    ).toBeVisible();
-    const surfaces = page.locator("strata-surface");
-    await expect(surfaces).toHaveCount(5);
+test.describe("STRATA component contracts in the catalog", () => {
+  test("uses the canonical canvas and a Lit button", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".canvas")).toBeVisible();
+    await expect(page.locator("strata-button")).toHaveJSProperty("label", "Continue");
+    await expect(page.locator("strata-button")).toHaveJSProperty("variant", "outlined");
   });
 
-  test("spectrum exposes exactly seven semantic families", async ({ page }) => {
-    await page.goto(
-      "/iframe.html?id=foundations-spectrum--semantic&viewMode=story",
-    );
-    await expect(page.locator("strata-badge")).toHaveCount(7);
+  test("controls update DOM properties, including booleans", async ({ page }) => {
+    await page.goto("/");
+    await page.getByLabel("Label").fill("Save changes");
+    await expect(page.locator("strata-button")).toHaveJSProperty("label", "Save changes");
+    await page.getByLabel("Disabled").check();
+    await expect(page.locator("strata-button")).toHaveJSProperty("disabled", true);
   });
 
-  test("components use Carbon icons directly", async ({ page }) => {
-    await page.goto(
-      "/iframe.html?id=components-overview--catalog&viewMode=story",
-    );
-    const icons = page.locator("iconify-icon");
-    await expect(icons.first()).toBeVisible();
-    const count = await icons.count();
-    expect(count).toBeGreaterThan(0);
-    for (let i = 0; i < count; i += 1) {
-      await expect(icons.nth(i)).toHaveAttribute("icon", /^carbon:/);
-    }
+  test("navigation selects another registered component", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /Badge/ }).click();
+    await expect(page.getByRole("heading", { name: "Badge." })).toBeVisible();
+    await expect(page.locator("strata-badge")).toContainText("In review");
+  });
+
+  test("surface and viewport selectors work", async ({ page }) => {
+    await page.goto("/");
+    await page.getByLabel("Canvas surface").selectOption("dark");
+    await expect(page.locator(".canvas")).toHaveAttribute("data-theme", "dark");
+    await page.getByLabel("Canvas viewport").selectOption("mobile");
+    await expect(page.locator(".preview-viewport")).toHaveClass(/viewport-mobile/);
   });
 });
