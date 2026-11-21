@@ -6,16 +6,15 @@ STRATA treats design rules as testable contracts.
 
 ```bash
 pnpm test                 # unit + contract tests
-pnpm test:visual          # Playwright visual regression
-pnpm test:visual:update   # intentionally update visual baselines
+pnpm test:visual          # browser smoke and visual contract checks
 pnpm test:a11y            # axe accessibility checks
 pnpm audit                # tokens + design laws + icon policy
 ```
 
-## Visual regression
+## Browser tests
 
-Baselines live beside the Playwright test suite under `__screenshots__/`. A visual change must be intentional and reviewed. The baseline command is never used by CI.
+Playwright starts the Svelte catalog and verifies its component canvas, responsive viewports, controls and rendered Lit elements. Tests should assert design-system behavior rather than implementation-specific catalog markup where possible.
 
 ## Accessibility
 
-Critical axe violations fail CI. Keyboard/focus behavior should also be represented in component stories.
+Critical axe violations fail CI. Keyboard/focus behavior and accessible labels are tested alongside component contracts.
