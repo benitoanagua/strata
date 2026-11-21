@@ -1,11 +1,11 @@
 @layer base {
   :root {
-    font-family: var(--strata-font-sans);
+    font-family: var(--strata-font-serif);
     color: var(--strata-color-text-primary);
     background: var(--strata-color-surface-page);
   }
   html {
-    font-family: var(--strata-font-sans);
+    font-family: var(--strata-font-serif);
     -webkit-font-smoothing: antialiased;
   }
   body {
@@ -13,7 +13,7 @@
     min-height: 100vh;
     background: var(--strata-color-surface-page);
     color: var(--strata-color-text-primary);
-    font-family: var(--strata-font-sans);
+    font-family: var(--strata-font-serif);
   }
   *,
   *::before,

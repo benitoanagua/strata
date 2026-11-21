@@ -17,7 +17,7 @@ export class StrataPagination extends LitElement {
       border-radius: var(--strata-radius-small);
       background: transparent;
       color: var(--strata-color-text-primary);
-      font: 500 13px var(--strata-font-sans);
+      font: 500 13px var(--strata-font-mono);
       cursor: pointer;
     }
     .strata-pagination__page[aria-current="page"] {

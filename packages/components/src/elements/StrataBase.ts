@@ -95,6 +95,7 @@ export const strataComponentStyles = css`
     list-style: none;
     align-items: center;
     flex-wrap: wrap;
+    font: 500 12px/1.4 var(--strata-font-mono);
   }
   .strata-control-group {
     display: flex;
@@ -239,6 +240,7 @@ export const strataComponentStyles = css`
     padding: 4px 8px;
     border-radius: var(--strata-component-radius);
     background: var(--strata-color-surface-subtle);
+    font: 500 12px/1 var(--strata-font-mono);
   }
   .strata-list {
     display: grid;
@@ -287,6 +289,16 @@ export const strataComponentStyles = css`
   .strata-stepper button {
     width: 32px;
     height: 32px;
+  }
+  .strata-stepper__value {
+    min-width: 2ch;
+    text-align: center;
+    font: 600 14px/1 var(--strata-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .strata-number-field__input {
+    font-family: var(--strata-font-mono);
+    font-variant-numeric: tabular-nums;
   }
   @keyframes strata-spin {
     to {

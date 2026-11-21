@@ -1,12 +1,19 @@
 @import "@strata/tokens/styles.css";
 
 :root {
-  font-family: var(--strata-font-sans);
+  font-family: var(--strata-font-serif);
   color: var(--strata-color-text-primary);
   background: var(--strata-color-surface-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+.sidebar,
+.topbar,
+.section-toolbar,
+.controls-panel,
+.page-footer {
+  font-family: var(--strata-font-sans);
 }
 * {
   box-sizing: border-box;
@@ -17,6 +24,7 @@ body {
   min-height: 100vh;
   background: var(--strata-color-surface-page);
   color: var(--strata-color-text-primary);
+  font-family: var(--strata-font-serif);
 }
 button,
 input,

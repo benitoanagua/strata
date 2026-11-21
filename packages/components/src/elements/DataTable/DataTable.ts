@@ -24,6 +24,12 @@ export class StrataDataTable extends LitElement {
       padding: 10px;
       border-bottom: 1px solid var(--strata-color-border-subtle);
     }
+    td.numeric,
+    th.numeric {
+      font-family: var(--strata-font-mono);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
     tbody tr:hover {
       background: var(--strata-color-gray-50);
     }
