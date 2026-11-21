@@ -6,18 +6,16 @@
 
 - Typecheck: corrected global element type map and item-component exports in `packages/components`.
 - Removed the redundant theme-aware mixin; components now inherit STRATA CSS tokens directly.
-- `@strata/components` now emits declaration files via `vite-plugin-dts` so downstream packages typecheck against a real `types` entry.
-- Tokens: added missing semantic tokens (`actionPrimary`, `surfaceDefault`, `surfaceSubtle`) and standardized gray naming (`gray-100`). All tokens referenced in code are now defined in the single source of truth.
-- `Divider`/`StrataFoundation` use scale-border tokens instead of an undefined `--strata-border-thin`; `divider-double` token reference corrected.
-- Theme colors used by Accordion/Carousel/Modal/Overlay map to STRATA tokens via semantic STRATA CSS tokens.
-- Component unit tests added (element registration + Button/NavItem behavior) under jsdom.
-- Playwright runs against the Storybook iframe and uses a Chromium mobile project (works without WebKit system deps); visual baselines established and passing.
-- Storybook build fixed by removing the tokens src alias that broke the `styles.css` subpath.
-- Removed the dead root `.storybook` configuration.
+- `@strata/components` emits declaration files via `vite-plugin-dts`.
+- Tokens: added missing semantic tokens and standardized gray naming.
+- Divider and foundation components use defined scale-border tokens.
+- Component unit tests cover registration and baseline behavior.
 
 ### Added
 
-- GitHub Actions CI covering audit, lint, typecheck, unit tests, build, Storybook build, a11y, visual regression and Changesets.
+- Internal Svelte component catalog with live property controls, surface and viewport selectors.
+- Browser and accessibility checks against the Svelte catalog.
+- GitHub Actions CI covering audit, lint, typecheck, tests, build and Changesets.
 - `.changeset/config.json`.
 
 ## 2.5.0
@@ -26,10 +24,9 @@
 
 - Expanded the canonical STRATA catalog to 48 component/element entries.
 - Added form, navigation, feedback, overlay, data and content primitives.
-- Added component catalog registry and Storybook overview.
 
 ### Changed
 
 - `strata-*` is the canonical namespace.
 - Carbon via `iconify-icon` remains the only permitted icon collection.
-- All new components consume STRATA tokens and Scale Law geometry.
+- Components consume STRATA tokens and Scale Law geometry.
