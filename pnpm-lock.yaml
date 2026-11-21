@@ -105,6 +105,12 @@ importers:
         specifier: ^5.7.0
         version: 5.9.3
 
+  packages/mediawiki-skin:
+    dependencies:
+      '@strata/tokens':
+        specifier: workspace:*
+        version: link:../tokens
+
   packages/testing:
     dependencies:
       '@strata/components':
