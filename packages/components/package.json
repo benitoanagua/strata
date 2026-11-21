@@ -1,6 +1,6 @@
 {
   "name": "@strata/components",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "type": "module",
   "description": "STRATA Design System Web Components",
   "main": "./dist/strata-components.es.js",
