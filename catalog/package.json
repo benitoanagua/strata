@@ -1,5 +1,5 @@
 {
-  "name": "@strata/catalog-svelte",
+  "name": "@strata/catalog",
   "version": "2.5.0",
   "private": true,
   "type": "module",

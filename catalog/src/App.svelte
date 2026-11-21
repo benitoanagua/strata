@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Controls from "./lib/Controls.svelte";
-  import { catalog, categories, defaultsFor, type CatalogEntry, type ControlValue } from "./lib/registry";
+  import Controls from "./lib/PropertyControls.svelte";
+  import { catalog, categories, defaultsFor, type CatalogEntry, type ControlValue } from "./lib/componentRegistry";
 
   let selectedId = $state("button");
   let values = $state<Record<string, ControlValue>>(defaultsFor(catalog[0]));
