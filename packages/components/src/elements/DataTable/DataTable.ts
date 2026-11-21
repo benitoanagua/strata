@@ -17,7 +17,8 @@ export class StrataDataTable extends LitElement {
       font: 700 12px var(--strata-font-sans);
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      border-bottom: 2px solid var(--strata-color-border-strong);
+      border-bottom: var(--strata-border-large) solid
+        var(--strata-color-border-strong);
       padding: 10px;
     }
     td {

@@ -48,6 +48,15 @@ function checkFile(file) {
       !border[1].includes("solid")
     )
       violations.push(`${file}:${n} non-token border width`);
+    for (const decl of line.matchAll(
+      /\bborder(?!-radius|-color|-style)(?:-[a-z]+)*\s*:\s*([^;]+)/g,
+    )) {
+      const px = decl[1].match(/(\d+(?:\.\d+)?)px/);
+      if (px && Number(px[1]) > 1 && !decl[1].includes("currentColor"))
+        violations.push(
+          `${file}:${n} border exceeds the 1px filete law (focus/spinner borders in currentColor are exempt)`,
+        );
+    }
     if (
       file.endsWith("NavItem.ts") &&
       line.includes(":host([selected])") &&

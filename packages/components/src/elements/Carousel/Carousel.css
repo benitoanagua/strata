@@ -93,7 +93,7 @@
 .strata-carousel__arrow {
   padding: 0.5rem;
 
-  border-width: 2px;
+  border-width: var(--strata-border-large);
   border-color: color-mix(
     in srgb,
     var(--strata-color-border-strong) 40%,
@@ -206,7 +206,7 @@
   width: 0.75rem;
   height: 0.75rem;
 
-  border-width: 2px;
+  border-width: var(--strata-border-large);
   border-color: color-mix(
     in srgb,
     var(--strata-color-border-strong) 40%,

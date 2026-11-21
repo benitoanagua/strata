@@ -2,11 +2,11 @@
 
 ## 1. Scale Law
 
-**Physical scale determines structural weight.**
+**Physical scale determines structural weight — through filetes and space, never elevation.**
 
 `micro → small → medium → large → hero`
 
-As a component becomes physically larger, its permitted structural weight increases: radius, border thickness and elevation are monotonic across the scale. Small components may have no border or elevation.
+Radius stays within 0–2 px and borders are filetes of 0, 0.5 or 1 px; both are monotonic across the scale. Elevation is abolished (`--strata-elevation-*` always resolves to `none`): separation comes from hairlines, whitespace and tonal surfaces, in the manner of the LaTeX CVs. Circular controls (switches, avatars, spinners, dots) are exempt from the radius cap. Once the scale saturates, larger components differ through space and typography, not heavier chrome.
 
 ## 2. Emphasis Law
 

@@ -3,10 +3,23 @@ const t = JSON.parse(
   fs.readFileSync(new URL("./src/tokens.json", import.meta.url)),
 );
 const order = ["micro", "small", "medium", "large", "hero"];
+for (const size of order) {
+  const g = t.scale[size];
+  if (g.radius < 0 || g.radius > 2)
+    throw new Error(`STRATA Scale Law: ${size} radius must stay within 0-2px`);
+  if (![0, 0.5, 1].includes(g.border))
+    throw new Error(
+      `STRATA Scale Law: ${size} border must be a 0, 0.5 or 1px filete`,
+    );
+  if (g.elevation !== 0)
+    throw new Error(
+      `STRATA Scale Law: elevation is abolished; use filetes and space (${size})`,
+    );
+}
 for (let i = 1; i < order.length; i++) {
   const a = t.scale[order[i - 1]],
     b = t.scale[order[i]];
-  if (b.radius < a.radius || b.border < a.border || b.elevation < a.elevation)
+  if (b.radius < a.radius || b.border < a.border)
     throw new Error(
       `STRATA Scale Law violated: ${order[i - 1]} -> ${order[i]}`,
     );

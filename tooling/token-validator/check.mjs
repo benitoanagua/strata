@@ -9,10 +9,21 @@ const t = JSON.parse(
   ),
 );
 const sizes = ["micro", "small", "medium", "large", "hero"];
+for (const size of sizes) {
+  const g = t.scale[size];
+  if (g.radius < 0 || g.radius > 2)
+    throw new Error(`Scale Law: ${size} radius outside 0-2px`);
+  if (![0, 0.5, 1].includes(g.border))
+    throw new Error(`Scale Law: ${size} border not a 0/0.5/1px filete`);
+  if (g.elevation !== 0)
+    throw new Error(`Scale Law: ${size} elevation must be abolished (0)`);
+}
 for (let i = 1; i < sizes.length; i++) {
-  for (const k of ["radius", "border", "elevation"])
-    if (t.scale[sizes[i]][k] < t.scale[sizes[i - 1]][k])
-      throw new Error(`Scale Law: ${sizes[i]} ${k}`);
+  if (
+    t.scale[sizes[i]].radius < t.scale[sizes[i - 1]].radius ||
+    t.scale[sizes[i]].border < t.scale[sizes[i - 1]].border
+  )
+    throw new Error(`Scale Law: ${sizes[i]} regresses`);
 }
 
 if ("spectrum" in t)

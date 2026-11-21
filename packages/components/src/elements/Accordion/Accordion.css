@@ -67,7 +67,7 @@
 
   outline: none;
 
-  border-left-width: 2px;
+  border-left-width: var(--strata-border-large);
   border-color: transparent;
 }
 @media (min-width: 769px) {
@@ -193,7 +193,7 @@
   transition-property: opacity;
   transition-duration: 300ms;
 
-  border-left-width: 2px;
+  border-left-width: var(--strata-border-large);
   border-color: color-mix(
     in srgb,
     var(--strata-color-action-primary) 20%,

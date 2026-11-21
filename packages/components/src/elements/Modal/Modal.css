@@ -92,7 +92,7 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  border-width: 2px;
+  border-width: var(--strata-border-large);
   border-color: color-mix(
     in srgb,
     var(--strata-color-border-strong) 40%,
@@ -186,7 +186,7 @@
 }
 
 .strata-modal--bordered {
-  border-width: 4px;
+  border-width: var(--strata-border-large);
   border-color: color-mix(
     in srgb,
     var(--strata-color-border-strong) 50%,
@@ -207,7 +207,7 @@
 
   backdrop-filter: none;
 
-  border-width: 2px;
+  border-width: var(--strata-border-large);
   border-color: color-mix(
     in srgb,
     var(--strata-color-border-strong) 60%,
@@ -225,7 +225,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 
-  border-width: 2px;
+  border-width: var(--strata-border-small);
   border-color: color-mix(
     in srgb,
     var(--strata-color-border-strong) 20%,
@@ -234,12 +234,12 @@
 }
 
 .strata-modal--accent-top {
-  border-top-width: 4px;
+  border-top-width: var(--strata-border-large);
   border-top-color: var(--strata-color-action-primary);
 }
 
 .strata-modal--accent-left {
-  border-left-width: 4px;
+  border-left-width: var(--strata-border-large);
   border-left-color: var(--strata-color-action-primary);
 }
 
@@ -348,7 +348,7 @@
 
   background-color: transparent;
 
-  border-width: 2px;
+  border-width: var(--strata-border-small);
   border-color: color-mix(
     in srgb,
     var(--strata-color-border-strong) 40%,
