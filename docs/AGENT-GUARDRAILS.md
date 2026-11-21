@@ -11,4 +11,4 @@ These rules are constraints, not suggestions.
 7. The only permitted icon collection is `@iconify-json/carbon`, used as `carbon:*` through `iconify-icon`.
 8. Source Sans 3 is the default UI typeface. Source Code Pro is reserved for numeric/data contexts.
 9. Prefer editorial hierarchy, whitespace and dividers before adding another container.
-10. Every new component requires a Storybook story and tests appropriate to its behavior.
+10. Every new component requires a catalog example and tests appropriate to its behavior.
