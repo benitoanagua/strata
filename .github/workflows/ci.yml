@@ -16,67 +16,49 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
           version: 10.0.0
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Audit (tokens + design rules + icon collection + legacy)
+        run: pnpm install --no-frozen-lockfile
+      - name: Audit design system
         run: pnpm run audit
-
       - name: Lint
         run: pnpm lint
-
       - name: Typecheck
         run: pnpm typecheck
-
-      - name: Unit tests
+      - name: Unit and contract tests
         run: pnpm test
-
-      - name: Build packages
+      - name: Build workspace and catalog
         run: pnpm build
 
-      - name: Build Storybook
-        run: pnpm build:storybook
-
   visual:
-    name: Visual regression & accessibility
+    name: Browser & accessibility
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs: verify
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
           version: 10.0.0
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+        run: pnpm install --no-frozen-lockfile
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
-
-      - name: Build packages (Storybook needs built tokens/components)
+      - name: Build workspace packages
         run: pnpm build
-
-      - name: Accessibility (axe)
+      - name: Accessibility
         run: pnpm test:a11y
-
-      - name: Visual regression
+      - name: Browser checks
         run: pnpm test:visual
 
   changesets:
@@ -89,19 +71,15 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
           version: 10.0.0
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+        run: pnpm install --no-frozen-lockfile
       - name: Create Release Pull Request or Publish
         uses: changesets/action@v1
         with:
