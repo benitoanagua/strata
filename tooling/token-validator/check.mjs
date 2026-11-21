@@ -25,4 +25,13 @@ const spectrum = [
 ];
 if (JSON.stringify(Object.keys(t.spectrum)) !== JSON.stringify(spectrum))
   throw new Error("Spectrum contract mismatch");
+if (
+  !t.fontsUrl?.startsWith("https://fonts.googleapis.com/") ||
+  !["Source+Serif+4", "Source+Sans+3", "Source+Code+Pro"].every((f) =>
+    t.fontsUrl.includes(f),
+  )
+)
+  throw new Error("Fonts must load from Google Fonts (serif, sans, mono)");
+for (const role of ["serif", "sans", "mono"])
+  if (!t.font[role]) throw new Error(`Missing font role: ${role}`);
 console.log("STRATA token contract passed");

@@ -134,13 +134,6 @@ importers:
         version: 4.1.12(@types/node@22.20.5)(jsdom@26.1.0)(vite@6.4.6(@types/node@22.20.5))
 
   packages/tokens:
-    dependencies:
-      '@fontsource/source-code-pro':
-        specifier: ^5.2.5
-        version: 5.3.1
-      '@fontsource/source-sans-3':
-        specifier: ^5.2.8
-        version: 5.3.1
     devDependencies:
       typescript:
         specifier: ^5.7.0
@@ -401,12 +394,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@fontsource/source-code-pro@5.3.1':
-    resolution: {integrity: sha512-qsJEkwJWXYP/9clmtt3BsIlZ+Lr4cuRgNAgu0vyZdCgESMRMhRkAmEFFHHNM81VdeURqg5D5+Rr3bALDFav78A==}
-
-  '@fontsource/source-sans-3@5.3.1':
-    resolution: {integrity: sha512-O3YxvbotUOgYI2Zx0bBcEMNjnwitRf9P2+9pd54sMoux1NHrdXnMwZusw2P78lFhEzOPN4glOEQmX0ASaS68uA==}
 
   '@iconify-json/carbon@1.2.30':
     resolution: {integrity: sha512-54GoLfi17qzhbdwOAbYvzpRBz2QNYAekghLyEHv1GpQN/Jmd3c/la8T71109n8lfmyWknPcLi/+OTAIT1VL0IA==}
@@ -1821,10 +1808,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.12':
     optional: true
-
-  '@fontsource/source-code-pro@5.3.1': {}
-
-  '@fontsource/source-sans-3@5.3.1': {}
 
   '@iconify-json/carbon@1.2.30':
     dependencies:

@@ -10,7 +10,8 @@
       "import": "./dist/index.js"
     },
     "./styles.css": "./dist/styles.css",
-    "./tokens.json": "./src/tokens.json"
+    "./tokens.json": "./src/tokens.json",
+    "./fonts.css": "./dist/fonts.css"
   },
   "files": [
     "dist",
@@ -20,10 +21,6 @@
     "build": "tsc -p tsconfig.json && node build-css.mjs",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "node validate.mjs"
-  },
-  "dependencies": {
-    "@fontsource/source-code-pro": "^5.2.5",
-    "@fontsource/source-sans-3": "^5.2.8"
   },
   "devDependencies": {
     "typescript": "^5.7.0"

@@ -30,7 +30,7 @@ STRATA has seven semantic spectrum families: red, orange, yellow, green, blue, i
 
 **Typography carries hierarchy before containers do.**
 
-Source Sans 3 is the interface family. Source Code Pro is reserved for numerical/data contexts where tabular alignment improves scanning.
+Source Serif 4 is the reading family (body text). Source Sans 3 is the interface family (dashboards, menus, navigation). Source Code Pro is reserved for tags, numerical/data contexts and similar machine-like elements where tabular alignment improves scanning. Fonts are loaded from Google Fonts, never bundled in the repository.
 
 ## 6. Iconography Law
 

@@ -2,8 +2,10 @@
 
 ## Families
 
-- **Source Sans 3** is the default UI/editorial sans.
-- **Source Code Pro** is reserved for numeric/data contexts where alignment or machine-like reading improves comprehension.
+- **Source Serif 4** is the reading family for body text (`--strata-font-serif`).
+- **Source Sans 3** is the UI sans for dashboards, menus and navigation (`--strata-font-sans`).
+- **Source Code Pro** is reserved for tags, numeric/data contexts and similar elements where alignment or machine-like reading improves comprehension (`--strata-font-mono`).
+- Fonts load from Google Fonts. Consumers add the `<link>` shown in `catalog/index.html` or import `@strata/tokens/fonts.css`; the repository never ships font files.
 
 ## Principle
 

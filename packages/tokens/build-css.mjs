@@ -3,6 +3,7 @@ import fs from "node:fs";
 const tokenFile = new URL("./src/tokens.json", import.meta.url);
 const outDir = new URL("./dist/", import.meta.url);
 const outFile = new URL("./styles.css", outDir);
+const fontsFile = new URL("./fonts.css", outDir);
 const tokens = JSON.parse(fs.readFileSync(tokenFile, "utf8"));
 
 const kebab = (key) =>
@@ -40,14 +41,7 @@ const themeVars = (theme) =>
     .map(([key, value]) => `--strata-color-${kebab(key)}: ${value};`)
     .join("");
 
-const css = `@import '@fontsource/source-sans-3/300.css';
-@import '@fontsource/source-sans-3/400.css';
-@import '@fontsource/source-sans-3/500.css';
-@import '@fontsource/source-sans-3/700.css';
-@import '@fontsource/source-code-pro/400.css';
-@import '@fontsource/source-code-pro/700.css';
-
-:root {
+const css = `:root {
   ${vars.join("\n  ")}
   ${themeVars("light")}
   color-scheme: light;
@@ -73,3 +67,7 @@ const css = `@import '@fontsource/source-sans-3/300.css';
 
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(outFile, css);
+fs.writeFileSync(
+  fontsFile,
+  `/* Fuentes STRATA: se cargan desde Google Fonts, nunca desde el repo. */\n@import url("${tokens.fontsUrl}");\n`,
+);
