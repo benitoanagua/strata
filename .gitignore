@@ -19,8 +19,6 @@ yarn-error.log*
 dist
 assets/dist
 *.zip
-*storybook.log
-storybook-static
 test-results
 playwright-report
 blob-report
