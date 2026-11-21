@@ -5,23 +5,22 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "dev": "turbo dev",
+    "catalog": "turbo dev --filter=@strata/catalog-svelte",
     "build": "turbo build",
+    "build:catalog": "pnpm --filter @strata/catalog-svelte build",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "lint": "node tooling/lint/design-rules.mjs && node tooling/lint/icon-rules.mjs && turbo lint",
-    "storybook": "pnpm --filter @strata/storybook storybook",
-    "build:storybook": "pnpm --filter @strata/storybook build-storybook",
-    "check": "pnpm audit && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm build:storybook",
+    "check": "pnpm audit && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm build:catalog",
     "test:visual": "pnpm --filter @strata/testing test:visual",
     "test:a11y": "pnpm --filter @strata/testing test:a11y",
     "release": "changeset publish",
     "audit": "node tooling/token-validator/check.mjs && node tooling/lint/design-rules.mjs && node tooling/lint/icon-rules.mjs",
-    "docs": "pnpm storybook",
+    "docs": "pnpm catalog",
     "test:contracts": "pnpm --filter @strata/testing test:contracts",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "test:all": "pnpm test && pnpm test:visual && pnpm test:a11y",
-    "test:visual:update": "pnpm --filter @strata/testing test:visual:update"
+    "test:all": "pnpm test && pnpm test:visual && pnpm test:a11y"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.0",
