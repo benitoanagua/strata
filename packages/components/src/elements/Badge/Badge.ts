@@ -1,5 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
+
+export type StrataBadgeTone =
+  "neutral" | "error" | "warning" | "success" | "info";
+
 @customElement("strata-badge")
 export class StrataBadge extends LitElement {
   static styles = css`
@@ -7,63 +11,42 @@ export class StrataBadge extends LitElement {
       display: inline-block;
     }
     .strata-badge {
-      font: 600 12px/1 var(--strata-font-sans);
+      font: 600 12px/1 var(--strata-font-mono);
       padding: 4px 7px;
       border-radius: var(--strata-radius-small);
       border: 0;
     }
-    .strata-badge--red {
-      background: color-mix(in srgb, var(--strata-color-red) 14%, transparent);
-      color: var(--strata-color-red);
+    .strata-badge--neutral,
+    .strata-badge--info {
+      background: var(--strata-color-surface-subtle);
+      color: var(--strata-color-text-primary);
     }
-    .strata-badge--orange {
+    .strata-badge--error {
       background: color-mix(
         in srgb,
-        var(--strata-color-orange) 14%,
+        var(--strata-color-status-error) 14%,
         transparent
       );
-      color: var(--strata-color-orange);
+      color: var(--strata-color-status-error);
     }
-    .strata-badge--yellow {
+    .strata-badge--warning {
       background: color-mix(
         in srgb,
-        var(--strata-color-yellow) 16%,
+        var(--strata-color-status-warning) 16%,
         transparent
       );
-      color: var(--strata-color-yellow);
+      color: var(--strata-color-status-warning);
     }
-    .strata-badge--green {
+    .strata-badge--success {
       background: color-mix(
         in srgb,
-        var(--strata-color-green) 14%,
+        var(--strata-color-status-success) 14%,
         transparent
       );
-      color: var(--strata-color-green);
-    }
-    .strata-badge--blue {
-      background: color-mix(in srgb, var(--strata-color-blue) 14%, transparent);
-      color: var(--strata-color-blue);
-    }
-    .strata-badge--indigo {
-      background: color-mix(
-        in srgb,
-        var(--strata-color-indigo) 14%,
-        transparent
-      );
-      color: var(--strata-color-indigo);
-    }
-    .strata-badge--violet {
-      background: color-mix(
-        in srgb,
-        var(--strata-color-violet) 14%,
-        transparent
-      );
-      color: var(--strata-color-violet);
+      color: var(--strata-color-status-success);
     }
   `;
-  @property({ reflect: true }) tone:
-    "red" | "orange" | "yellow" | "green" | "blue" | "indigo" | "violet" =
-    "blue";
+  @property({ reflect: true }) tone: StrataBadgeTone = "neutral";
   render() {
     return html`<span class="strata-badge strata-badge--${this.tone}"
       ><slot></slot

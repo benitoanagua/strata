@@ -23,8 +23,6 @@ for (const [key, value] of Object.entries(tokens.scale)) {
 }
 for (const [key, value] of Object.entries(tokens.monochrome))
   vars.push(`--strata-color-${kebab(key)}: ${value};`);
-for (const [key, value] of Object.entries(tokens.spectrum))
-  vars.push(`--strata-color-${key}: ${value};`);
 for (const [key, value] of Object.entries(tokens.spacing))
   vars.push(`--strata-space-${key}: ${value}px;`);
 for (const [key, value] of Object.entries(tokens.motion))
@@ -41,25 +39,36 @@ const themeVars = (theme) =>
     .map(([key, value]) => `--strata-color-${kebab(key)}: ${value};`)
     .join("");
 
+const accentVars = (theme) =>
+  tokens.accent?.enabled
+    ? Object.entries(tokens.accent[theme] ?? {})
+        .map(([key, value]) => `--strata-color-accent-${kebab(key)}: ${value};`)
+        .join("")
+    : "";
+
 const css = `:root {
   ${vars.join("\n  ")}
   ${themeVars("light")}
+  ${accentVars("light")}
   color-scheme: light;
 }
 
 [data-theme="light"] {
   ${themeVars("light")}
+  ${accentVars("light")}
   color-scheme: light;
 }
 
 [data-theme="dark"] {
   ${themeVars("dark")}
+  ${accentVars("dark")}
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     ${themeVars("dark")}
+    ${accentVars("dark")}
     color-scheme: dark;
   }
 }

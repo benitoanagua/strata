@@ -67,8 +67,9 @@
   color: var(--strata-color-text-secondary);
 }
 .strata-card__tag {
-  color: var(--strata-color-blue);
-  text-decoration: none;
+  color: var(--strata-color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .strata-card__author {
   display: flex;

@@ -17,7 +17,7 @@ The canvas mounts the registered custom element and assigns properties directly 
 
 ## STRATA visual laws
 
-- Monochrome establishes structure; spectrum colors remain semantic.
+- Monochrome establishes structure; the spectrum was replaced by a grayscale contract, three desaturated status colors and an optional disabled-by-default accent.
 - Source Serif 4 is the reading family, Source Sans 3 the UI family, and Source Code Pro is reserved for tags, data and numeric alignment. Fonts are loaded from Google Fonts; no font files or `@fontsource` packages live in the repository.
 - Component geometry follows the Scale Law.
 - The catalog imports the published token stylesheet and component stylesheet, and uses the existing semantic CSS variables.

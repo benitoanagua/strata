@@ -18,13 +18,19 @@ Primary actions use typography, contrast and semantic color before adding struct
 
 **Monochrome establishes structure.**
 
-Black, white and gray build the interface, editorial hierarchy, surfaces, navigation and dividers.
+Black, white and gray build the interface, editorial hierarchy, surfaces, navigation and dividers. The gray scale follows the ink ramp of the editorial CVs: ink `#111111`, mid `#333333`, soft `#666666`, pale `#999999`, divisor `#CCCCCC` — mirrored for dark surfaces. Hierarchy is carried by tone, size and weight, not hue.
 
-## 4. Spectrum Law
+## 4. Accent Law
 
-**Color establishes meaning.**
+**Color is an exception, never a system.**
 
-STRATA has seven semantic spectrum families: red, orange, yellow, green, blue, indigo and violet. They are used with restraint for state, information, emphasis and categorization.
+STRATA has no spectrum. The seven-color family system was removed; there is no `spectrum` token group and components may not reference it.
+
+- A **single optional accent** may exist for links and focus, defined in `tokens.accent` and **disabled by default**. Enabling it emits `--strata-color-accent-link` / `--strata-color-accent-focus`, which must satisfy the WCAG AA contrast contract.
+- **Functional status colors** (`status-error`, `status-warning`, `status-success`) are the only other hues, deliberately desaturated. They are always accompanied by an icon, underline, weight or filete — never color alone.
+- If the accent and status colors can be removed without breaking comprehension, the interface is correct.
+
+Decision note: the brief "que deje ser monocromático" was ambiguous between "strictly monochrome" and "monochrome-led". STRATA resolves it as _monochrome-led with a minimal optional exception_: the default theme emits zero chromatic variables.
 
 ## 5. Typography Law
 

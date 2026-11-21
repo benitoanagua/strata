@@ -16,7 +16,7 @@ catalog
 
 ## Packages
 
-- `@strata/tokens`: primitive and semantic design tokens, CSS output, typography and spectrum.
+- `@strata/tokens`: primitive and semantic design tokens, CSS output, typography and a grayscale-first color contract with optional accent.
 - `@strata/core`: shared type contracts, theme utilities and the Scale Law.
 - `@strata/components`: publishable Lit Web Components and their public TypeScript contracts.
 - `catalog`: internal Svelte playground that consumes the component package.

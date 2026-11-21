@@ -13,7 +13,7 @@ export class StrataProgress extends LitElement {
     }
     .strata-progress__bar {
       height: 100%;
-      background: var(--strata-color-blue);
+      background: var(--strata-color-action-primary);
       transition: width var(--strata-motion-normal) ease;
     }
     @media (prefers-reduced-motion: reduce) {

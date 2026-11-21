@@ -10,6 +10,8 @@ const allowedShadow =
 const allowedBorderWidth =
   /var\(--strata-border-(micro|small|medium|large|hero)\)|0|thin|medium|thick/;
 const rawColor = /#[0-9a-fA-F]{3,8}\b|\brgb\(|\brgba\(|\bhsl\(|\bhsla\(/;
+const removedColorToken =
+  /--strata-color-(?:red|orange|yellow|green|blue|indigo|violet)\b|--strata-color-status-(?:info|caution|context|special)\b/;
 
 function walk(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -27,6 +29,10 @@ function checkFile(file) {
     const n = i + 1;
     if (rawColor.test(line))
       violations.push(`${file}:${n} raw color; use STRATA color tokens`);
+    if (removedColorToken.test(line))
+      violations.push(
+        `${file}:${n} removed spectrum/status token; use semantic or status-* tokens`,
+      );
     const shadow = line.match(/box-shadow\s*:\s*([^;]+)/);
     if (shadow && !allowedShadow.test(shadow[1]))
       violations.push(`${file}:${n} non-token shadow`);

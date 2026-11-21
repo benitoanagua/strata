@@ -350,14 +350,12 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-badge",
     description: "A compact label for status and classification.",
     controls: [
-      select("tone", "Tone", "blue", [
-        "red",
-        "orange",
-        "yellow",
-        "green",
-        "blue",
-        "indigo",
-        "violet",
+      select("tone", "Tone", "neutral", [
+        "neutral",
+        "error",
+        "warning",
+        "success",
+        "info",
       ]),
     ],
     slotContent: "In review",

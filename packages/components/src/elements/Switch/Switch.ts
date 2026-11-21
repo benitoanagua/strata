@@ -30,7 +30,7 @@ export class StrataSwitch extends LitElement {
       transition: transform 0.18s ease;
     }
     button[aria-checked="true"] {
-      background: var(--strata-color-green);
+      background: var(--strata-color-action-primary);
     }
     button[aria-checked="true"] span {
       transform: translateX(16px);
