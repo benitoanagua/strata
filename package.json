@@ -5,9 +5,9 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "dev": "turbo dev",
-    "catalog": "turbo dev --filter=@strata/catalog-svelte",
+    "catalog": "turbo dev --filter=@strata/catalog",
     "build": "turbo build",
-    "build:catalog": "pnpm --filter @strata/catalog-svelte build",
+    "build:catalog": "pnpm --filter @strata/catalog build",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "lint": "node tooling/lint/design-rules.mjs && node tooling/lint/icon-rules.mjs && turbo lint",
