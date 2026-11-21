@@ -27,6 +27,19 @@ const iconPattern =
   /(?:icon\s*=\s*["'`]([^"'`]+)["'`]|icon\s*=\s*\{?\s*["'`]([^"'`]+)["'`])/g;
 const violations = [];
 
+const bundledIconsPath = path.join(
+  root,
+  "packages/components/src/carbon-icons.json",
+);
+const bundledIcons = fs.existsSync(bundledIconsPath)
+  ? new Set(
+      Object.keys(
+        JSON.parse(fs.readFileSync(bundledIconsPath, "utf8")).icons ?? {},
+      ),
+    )
+  : new Set();
+const componentsSrc = path.join(root, "packages/components/src");
+
 function walk(dir) {
   if (!fs.existsSync(dir)) return;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -51,6 +64,15 @@ function checkFile(file) {
     if (!value.startsWith(allowedPrefix)) {
       violations.push(
         `${path.relative(root, file)}: icon "${value}" is outside the allowed Carbon collection`,
+      );
+    } else if (
+      file.startsWith(componentsSrc) &&
+      !file.endsWith("carbon-icons.json") &&
+      bundledIcons.size &&
+      !bundledIcons.has(value.slice(allowedPrefix.length))
+    ) {
+      violations.push(
+        `${path.relative(root, file)}: icon "${value}" is not in the bundled carbon-icons.json allowlist`,
       );
     }
   }
