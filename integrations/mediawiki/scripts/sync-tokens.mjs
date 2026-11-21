@@ -15,8 +15,9 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const pkgRoot = path.resolve(here, "..");
-const tokensDist = path.resolve(pkgRoot, "../tokens/dist");
+const tokensDist = path.resolve(pkgRoot, "../../packages/tokens/dist");
 const outDir = path.join(pkgRoot, "resources");
+const proseCss = path.resolve(pkgRoot, "../../packages/prose/prose.css");
 
 for (const [src, dest] of [
   ["fonts.css", "strata-fonts.css"],
@@ -32,3 +33,9 @@ for (const [src, dest] of [
   fs.copyFileSync(from, path.join(outDir, dest));
   console.log(`synced ${src} -> resources/${dest}`);
 }
+if (!fs.existsSync(proseCss)) {
+  console.error(`Missing ${proseCss}. Is @strata/prose installed?`);
+  process.exit(1);
+}
+fs.copyFileSync(proseCss, path.join(outDir, "strata-prose.css"));
+console.log("synced @strata/prose -> resources/strata-prose.css");

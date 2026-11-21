@@ -1,6 +1,6 @@
 # STRATA MediaWiki skin
 
-`packages/mediawiki-skin` is a reading-first MediaWiki skin (MediaWiki **1.39+**)
+`integrations/mediawiki` is a reading-first MediaWiki skin (MediaWiki **1.39+**)
 built on the STRATA design tokens. It targets long-form reading — the same
 LaTeX-editorial discipline as the rest of the system: serif body, sans chrome,
 mono metadata, filetes instead of shadows, grayscale-first with an optional
@@ -27,14 +27,14 @@ disabled accent.
    ```sh
    pnpm install
    pnpm --filter @strata/tokens build
-   pnpm --filter @strata/mediawiki-skin build
+   pnpm --filter @strata/integration-mediawiki build
    ```
 
    `scripts/sync-tokens.mjs` copies `@strata/tokens` `dist/fonts.css` and
    `dist/styles.css` into `resources/strata-fonts.css` and
    `resources/strata-tokens.css` (gitignored, regenerated on build).
 
-2. Copy `packages/mediawiki-skin/` into your MediaWiki `skins/` directory as
+2. Copy `integrations/mediawiki/` into your MediaWiki `skins/` directory as
    `skins/Strata/`.
 
 3. Enable it in `LocalSettings.php`:

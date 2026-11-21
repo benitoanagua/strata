@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { catalog } from "../../../catalog/src/lib/componentRegistry.ts";
+import { catalog } from "../../../apps/catalog/src/lib/componentRegistry.ts";
 
 const THEMES = ["light", "dark"] as const;
 

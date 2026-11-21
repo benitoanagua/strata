@@ -1,0 +1,23 @@
+{
+  "name": "@strata/prose",
+  "version": "0.1.0",
+  "description": "STRATA reading layer — platform-agnostic editorial prose styles on STRATA tokens",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "prose.css"
+  ],
+  "exports": {
+    "./prose.css": "./prose.css"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "dependencies": {
+    "@strata/tokens": "workspace:*"
+  },
+  "scripts": {
+    "build": "mkdir -p dist && cp prose.css dist/prose.css",
+    "typecheck": "node -e \"console.log('no types')\""
+  }
+}

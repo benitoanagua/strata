@@ -1,8 +1,9 @@
 /* ==========================================================================
-   STRATA MediaWiki skin
-   Reading-first, LaTeX-editorial. All values come from @strata/tokens
-   custom properties (strata-tokens.css). Fonts load from Google Fonts
-   (strata-fonts.css). Light/dark follow prefers-color-scheme.
+   STRATA MediaWiki skin — platform layer only.
+   Reading styles live in @strata/prose (strata-prose.css); tokens in
+   strata-tokens.css; fonts in strata-fonts.css. This file keeps only what
+   is specific to MediaWiki: layout, header, sidebar portlets, TOC,
+   wikitable, infobox, categories and print chrome.
    ========================================================================== */
 
 /* ---------- Base ---------- */
@@ -152,7 +153,7 @@ body {
 }
 
 .strata-portlet li a:hover {
-  background: var(--strata-color-surface-subtle);
+  background: var(--strata-color-surface-hover);
 }
 
 .strata-portlet li a:focus-visible {
@@ -160,148 +161,12 @@ body {
   outline-offset: 1px;
 }
 
-/* ---------- Parser output (serif, reading) ---------- */
-
-.mw-parser-output {
-  max-width: var(--strata-editorial-measure);
-  font-family: var(--strata-font-serif);
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--strata-color-text-primary);
-}
-
-.mw-parser-output p {
-  margin: 0 0 1em;
-}
-
-.mw-parser-output h1,
-.mw-parser-output h2,
-.mw-parser-output h3,
-.mw-parser-output h4,
-.mw-parser-output h5,
-.mw-parser-output h6 {
-  font-family: var(--strata-font-serif);
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--strata-color-text-primary);
-  margin: 1.8em 0 0.6em;
-}
-
-.mw-parser-output h1 {
-  font-size: 1.6em;
-  padding-bottom: 0.3em;
-  border-bottom: var(--strata-border-small) solid
-    var(--strata-color-border-subtle);
-}
-
-.mw-parser-output h2 {
-  font-size: 1.35em;
-  padding-bottom: 0.25em;
-  border-bottom: var(--strata-border-small) solid
-    var(--strata-color-border-subtle);
-}
-
-.mw-parser-output h3 {
-  font-size: 1.15em;
-}
-
-.mw-parser-output h4 {
-  font-size: 1.05em;
-}
-
-.mw-parser-output h5,
-.mw-parser-output h6 {
-  font-size: 0.95em;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--strata-color-text-secondary);
-}
-
-.mw-parser-output a {
-  color: var(--strata-color-accent-link, var(--strata-color-text-primary));
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.mw-parser-output a:hover {
-  text-decoration-thickness: 2px;
-}
-
-.mw-parser-output a:focus-visible {
-  outline: 2px solid var(--strata-color-focus-ring);
-  outline-offset: 2px;
-}
-
-.mw-parser-output ul,
-.mw-parser-output ol {
-  margin: 0 0 1em;
-  padding-left: 1.6em;
-}
-
-.mw-parser-output li {
-  margin: 0.3em 0;
-}
-
-.mw-parser-output blockquote {
-  margin: 1em 0;
-  padding: 0.2em 0 0.2em 1.2em;
-  border-left: var(--strata-border-large) solid
-    var(--strata-color-border-subtle);
-  color: var(--strata-color-text-secondary);
-  font-style: italic;
-}
-
-.mw-parser-output code,
-.mw-parser-output pre,
-.mw-parser-output kbd,
-.mw-parser-output samp {
-  font-family: var(--strata-font-mono);
-  font-size: 0.9em;
-}
-
-.mw-parser-output pre {
-  padding: 12px 14px;
-  border: var(--strata-border-small) solid var(--strata-color-border-subtle);
-  border-radius: var(--strata-radius-small);
-  background: var(--strata-color-surface-subtle);
-  overflow-x: auto;
-}
-
-.mw-parser-output hr {
-  border: 0;
-  border-top: var(--strata-border-small) solid var(--strata-color-border-subtle);
-  margin: 2em 0;
-}
-
-.mw-parser-output .hatnote,
-.mw-parser-output .dablink {
-  font-size: 0.9em;
-  color: var(--strata-color-text-secondary);
-  font-style: italic;
-}
-
-.mw-parser-output table {
-  border-collapse: collapse;
-}
-
-/* Wikitable: filete grid */
+/* ---------- Parser output: MW-specific structures ---------- */
+/* Generic reading styles come from @strata/prose via .strata-prose on
+   .mw-body-content in skin.mustache. */
 
 .mw-parser-output table.wikitable {
-  margin: 1em 0;
   border: var(--strata-border-small) solid var(--strata-color-border-subtle);
-  font-size: 0.95em;
-}
-
-.mw-parser-output table.wikitable th,
-.mw-parser-output table.wikitable td {
-  border: var(--strata-border-small) solid var(--strata-color-border-subtle);
-  padding: 6px 10px;
-}
-
-.mw-parser-output table.wikitable th {
-  background: var(--strata-color-surface-subtle);
-  font-weight: 600;
-  text-align: left;
 }
 
 /* Infobox: bordered filete card */
@@ -350,7 +215,6 @@ body {
   margin: 1em 0;
   font-family: var(--strata-font-sans);
   font-size: 13px;
-  max-width: var(--strata-editorial-measure);
 }
 
 #toc .toctitle {
@@ -369,7 +233,16 @@ body {
   margin: 2px 0;
 }
 
-/* References / citations */
+#toc a {
+  color: var(--strata-color-text-primary);
+  text-decoration: none;
+}
+
+#toc a:hover {
+  text-decoration: underline;
+}
+
+/* References / citations (MW markup) */
 
 .mw-parser-output .mw-references-wrap,
 .mw-parser-output ol.references {
@@ -383,16 +256,6 @@ body {
 
 .mw-parser-output .mw-references-wrap li {
   margin: 0.4em 0;
-}
-
-.mw-parser-output sup.reference {
-  font-size: 0.75em;
-  line-height: 0;
-}
-
-.mw-parser-output .refbegin,
-.mw-parser-output .reflist {
-  font-size: 0.9em;
 }
 
 /* Category tags (mono) */
@@ -435,7 +298,7 @@ body {
 }
 
 #catlinks li a:hover {
-  background: var(--strata-color-surface-subtle);
+  background: var(--strata-color-surface-hover);
 }
 
 /* ---------- Subtitle / metadata ---------- */
@@ -536,7 +399,7 @@ body {
   }
 
   .mw-parser-output {
-    font-size: 15px;
+    font-size: 0.95em;
   }
 
   .mw-parser-output table.infobox {
@@ -574,13 +437,8 @@ body {
     padding: 0;
   }
 
-  .mw-parser-output {
+  .strata-prose {
     max-width: none;
-  }
-
-  .mw-parser-output a {
-    color: #000;
-    text-decoration: underline;
   }
 
   .mw-parser-output table.infobox {
@@ -595,26 +453,8 @@ body {
     border: 0.5pt solid #999;
   }
 
-  .mw-parser-output h1,
-  .mw-parser-output h2 {
-    border-bottom: 0.5pt solid #999;
-  }
-
-  .mw-parser-output pre {
-    border: 0.5pt solid #999;
-    background: none;
-  }
-
   #toc {
     border: 0.5pt solid #999;
     background: none;
-  }
-
-  .mw-parser-output,
-  .mw-parser-output table,
-  .mw-parser-output tr,
-  .mw-parser-output td,
-  .mw-parser-output th {
-    page-break-inside: avoid;
   }
 }

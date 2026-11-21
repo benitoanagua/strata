@@ -1,4 +1,5 @@
 packages:
-  - catalog
+  - apps/*
   - packages/*
+  - integrations/*
   - tooling/*

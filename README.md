@@ -14,14 +14,18 @@ STRATA is a contemporary editorial design system for mobile-first interfaces. It
 ## Architecture
 
 ```text
-catalog
-packages/tokens
-packages/core
-packages/components
-packages/testing
-tooling
+apps/catalog            # internal Svelte playground (private)
+packages/tokens         # @strata/tokens — published
+packages/core           # @strata/core — published
+packages/components     # @strata/components — published
+packages/prose          # @strata/prose — published reading layer
+packages/testing        # @strata/testing — private
+integrations/mediawiki  # @strata/integration-mediawiki — private
+ tooling                # lint + token validation
 docs
 ```
+
+See `docs/ARCHITECTURE.md` for the layout convention: `apps/` are executables, `packages/` are publishable, `integrations/` are platform adapters and `tooling/` holds lint and validators.
 
 ## Commands
 
@@ -33,4 +37,4 @@ pnpm test:visual
 pnpm test:a11y
 ```
 
-The Svelte catalog is a private development tool at the repository root. Published Web Components remain in `@strata/components`.
+The Svelte catalog is a private development tool under `apps/catalog`. Published Web Components remain in `@strata/components`.
