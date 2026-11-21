@@ -10,7 +10,7 @@ Before a component is considered stable, complete:
 - keyboard/focus behavior
 - accessible name/semantics
 - light/dark verification
-- mobile viewport story
+- mobile viewport verification
 - contract test
 - accessibility test
 - visual baseline
