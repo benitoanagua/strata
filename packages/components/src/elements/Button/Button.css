@@ -39,7 +39,7 @@
 }
 
 .strata-button--variant-outlined:hover {
-  background: var(--strata-color-gray-100);
+  background: var(--strata-color-surface-hover);
 }
 
 .strata-button--variant-text {
@@ -49,7 +49,7 @@
 }
 
 .strata-button--variant-text:hover {
-  background: var(--strata-color-gray-100);
+  background: var(--strata-color-surface-hover);
 }
 
 .strata-button--variant-elevated {
@@ -60,7 +60,7 @@
 }
 
 .strata-button--variant-tonal {
-  background: var(--strata-color-gray-200);
+  background: var(--strata-color-surface-selected);
   color: var(--strata-color-text-primary);
   border: 0;
 }

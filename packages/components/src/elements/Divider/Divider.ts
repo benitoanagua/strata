@@ -5,6 +5,7 @@ export class StrataDivider extends LitElement {
   static styles = css`
     :host {
       display: block;
+      width: 100%;
     }
     .divider {
       border: 0;

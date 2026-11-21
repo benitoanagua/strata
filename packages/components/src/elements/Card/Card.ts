@@ -65,7 +65,7 @@ export class StrataCard extends BaseClass {
   private setupObservers() {
     this.cleanupObservers();
 
-    if (this.imageElement) {
+    if (this.imageElement && typeof ResizeObserver === "function") {
       this.imageObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
           this.imageSize = {

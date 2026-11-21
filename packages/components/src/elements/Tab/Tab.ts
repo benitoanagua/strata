@@ -20,7 +20,6 @@ export class StrataTab extends LitElement implements TabProps {
         ?disabled="${this.disabled}"
         aria-selected="${this.active}"
         tabindex="${this.active ? 0 : -1}"
-        aria-controls=${this.panelId || undefined}
       >
         <slot></slot>
       </button>

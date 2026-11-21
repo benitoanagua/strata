@@ -48,6 +48,8 @@ const surfaces = [
   "surfaceDefault",
   "surfaceRaised",
   "surfaceSubtle",
+  "surfaceHover",
+  "surfaceSelected",
 ];
 const statuses = ["statusError", "statusWarning", "statusSuccess"];
 

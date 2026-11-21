@@ -19,11 +19,11 @@ export class StrataNavItem extends LitElement {
       cursor: pointer;
     }
     .strata-nav-item:hover {
-      background: var(--strata-color-gray-100);
+      background: var(--strata-color-surface-hover);
       color: var(--strata-color-text-primary);
     }
     :host([selected]) .strata-nav-item {
-      background: var(--strata-color-gray-200);
+      background: var(--strata-color-surface-selected);
       color: var(--strata-color-text-primary);
       font-weight: 700;
     }

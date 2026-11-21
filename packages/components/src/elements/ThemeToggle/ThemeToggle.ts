@@ -16,10 +16,15 @@ export class StrataThemeToggle extends LitElement {
   }
 
   private loadTheme() {
-    const savedTheme = localStorage.getItem("strata-theme") as ThemeMode | null;
-    const systemPrefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
+    let savedTheme: ThemeMode | null = null;
+    try {
+      savedTheme = localStorage.getItem("strata-theme") as ThemeMode | null;
+    } catch {
+      savedTheme = null;
+    }
+    const systemPrefersDark =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
 
     this.currentTheme = savedTheme || (systemPrefersDark ? "dark" : "light");
     this.applyTheme(this.currentTheme, false);
@@ -35,7 +40,11 @@ export class StrataThemeToggle extends LitElement {
     }
 
     this.currentTheme = theme;
-    localStorage.setItem("strata-theme", theme);
+    try {
+      localStorage.setItem("strata-theme", theme);
+    } catch {
+      // storage unavailable (SSR, privacy modes)
+    }
 
     this.setAttribute("data-theme", theme);
 

@@ -21,7 +21,7 @@ export class StrataPagination extends LitElement {
       cursor: pointer;
     }
     .strata-pagination__page[aria-current="page"] {
-      background: var(--strata-color-gray-200);
+      background: var(--strata-color-surface-selected);
       font-weight: 700;
     }
   `;

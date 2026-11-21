@@ -374,7 +374,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Feedback",
     tagName: "strata-progress",
     description: "Indeterminate-free progress along a 0–100 scale.",
-    controls: [num("value", "Value", 65)],
+    controls: [num("value", "Value", 65), text("label", "Label", "Progress")],
   },
   {
     id: "skeleton",

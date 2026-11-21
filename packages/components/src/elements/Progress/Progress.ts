@@ -5,6 +5,7 @@ export class StrataProgress extends LitElement {
   static styles = css`
     :host {
       display: block;
+      width: 100%;
     }
     .strata-progress__track {
       height: 4px;
@@ -23,10 +24,12 @@ export class StrataProgress extends LitElement {
     }
   `;
   @property({ type: Number }) value = 0;
+  @property() label = "Progress";
   render() {
     return html`<div
       class="strata-progress__track"
       role="progressbar"
+      aria-label="${this.label}"
       aria-valuemin="0"
       aria-valuemax="100"
       aria-valuenow="${Math.max(0, Math.min(100, this.value))}"

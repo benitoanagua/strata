@@ -269,6 +269,10 @@ export class StrataCarousel extends LitElement implements CarouselProps {
   }
 
   private setupMediaQuery() {
+    if (typeof window.matchMedia !== "function") {
+      this.isMobile = false;
+      return;
+    }
     this.mediaQuery = window.matchMedia("(max-width: 768px)");
     this.isMobile = this.mediaQuery.matches;
     this.mediaQuery.addEventListener("change", this.handleMediaChange);
@@ -284,6 +288,7 @@ export class StrataCarousel extends LitElement implements CarouselProps {
   };
 
   private setupResizeObserver() {
+    if (typeof ResizeObserver !== "function") return;
     this.resizeObserver = new ResizeObserver(() => {
       this.updateLayout();
     });

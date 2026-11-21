@@ -30,11 +30,11 @@
     color var(--strata-motion-fast) ease;
 }
 .strata-tab__button:hover:not(:disabled) {
-  background: var(--strata-color-gray-100);
+  background: var(--strata-color-surface-hover);
   color: var(--strata-color-text-primary);
 }
 .strata-tab__button[aria-selected="true"] {
-  background: var(--strata-color-gray-200);
+  background: var(--strata-color-surface-selected);
   color: var(--strata-color-text-primary);
   font-weight: 700;
 }

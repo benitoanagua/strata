@@ -5,6 +5,7 @@ export class StrataSkeleton extends LitElement {
   static styles = css`
     :host {
       display: block;
+      width: 100%;
     }
     .strata-skeleton {
       height: var(--strata-space-4);

@@ -10,7 +10,7 @@ Black, white and gray establish structure, hierarchy and reading order.
 Hierarchy is carried by tone, size and weight — almost never by hue.
 
 - `--strata-color-text-primary` / `text-secondary` — body and supporting text.
-- `--strata-color-surface-page|default|raised|subtle` — paper and card surfaces.
+- `--strata-color-surface-page|default|raised|subtle|hover|selected` — paper, card and interactive-state surfaces.
 - `--strata-color-action-primary` — primary actions (ink on paper, paper on ink).
 - `--strata-color-border-subtle|strong` — hairlines and emphasis borders.
 - `--strata-color-focus-ring` — focus indicator (grayscale by default).
