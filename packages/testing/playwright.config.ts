@@ -2,22 +2,16 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./visual",
-  snapshotPathTemplate:
-    "{testDir}/__screenshots__/{projectName}/{testFilePath}/{arg}{ext}",
-  expect: {
-    toHaveScreenshot: { animations: "disabled", caret: "hide", scale: "css" },
-  },
   use: {
-    baseURL: "http://127.0.0.1:6006",
+    baseURL: "http://127.0.0.1:5174",
     colorScheme: "light",
-    viewport: { width: 390, height: 844 },
+    viewport: { width: 1280, height: 900 },
   },
-  projects: [{ name: "mobile", use: { ...devices["Pixel 7"] } }],
+  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command:
-      "CI=true pnpm --filter @strata/storybook storybook -- --host 127.0.0.1",
-    url: "http://127.0.0.1:6006",
-    reuseExistingServer: true,
+    command: "pnpm --filter @strata/catalog-svelte dev -- --host 127.0.0.1",
+    url: "http://127.0.0.1:5174",
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });

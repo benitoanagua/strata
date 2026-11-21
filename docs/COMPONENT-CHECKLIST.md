@@ -13,7 +13,7 @@ Before a component is considered stable:
 - [ ] Has keyboard/focus semantics where interactive.
 - [ ] Has an accessible name where required.
 - [ ] Supports reduced motion.
-- [ ] Has a Storybook story with mobile viewport coverage.
+- [ ] Has a catalog example with mobile viewport coverage.
 - [ ] Has unit/contract coverage.
 - [ ] Has an accessibility check when interactive.
 - [ ] Has visual regression coverage when visual geometry matters.

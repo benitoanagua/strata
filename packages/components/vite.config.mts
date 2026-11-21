@@ -8,7 +8,6 @@ export default defineConfig({
       entryRoot: "src",
       tsconfigPath: "./tsconfig.json",
       insertTypesEntry: true,
-      exclude: ["src/**/*.stories.ts"],
     }),
   ],
   build: {

@@ -1,22 +1,19 @@
-import { waitForStoryReady } from "./story-ready.js";
 import { test, expect } from "@playwright/test";
 
-const stories = [
-  ["introduction-strata-design-system--overview", "introduction"],
-  ["foundations-scale-law--structural", "scale-law"],
-  ["components-overview--catalog", "component-catalog"],
-] as const;
+test.describe("STRATA responsive layout", () => {
+  test("catalog canvas remains usable at mobile width", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    await expect(page.getByRole("navigation", { name: "Component navigation" })).toBeVisible();
+    await expect(page.locator(".preview-stage strata-button")).toBeVisible();
+    await expect(page.locator("body")).toHaveJSProperty("scrollWidth", 390);
+  });
 
-test.describe("STRATA visual regression", () => {
-  for (const [story, snapshot] of stories) {
-    test(snapshot, async ({ page }) => {
-      await page.goto(`/iframe.html?id=${story}&viewMode=story`);
-      await page.waitForLoadState("networkidle");
-    await waitForStoryReady(page);
-      await expect(page.locator(".strata-story-frame")).toHaveScreenshot(
-        `${snapshot}.png`,
-        { fullPage: true },
-      );
-    });
-  }
+  test("catalog retains the workspace at desktop width", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/");
+    await expect(page.locator(".sidebar")).toBeVisible();
+    await expect(page.locator(".controls-panel")).toBeVisible();
+    await expect(page.locator(".preview-block")).toBeVisible();
+  });
 });

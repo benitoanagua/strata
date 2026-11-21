@@ -8,7 +8,7 @@ Every public component must define:
 4. Token usage only; no product hardcoded colors/radii/elevation.
 5. Accessibility semantics and keyboard behavior.
 6. Responsive/mobile behavior.
-7. Storybook story with default, states and edge cases.
+7. Catalog example with default, states and edge cases.
 8. Unit/contract test.
 9. Visual regression coverage when geometry or interaction is visual.
 

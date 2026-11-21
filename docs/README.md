@@ -1,3 +1,3 @@
 # STRATA Documentation
 
-The Storybook application is the interactive documentation source. These Markdown files contain normative architecture and design laws.
+The Svelte component catalog is the interactive documentation and playground. These Markdown files contain normative architecture, component contracts and design laws.
