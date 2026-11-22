@@ -5,6 +5,9 @@ import { customElement, property } from "lit/decorators.js";
 export class StrataPagination extends LitElement {
   static styles = css`
     :host {
+      display: block;
+    }
+    nav {
       display: flex;
       gap: 4px;
       align-items: center;
@@ -27,6 +30,7 @@ export class StrataPagination extends LitElement {
   `;
   @property({ type: Number }) page = 1;
   @property({ type: Number }) pages = 1;
+  @property({ type: String }) label = "Pagination";
 
   private selectPage(page: number) {
     if (page === this.page || page < 1 || page > this.pages) return;
@@ -41,6 +45,18 @@ export class StrataPagination extends LitElement {
   }
 
   render() {
-    return html`${Array.from({ length: Math.min(this.pages, 7) }, (_, i) => i + 1).map((n) => html`<button class="strata-pagination__page" type="button" aria-current=${n === this.page ? "page" : "false"} @click=${() => this.selectPage(n)}>${n}</button>`)}`;
+    return html`<nav aria-label=${this.label}>
+      ${Array.from({ length: Math.min(this.pages, 7) }, (_, i) => i + 1).map(
+        (n) =>
+          html`<button
+            class="strata-pagination__page"
+            type="button"
+            aria-current=${n === this.page ? "page" : "false"}
+            @click=${() => this.selectPage(n)}
+          >
+            ${n}
+          </button>`,
+      )}
+    </nav>`;
   }
 }

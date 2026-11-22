@@ -142,7 +142,7 @@ export class StrataTicker extends StrataElement {
       >
         <iconify-icon icon="carbon:chevron-left"></iconify-icon>
       </button>
-      <ul aria-label=${this.label}>
+      <ul aria-label=${this.label} tabindex="0">
         ${items.map((item) => {
           const href = safeHref(item.href);
           return html`<li>

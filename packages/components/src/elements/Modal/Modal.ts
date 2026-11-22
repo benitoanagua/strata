@@ -255,6 +255,7 @@ export class StrataModal extends LitElement {
           role="dialog"
           aria-modal="true"
           aria-labelledby=${this.title ? this.titleId : undefined}
+          aria-label=${this.title ? undefined : "Modal"}
           @click="${(e: Event) => e.stopPropagation()}"
           @keydown="${this.handleModalKeydown}"
           tabindex="-1"

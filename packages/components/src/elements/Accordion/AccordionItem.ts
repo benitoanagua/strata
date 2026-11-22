@@ -17,6 +17,12 @@ export class StrataAccordionItem
   private toggle() {
     if (this.disabled) return;
 
+    // Standalone use (no strata-accordion ancestor): toggle directly.
+    if (!this.closest("strata-accordion")) {
+      this.open = !this.open;
+      return;
+    }
+
     const index = Array.from(this.parentElement?.children || []).indexOf(this);
 
     this.dispatchEvent(

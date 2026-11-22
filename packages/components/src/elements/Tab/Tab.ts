@@ -12,6 +12,11 @@ export class StrataTab extends LitElement implements TabProps {
   @property({ type: Boolean, reflect: true }) active = false;
   @property({ type: String, attribute: "panel-id" }) panelId = "";
 
+  /** Delegates focus to the inner tab button (roving tabindex host target). */
+  focus() {
+    this.renderRoot.querySelector<HTMLElement>("button")?.focus();
+  }
+
   render() {
     return html`
       <button

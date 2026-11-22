@@ -78,6 +78,10 @@ export class StrataDialog extends LitElement {
     this.previouslyFocused = null;
   }
   private handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      this.open = false;
+      return;
+    }
     if (e.key !== "Tab") return;
     const content = this.renderRoot.querySelector<HTMLElement>(
       ".strata-dialog__content",
@@ -116,6 +120,7 @@ export class StrataDialog extends LitElement {
         role="dialog"
         aria-modal="true"
         aria-labelledby=${this.labelledBy || undefined}
+        aria-label=${this.title ? undefined : "Dialog"}
         tabindex="-1"
         @keydown=${this.handleKeydown}
       >

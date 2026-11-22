@@ -56,6 +56,9 @@ export class StrataTextField extends LitElement {
   private readonly errorId = `strata-tf-error-${Math.random()
     .toString(36)
     .slice(2, 9)}`;
+  private readonly inputId = `strata-tf-input-${Math.random()
+    .toString(36)
+    .slice(2, 9)}`;
 
   private handleInput(event: Event) {
     if (this.disabled) return;
@@ -69,8 +72,9 @@ export class StrataTextField extends LitElement {
 
   render() {
     return html`<div class="strata-text-field">
-      <label>${this.label}</label>
+      <label for=${this.inputId}>${this.label}</label>
       <input
+        id=${this.inputId}
         .value=${this.value}
         .placeholder=${this.placeholder}
         ?disabled=${this.disabled}

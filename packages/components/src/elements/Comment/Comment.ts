@@ -92,8 +92,9 @@ export class StrataComment extends StrataElement {
   /** Machine-readable date for `<time datetime>`. */
   @property({ type: String, attribute: "date-time" }) dateTime = "";
   @property({ type: String }) href = "";
-  /** Optional role badge ("Autor", "Moderador"). */
-  @property({ type: String }) role = "";
+  /** Optional role badge ("Autor", "Moderador"). Mapped from `role-label`,
+   *  never `role`, which is the global ARIA attribute. */
+  @property({ type: String, attribute: "role-label" }) role = "";
   @property({ type: String, attribute: "reply-label" }) replyLabel = "Reply";
   @property({ type: Boolean }) replyable = true;
   @state() private hasReplies = false;

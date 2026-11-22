@@ -5,6 +5,7 @@ import { StrataElement } from "../StrataBase.js";
 @customElement("strata-bottom-sheet")
 export class StrataBottomSheet extends StrataElement {
   @property({ type: Boolean, reflect: true }) open = false;
+  private previouslyFocused: HTMLElement | null = null;
   private handleEscape = (event: KeyboardEvent) => {
     if (event.key === "Escape" && this.open) this.open = false;
   };
@@ -14,17 +15,37 @@ export class StrataBottomSheet extends StrataElement {
   }
   disconnectedCallback() {
     window.removeEventListener("keydown", this.handleEscape);
+    this.restoreFocus();
     super.disconnectedCallback();
   }
   @property({ type: String }) title = "";
+  protected updated(changed: Map<string, unknown>) {
+    if (!changed.has("open")) return;
+    if (this.open) {
+      this.previouslyFocused =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+      queueMicrotask(() =>
+        this.renderRoot
+          .querySelector<HTMLElement>(".strata-bottom-sheet button")
+          ?.focus(),
+      );
+    } else {
+      this.restoreFocus();
+    }
+  }
+  private restoreFocus() {
+    this.previouslyFocused?.focus();
+    this.previouslyFocused = null;
+  }
   render() {
     return html`<section
       class="strata-bottom-sheet"
       ?hidden=${!this.open}
       role="dialog"
-      role="dialog"
       aria-modal="true"
-      aria-label=${this.title}
+      aria-label=${this.title || "Bottom sheet"}
     >
       <header>
         <strong>${this.title}</strong

@@ -29,6 +29,11 @@ export class StrataFilterBar extends StrataElement {
         justify-content: space-between;
         gap: 8px 16px;
       }
+      .filters {
+        display: flex;
+        flex: 1 1 240px;
+        min-width: 0;
+      }
       ul {
         display: flex;
         flex-wrap: wrap;
@@ -127,10 +132,12 @@ export class StrataFilterBar extends StrataElement {
 
   render() {
     const items = parseItems(this.items);
-    return html`<ul role="group" aria-label=${this.label}>
-        ${this.chip(this.allLabel, "")}
-        ${items.map((item) => this.chip(item.label, item.label))}
-      </ul>
+    return html`<div class="filters" role="group" aria-label=${this.label}>
+        <ul>
+          ${this.chip(this.allLabel, "")}
+          ${items.map((item) => this.chip(item.label, item.label))}
+        </ul>
+      </div>
       ${
         this.hideTools
           ? ""
