@@ -6,10 +6,8 @@
    ========================================================================== */
 
 .strata-prose {
-  max-width: var(--strata-editorial-measure, 34rem);
-  font-family: var(--strata-font-serif);
-  font-size: 1rem;
-  line-height: 1.6;
+  max-width: 70ch;
+  font: var(--strata-type-reading-body) var(--strata-font-serif);
   color: var(--strata-color-text-primary);
   -webkit-font-smoothing: antialiased;
 }
@@ -249,46 +247,38 @@
   font-size: 0.85em;
 }
 
-/* ---------- Responsive ---------- */
-
-@media (max-width: 640px) {
-  .strata-prose {
-    font-size: 0.95rem;
-  }
-}
-
 /* ---------- Print ---------- */
 
 @media print {
   .strata-prose {
     max-width: none;
-    color: #000;
-    background: #fff;
+    color: CanvasText;
+    background: Canvas;
   }
 
   .strata-prose a {
-    color: #000;
+    color: LinkText;
     text-decoration: underline;
   }
 
   .strata-prose h1,
   .strata-prose h2 {
-    border-bottom: 0.5pt solid #999;
+    border-bottom: 0.5pt solid GrayText;
   }
 
   .strata-prose table th,
   .strata-prose table td {
-    border: 0.5pt solid #999;
+    border: 0.5pt solid GrayText;
   }
 
   .strata-prose pre,
   .strata-prose code {
-    border: 0.5pt solid #999;
+    border: 0.5pt solid GrayText;
     background: none;
   }
 
   .strata-prose blockquote {
-    border-left: 0.5pt solid #999;
+    border-left: 0.5pt solid GrayText;
   }
 
   .strata-prose,

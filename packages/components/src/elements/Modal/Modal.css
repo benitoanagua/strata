@@ -319,12 +319,9 @@
 }
 
 .strata-modal__title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font: var(--strata-type-title-large) var(--strata-font-serif);
 
   color: var(--strata-color-text-primary);
-
-  letter-spacing: -0.025em;
 
   padding-right: 1rem;
 }
@@ -418,6 +415,7 @@
   background-color: transparent;
 
   color: var(--strata-color-text-secondary);
+  font-family: var(--strata-font-serif);
 
   overflow-y: auto;
 

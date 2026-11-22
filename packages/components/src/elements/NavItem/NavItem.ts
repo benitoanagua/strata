@@ -15,7 +15,7 @@ export class StrataNavItem extends LitElement {
       border-radius: var(--strata-radius-small);
       background: transparent;
       color: var(--strata-color-text-secondary);
-      font: 500 14px var(--strata-font-sans);
+      font: var(--strata-type-label-large) var(--strata-font-sans);
       cursor: pointer;
     }
     .strata-nav-item:hover {

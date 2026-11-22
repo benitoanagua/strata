@@ -10,7 +10,7 @@
   border-radius: var(--strata-radius-medium);
   background: var(--strata-color-text-primary);
   color: var(--strata-color-surface-page);
-  font: 500 14px/1 var(--strata-font-sans);
+  font: var(--strata-type-label-large) var(--strata-font-sans);
   cursor: pointer;
   text-decoration: none;
   transition:
@@ -70,7 +70,7 @@
   padding: 6px 12px;
   border-radius: var(--strata-radius-small);
   border-width: var(--strata-border-small);
-  font-size: 12px;
+  font: var(--strata-type-label-medium) var(--strata-font-sans);
 }
 
 .strata-button--size-medium {
@@ -85,7 +85,7 @@
   border-radius: var(--strata-radius-large);
   border-width: var(--strata-border-large);
   box-shadow: var(--strata-elevation-large);
-  font-size: 16px;
+  font: var(--strata-type-title-medium) var(--strata-font-sans);
 }
 
 .strata-button--size-large.strata-button--variant-text {

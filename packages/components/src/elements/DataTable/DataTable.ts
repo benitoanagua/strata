@@ -10,11 +10,12 @@ export class StrataDataTable extends LitElement {
     table {
       width: 100%;
       border-collapse: collapse;
-      font: 400 14px/1.4 var(--strata-font-sans);
+      font: var(--strata-type-body-medium) var(--strata-font-serif);
     }
     th {
       text-align: left;
-      font: 700 12px var(--strata-font-sans);
+      font: var(--strata-type-label-medium) var(--strata-font-sans);
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       border-bottom: var(--strata-border-large) solid

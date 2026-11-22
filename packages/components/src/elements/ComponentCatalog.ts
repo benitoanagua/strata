@@ -47,6 +47,7 @@ export const STRATA_COMPONENT_CATALOG = [
   "spinner",
   "file-upload",
   "stepper",
+  "prose",
 ] as const;
 
 export type StrataComponentName = (typeof STRATA_COMPONENT_CATALOG)[number];

@@ -54,6 +54,7 @@ export { StrataListItem } from "./ListItem/ListItem.js";
 export { StrataSpinner } from "./Spinner/Spinner.js";
 export { StrataFileUpload } from "./FileUpload/FileUpload.js";
 export { StrataStepper } from "./Stepper/Stepper.js";
+export { StrataProse } from "./Prose/Prose.js";
 
 export { STRATA_COMPONENT_CATALOG } from "./ComponentCatalog.js";
 export type { StrataComponentName } from "./ComponentCatalog.js";
@@ -114,5 +115,6 @@ declare global {
     "strata-spinner": import("./Spinner/Spinner.js").StrataSpinner;
     "strata-file-upload": import("./FileUpload/FileUpload.js").StrataFileUpload;
     "strata-stepper": import("./Stepper/Stepper.js").StrataStepper;
+    "strata-prose": import("./Prose/Prose.js").StrataProse;
   }
 }

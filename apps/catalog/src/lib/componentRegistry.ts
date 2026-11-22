@@ -658,6 +658,41 @@ export const catalog: readonly CatalogEntry[] = [
     description: "The STRATA brand mark.",
     controls: [],
   },
+  {
+    id: "prose",
+    name: "Prose",
+    category: "Data / content",
+    tagName: "strata-prose",
+    description:
+      "Reading wrapper for long-form content. Requires @strata/prose/prose.css.",
+    controls: [],
+    slotHtml: `<h1>On the architecture of quiet interfaces</h1>
+<p class="hatnote">An editorial note on restraint, measure and the filete.</p>
+<p>Typography is the voice of an interface. When a page is meant to be read rather than operated, the first decision is not which components to use but how much noise to remove. STRATA answers that question the way a well-set page of LaTeX does: a single serif voice for the text, a modest scale for headings, hairline rules instead of shadows, and a measure narrow enough that the eye never loses the line.</p>
+<p>The body is set at roughly ten and a half points with a leading near one and a half — dense enough to feel like print, airy enough to survive a screen. Headings do not shout; they mark sections the way a chapter heading does in a monograph, with a modest weight and a fine rule beneath the first two levels.</p>
+<h2>Measure and rhythm</h2>
+<p>A line of text should carry about sixty-five to seventy-five characters. Beyond that, the eye must travel too far to return; below that, the text breaks into choppy fragments. The prose layer enforces this with a <code>ch</code>-based measure, so the column breathes at any font size.</p>
+<ul>
+<li>Serif for reading: <em>Source Serif 4</em> carries paragraphs, quotes and tables.</li>
+<li>Sans for chrome: menus, buttons and labels stay in <em>Source Sans 3</em>.</li>
+<li>Mono for data: tags, identifiers and figures use <em>Source Code Pro</em>.</li>
+</ul>
+<blockquote><p>Simplicity is not the absence of detail; it is the presence of only the detail that matters.</p></blockquote>
+<h2>Structure in markup</h2>
+<p>Long-form content arrives as plain HTML or wikitext. The prose stylesheet understands the usual vocabulary: headings, lists, <code>inline code</code>, <pre><code>blocks</code></pre>, tables, figures and references.</p>
+<table>
+<thead><tr><th>Role</th><th>Family</th><th>Used for</th></tr></thead>
+<tbody>
+<tr><td>Reading</td><td>Serif</td><td>Paragraphs, quotes, article body</td></tr>
+<tr><td>Interface</td><td>Sans</td><td>Menus, buttons, forms, labels</td></tr>
+<tr><td>Data</td><td>Mono</td><td>Tags, badges, identifiers, numbers</td></tr>
+</tbody>
+</table>
+<p>Press <kbd>Ctrl</kbd>+<kbd>K</kbd> to search, or jump to the <a href="#notes">notes</a>. A footnote marker looks like this.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup></p>
+<h2>Details that carry weight</h2>
+<p>Small decisions accumulate: the offset of an underline, the silence between paragraphs, the exact gray of a hairline. The goal is a page that disappears — where the reader remembers the argument, not the interface.</p>
+<div class="footnotes"><ol><li id="fn1">See <em>Design Laws</em>, §3, for the measure contract.</li></ol></div>`,
+  },
 ];
 
 export const categories = [...new Set(catalog.map((entry) => entry.category))];

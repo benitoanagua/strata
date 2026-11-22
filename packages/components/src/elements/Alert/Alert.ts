@@ -21,7 +21,7 @@ export class StrataAlert extends LitElement {
       border-left: var(--strata-border-large) solid currentColor;
       border-radius: var(--strata-radius-small);
       background: var(--strata-color-surface-raised);
-      font: 400 14px/1.45 var(--strata-font-sans);
+      font: var(--strata-type-reading-body) var(--strata-font-serif);
     }
     .strata-alert__icon {
       flex: 0 0 auto;

@@ -13,7 +13,7 @@ export class StrataTextField extends LitElement {
       gap: 6px;
     }
     label {
-      font: 500 12px/1.2 var(--strata-font-sans);
+      font: var(--strata-type-label-medium) var(--strata-font-sans);
     }
     input {
       width: 100%;
@@ -23,7 +23,7 @@ export class StrataTextField extends LitElement {
       border-radius: var(--strata-radius-small);
       background: var(--strata-color-surface-page);
       color: var(--strata-color-text-primary);
-      font: 400 14px/1.4 var(--strata-font-sans);
+      font: var(--strata-type-body-medium) var(--strata-font-sans);
     }
     input:focus {
       border-color: var(--strata-color-focus-ring);

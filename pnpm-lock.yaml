@@ -38,6 +38,9 @@ importers:
       '@strata/components':
         specifier: workspace:*
         version: link:../../packages/components
+      '@strata/prose':
+        specifier: workspace:*
+        version: link:../../packages/prose
       '@strata/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens

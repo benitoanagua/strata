@@ -55,22 +55,22 @@ export const strataComponentStyles = css`
     font-weight: 500;
   }
   .strata-title--level-1 {
-    font-size: 2rem;
+    font: var(--strata-type-headline-large) var(--strata-font-serif);
   }
   .strata-title--level-2 {
-    font-size: 1.75rem;
+    font: var(--strata-type-headline-medium) var(--strata-font-serif);
   }
   .strata-title--level-3 {
-    font-size: 1.5rem;
+    font: var(--strata-type-headline-small) var(--strata-font-serif);
   }
   .strata-title--level-4 {
-    font-size: 1.25rem;
+    font: var(--strata-type-title-large) var(--strata-font-serif);
   }
   .strata-title--level-5 {
-    font-size: 1.125rem;
+    font: var(--strata-type-title-medium) var(--strata-font-serif);
   }
   .strata-title--level-6 {
-    font-size: 1rem;
+    font: var(--strata-type-title-small) var(--strata-font-serif);
   }
   .strata-avatar {
     width: 40px;
@@ -95,7 +95,7 @@ export const strataComponentStyles = css`
     list-style: none;
     align-items: center;
     flex-wrap: wrap;
-    font: 500 12px/1.4 var(--strata-font-mono);
+    font: var(--strata-type-label-medium) var(--strata-font-mono);
   }
   .strata-control-group {
     display: flex;
@@ -240,7 +240,7 @@ export const strataComponentStyles = css`
     padding: 4px 8px;
     border-radius: var(--strata-component-radius);
     background: var(--strata-color-surface-subtle);
-    font: 500 12px/1 var(--strata-font-mono);
+    font: var(--strata-type-label-medium) var(--strata-font-mono);
   }
   .strata-list {
     display: grid;
@@ -293,7 +293,7 @@ export const strataComponentStyles = css`
   .strata-stepper__value {
     min-width: 2ch;
     text-align: center;
-    font: 600 14px/1 var(--strata-font-mono);
+    font: var(--strata-type-numeric-small) var(--strata-font-mono);
     font-variant-numeric: tabular-nums;
   }
   .strata-number-field__input {

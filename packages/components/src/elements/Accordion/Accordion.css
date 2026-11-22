@@ -189,6 +189,7 @@
   padding: 1rem;
   padding-top: 1rem;
   color: var(--strata-color-text-secondary);
+  font-family: var(--strata-font-serif);
 
   transition-property: opacity;
   transition-duration: 300ms;

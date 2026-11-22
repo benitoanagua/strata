@@ -12,7 +12,7 @@ export class StrataCheckbox extends LitElement {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font: 400 14px var(--strata-font-sans);
+      font: var(--strata-type-body-medium) var(--strata-font-sans);
       cursor: pointer;
     }
     input {

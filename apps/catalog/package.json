@@ -13,7 +13,8 @@
   "dependencies": {
     "@strata/components": "workspace:*",
     "@strata/tokens": "workspace:*",
-    "svelte": "^5.20.0"
+    "svelte": "^5.20.0",
+    "@strata/prose": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.0",

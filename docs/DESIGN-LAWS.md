@@ -38,6 +38,8 @@ Decision note: the brief "que deje ser monocromático" was ambiguous between "st
 
 Source Serif 4 is the reading family (body text). Source Sans 3 is the interface family (dashboards, menus, navigation). Source Code Pro is reserved for tags, numerical/data contexts and similar machine-like elements where tabular alignment improves scanning. Fonts are loaded from Google Fonts, never bundled in the repository.
 
+Sizes come from `--strata-type-*` tokens only; there is no display scale — headings are modest (≤24 px), medium weight, and may carry a hairline filete, mirroring the section titles of the LaTeX CVs. Reading measure is capped near 70 `ch`.
+
 ## 6. Iconography Law
 
 Iconify is used directly. `@iconify-json/carbon` is the only permitted icon collection.

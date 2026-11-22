@@ -11,7 +11,7 @@ export class StrataSelect extends LitElement {
     label {
       display: grid;
       gap: 6px;
-      font: 500 12px/1.2 var(--strata-font-sans);
+      font: var(--strata-type-label-medium) var(--strata-font-sans);
     }
     select {
       min-height: 40px;
@@ -20,7 +20,7 @@ export class StrataSelect extends LitElement {
       border-radius: var(--strata-radius-small);
       background: var(--strata-color-surface-page);
       color: var(--strata-color-text-primary);
-      font: 400 14px var(--strata-font-sans);
+      font: var(--strata-type-body-medium) var(--strata-font-sans);
     }
   `;
   @property() label = "";

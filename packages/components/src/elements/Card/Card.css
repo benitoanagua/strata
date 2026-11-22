@@ -43,27 +43,23 @@
   display: block;
   color: var(--strata-color-text-primary);
   text-decoration: none;
-  font-size: 20px;
-  line-height: 1.2;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font: var(--strata-type-headline-medium) var(--strata-font-serif);
 }
 .strata-card--size-large .strata-card__title-link,
 .strata-card--size-hero .strata-card__title-link {
-  font-size: 28px;
+  font: var(--strata-type-headline-large) var(--strata-font-serif);
 }
 .strata-card__excerpt {
   margin: 8px 0 0;
   color: var(--strata-color-text-secondary);
-  font-size: 14px;
-  line-height: 1.5;
+  font: var(--strata-type-reading-body) var(--strata-font-serif);
 }
 .strata-card__meta {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 14px;
-  font: 500 12px/1.2 var(--strata-font-mono);
+  font: var(--strata-type-label-medium) var(--strata-font-mono);
   color: var(--strata-color-text-secondary);
 }
 .strata-card__tag {
@@ -76,7 +72,7 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 10px;
-  font-size: 12px;
+  font: var(--strata-type-label-medium) var(--strata-font-sans);
 }
 .strata-card__author-image,
 .strata-card__author-bullet {

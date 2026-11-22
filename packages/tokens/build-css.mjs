@@ -27,6 +27,13 @@ for (const [key, value] of Object.entries(tokens.spacing))
   vars.push(`--strata-space-${key}: ${value}px;`);
 for (const [key, value] of Object.entries(tokens.motion))
   vars.push(`--strata-motion-${key}: ${value}ms;`);
+for (const [key, value] of Object.entries(tokens.typography ?? {})) {
+  const name = kebab(key);
+  vars.push(
+    `--strata-type-${name}: ${value.weight} ${value.size}px/${value.lineHeight}px;`,
+  );
+  vars.push(`--strata-type-${name}-tracking: ${value.letterSpacing}px;`);
+}
 for (const [key, value] of Object.entries(tokens.editorial))
   vars.push(
     `--strata-editorial-${kebab(key)}: ${value}${key === "measure" ? "px" : key === "gutter" || key === "dividerDouble" ? "px" : ""};`,

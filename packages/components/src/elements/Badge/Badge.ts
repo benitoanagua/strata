@@ -11,7 +11,8 @@ export class StrataBadge extends LitElement {
       display: inline-block;
     }
     .strata-badge {
-      font: 600 12px/1 var(--strata-font-mono);
+      font: var(--strata-type-label-medium) var(--strata-font-mono);
+      font-weight: 600;
       padding: 4px 7px;
       border-radius: var(--strata-radius-small);
       border: 0;
