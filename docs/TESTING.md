@@ -15,7 +15,7 @@ pnpm changeset status   # changeset validity (run before releases)
 ## Layers
 
 - `packages/components/test/` — Vitest + jsdom unit and contract tests:
-  element registration, mount/a11y-name sweep over all 74 catalog entries
+  element registration, mount/a11y-name sweep over all 76 catalog entries
   (`catalog-components.test.ts`), value-event contracts (`api-contracts`),
   editorial/article-nav behavior, font and status-semantics rules, and
   regression tests for audit fixes (`fixes.test.ts`).
@@ -27,7 +27,7 @@ pnpm changeset status   # changeset validity (run before releases)
   (`vite preview` on port 5174):
   - `smoke.spec.ts` — catalog loads, property updates, reset.
   - `catalog.spec.ts` — inventory counts, search, category collapse,
-    selection of all 74 entries, typed controls (boolean/number), reset,
+    selection of all 76 entries, typed controls (boolean/number), reset,
     snippet generation + clipboard copy, API/a11y tabs, compound fixtures,
     all five scenarios, surface/viewport controls.
   - `components.spec.ts` — axe scan (critical+serious) and visual baseline

@@ -8,9 +8,10 @@ const kebab = (name: string) =>
   name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 
 describe("catalog registry", () => {
-  it("mirrors the canonical 74-entry inventory", () => {
-    expect(catalog).toHaveLength(74);
-    expect(new Set(catalog.map((e) => e.id)).size).toBe(74);
+  it("mirrors the canonical component inventory", () => {
+    const canonicalIds = STRATA_COMPONENT_CATALOG.map(kebab);
+    expect(catalog).toHaveLength(canonicalIds.length);
+    expect(new Set(catalog.map((e) => e.id)).size).toBe(canonicalIds.length);
   });
 
   it("covers every canonical component exactly once", () => {

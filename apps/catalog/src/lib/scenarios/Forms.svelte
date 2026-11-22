@@ -47,11 +47,15 @@
       onstrata-change={(e: Event) => (qty = Number(detail(e).value ?? qty))}
     ></strata-number-field>
     <strata-date-field label="Fecha de envío" value="2026-11-22"></strata-date-field>
-    <strata-select label="Región" value="andean">
-      <option value="andean">Andina</option>
-      <option value="litoral">Litoral</option>
-      <option value="chaco">Chaco</option>
-    </strata-select>
+    <strata-select
+      label="Región"
+      value="andean"
+      options={[
+        { value: "andean", label: "Andina" },
+        { value: "litoral", label: "Litoral" },
+        { value: "chaco", label: "Chaco" },
+      ]}
+    ></strata-select>
     <strata-file-upload
       label="Adjuntar archivo"
       accept=".pdf,.md"

@@ -1,0 +1,56 @@
+:host {
+  display: inline-block;
+}
+
+.viewer-settings {
+  position: relative;
+  display: inline-flex;
+}
+
+.vs-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: var(--strata-border-small) solid var(--strata-color-border-subtle);
+  border-radius: var(--strata-radius-small);
+  background: var(--strata-color-surface-page);
+  color: var(--strata-color-text-primary);
+  font: var(--strata-type-label-medium) var(--strata-font-sans);
+  cursor: pointer;
+}
+
+.vs-toggle:hover {
+  background: var(--strata-color-surface-hover);
+}
+
+.vs-toggle[aria-expanded="true"] {
+  background: var(--strata-color-surface-selected);
+}
+
+.vs-toggle iconify-icon {
+  font-size: 15px;
+}
+
+.vs-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  display: grid;
+  gap: 10px;
+  min-width: 210px;
+  padding: 12px;
+  border: var(--strata-border-small) solid var(--strata-color-border-subtle);
+  border-radius: var(--strata-radius-medium);
+  background: var(--strata-color-surface-raised);
+}
+
+.vs-panel[hidden] {
+  display: none;
+}
+
+.vs-panel strata-select {
+  display: block;
+}

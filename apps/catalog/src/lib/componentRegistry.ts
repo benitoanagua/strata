@@ -1498,6 +1498,77 @@ export const catalog: readonly CatalogEntry[] = [
     notes:
       "Progressive enhancement: appends a.strata-anchor links to headings in the target subtree. Pair with @strata/prose for styling.",
   },
+  {
+    id: "tree",
+    name: "Tree",
+    category: "Navigation",
+    tagName: "strata-tree",
+    description:
+      "Accessible data-driven tree with selection, expansion and full keyboard navigation.",
+    maturity: "beta",
+    controls: [
+      text("label", "Label", "Tree"),
+      list(
+        "nodes",
+        "Nodes (JSON)",
+        '[{"id":"cat","label":"Category","meta":"2","children":[{"id":"one","label":"First item"},{"id":"two","label":"Second item","disabled":true}]},{"id":"solo","label":"Standalone node","icon":"carbon:document"}]',
+      ),
+      list("selectedIds", "Selected ids (JSON)", '["one"]'),
+      bool("multiple", "Multiple selection"),
+      text("emptyLabel", "Empty label", "No items"),
+    ],
+    events: [
+      {
+        name: "strata-select",
+        detail: "{ id, node, selected }",
+        description: "Fired when a node is activated.",
+      },
+      {
+        name: "strata-selection-change",
+        detail: "{ ids }",
+        description: "Fired with the full set of selected ids.",
+      },
+      {
+        name: "strata-toggle",
+        detail: "{ id, expanded }",
+        description: "Fired when a parent node expands or collapses.",
+      },
+    ],
+    a11y: "role=tree/treeitem/group with aria-level, aria-setsize, aria-posinset, aria-expanded, aria-selected and aria-disabled; roving tabindex; ArrowUp/Down/Left/Right, Home, End, Enter and Space.",
+    notes:
+      "Data-driven only: pass nodes as a StrataTreeNode[] or JSON. Navigation is the consumer's job — listen to strata-select and route yourself.",
+  },
+  {
+    id: "viewer-settings",
+    name: "ViewerSettings",
+    category: "Surfaces",
+    tagName: "strata-viewer-settings",
+    description:
+      "Disclosure panel with theme, surface, viewport and motion preferences for viewers and playgrounds.",
+    maturity: "beta",
+    controls: [
+      text("label", "Label", "Viewer settings"),
+      select("theme", "Theme", "system", ["system", "light", "dark"]),
+      select("surface", "Surface", "auto", ["auto", "light", "dark", "grid"]),
+      select("viewport", "Viewport", "desktop", [
+        "desktop",
+        "tablet",
+        "mobile",
+      ]),
+      select("motion", "Motion", "system", ["system", "reduced"]),
+      bool("open", "Open"),
+    ],
+    events: [
+      {
+        name: "strata-change",
+        detail: "{ value: { theme, surface, viewport, motion } }",
+        description: "Fired when any setting changes.",
+      },
+    ],
+    a11y: "Toggle button exposes aria-expanded/aria-controls; the panel is a labelled group of labelled selects; Escape closes and focus returns to the toggle.",
+    notes:
+      "Controlled component: persistence and theme resolution stay in the consumer. Used by this catalog itself (key: strata-catalog-viewer).",
+  },
 ];
 
 export const categories: readonly Category[] = CATEGORIES;

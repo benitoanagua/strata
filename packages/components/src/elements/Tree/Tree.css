@@ -1,0 +1,95 @@
+:host {
+  display: block;
+}
+
+.strata-tree {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: var(--strata-type-label-medium) var(--strata-font-sans);
+}
+
+.strata-tree__group {
+  margin: 0;
+  padding: 0 0 0 16px;
+  list-style: none;
+}
+
+.strata-tree__item {
+  margin: 0;
+}
+
+.strata-tree__row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 8px;
+  border-radius: var(--strata-radius-small);
+  color: var(--strata-color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.strata-tree__item:hover > .strata-tree__row {
+  background: var(--strata-color-surface-hover);
+  color: var(--strata-color-text-primary);
+}
+
+.strata-tree__item[aria-selected="true"] > .strata-tree__row {
+  background: var(--strata-color-surface-selected);
+  color: var(--strata-color-text-primary);
+  font-weight: 600;
+}
+
+.strata-tree__item[aria-disabled="true"] > .strata-tree__row {
+  color: var(--strata-color-text-secondary);
+  opacity: 0.55;
+  cursor: default;
+}
+
+.strata-tree__item:focus-visible {
+  outline: 2px solid var(--strata-color-focus-ring);
+  outline-offset: -2px;
+}
+
+.strata-tree__caret {
+  flex: 0 0 12px;
+  width: 12px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--strata-color-text-secondary);
+}
+
+.strata-tree__icon {
+  flex: 0 0 auto;
+  font-size: 14px;
+}
+
+.strata-tree__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.strata-tree__href {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--strata-color-text-secondary);
+}
+
+.strata-tree__meta {
+  margin-left: auto;
+  font: var(--strata-type-label-small) var(--strata-font-mono);
+  color: var(--strata-color-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.strata-tree__empty {
+  margin: 0;
+  padding: 10px 8px;
+  color: var(--strata-color-text-secondary);
+  font: var(--strata-type-label-medium) var(--strata-font-sans);
+}

@@ -81,10 +81,28 @@ export { StrataReferences } from "./References/References.js";
 export { StrataHatnote } from "./Hatnote/Hatnote.js";
 export { StrataArticleNav } from "./ArticleNav/ArticleNav.js";
 export { StrataHeadingAnchors } from "./HeadingAnchors/HeadingAnchors.js";
+export { StrataTree } from "./Tree/Tree.js";
+export { StrataViewerSettings } from "./ViewerSettings/ViewerSettings.js";
 export { STRATA_SHARE_NETWORKS } from "./Share/Share.js";
 export { STRATA_COMPONENT_CATALOG } from "./ComponentCatalog.js";
 export type { StrataComponentName } from "./ComponentCatalog.js";
 export type { StrataIconName } from "../types/iconify.js";
+export type {
+  StrataTreeNode,
+  TreeSelectDetail,
+  TreeSelectionDetail,
+  TreeToggleDetail,
+  StrataTreeSelectEvent,
+  StrataTreeSelectionEvent,
+  StrataTreeToggleEvent,
+} from "../types/tree.js";
+export type {
+  ViewerMotionPreference,
+  ViewerSettingsValue,
+  ViewerSurfacePreference,
+  ViewerThemePreference,
+  ViewerViewportPreference,
+} from "../types/viewer-settings.js";
 
 // Global element typing is kept here so IDEs know every public element.
 declare global {
@@ -98,6 +116,8 @@ declare global {
     "strata-hatnote": import("./Hatnote/Hatnote.js").StrataHatnote;
     "strata-article-nav": import("./ArticleNav/ArticleNav.js").StrataArticleNav;
     "strata-heading-anchors": import("./HeadingAnchors/HeadingAnchors.js").StrataHeadingAnchors;
+    "strata-tree": import("./Tree/Tree.js").StrataTree;
+    "strata-viewer-settings": import("./ViewerSettings/ViewerSettings.js").StrataViewerSettings;
     "strata-meta": import("./Meta/Meta.js").StrataMeta;
     "strata-tag-list": import("./TagList/TagList.js").StrataTagList;
     "strata-section-header": import("./SectionHeader/SectionHeader.js").StrataSectionHeader;

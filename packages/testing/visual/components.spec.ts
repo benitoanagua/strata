@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { catalog } from "../../../apps/catalog/src/lib/componentRegistry.ts";
 import { stubRemoteFonts } from "./font-stub";
@@ -24,13 +24,25 @@ const PARENT_FIXTURES: Record<string, string> = {
   </strata-list>`,
 };
 
-async function openComponent(page: Page, name: string, theme: string) {
+async function seedViewerPrefs(page: Page, surface: string) {
+  await page.addInitScript((value) => {
+    window.localStorage.setItem(
+      "strata-catalog-viewer",
+      JSON.stringify({
+        version: 1,
+        theme: "system",
+        surface: value,
+        viewport: "desktop",
+        motion: "system",
+      }),
+    );
+  }, surface);
+}
+
+async function openComponent(page: Page, entryId: string, surface: string) {
+  await seedViewerPrefs(page, surface);
   await page.goto("/");
-  await page.getByLabel("Canvas surface").selectOption(theme);
-  await page
-    .getByRole("navigation", { name: "Component navigation" })
-    .getByRole("button", { name: `◇ ${name}`, exact: true })
-    .click();
+  await page.locator(`[data-node-id="entry:${entryId}"]`).click();
   const preview = page.locator(".preview-stage > *").last();
   await expect(preview).toBeAttached();
   await page.waitForTimeout(150);
@@ -43,8 +55,8 @@ test.describe("STRATA component axe coverage", () => {
         page,
       }) => {
         await stubRemoteFonts(page);
+        await seedViewerPrefs(page, theme);
         await page.goto("/");
-        await page.getByLabel("Canvas surface").selectOption(theme);
 
         const fixture = PARENT_FIXTURES[entry.id];
         if (fixture) {
@@ -53,10 +65,7 @@ test.describe("STRATA component axe coverage", () => {
           }, fixture);
           await page.waitForTimeout(200);
         } else {
-          await page
-            .getByRole("navigation", { name: "Component navigation" })
-            .getByRole("button", { name: `◇ ${entry.name}`, exact: true })
-            .click();
+          await page.locator(`[data-node-id="entry:${entry.id}"]`).click();
           const preview = page.locator(".preview-stage > *").last();
           await expect(preview).toBeAttached();
           await page.waitForTimeout(150);
@@ -88,7 +97,7 @@ test.describe("STRATA component screenshots", () => {
         page,
       }) => {
         await stubRemoteFonts(page);
-        await openComponent(page, entry.name, theme);
+        await openComponent(page, entry.id, theme);
         await expect(page.locator(".preview-stage")).toHaveScreenshot(
           `${entry.id}-${theme}.png`,
           { animations: "disabled" },

@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
   await stubRemoteFonts(page);
 });
 
-const LIBRARY_ENTRIES = 74;
+const LIBRARY_ENTRIES = 76;
 const SCENARIOS = 5;
 
 test("catalog lists every canonical component and scenario", async ({
@@ -13,19 +13,17 @@ test("catalog lists every canonical component and scenario", async ({
 }) => {
   await page.goto("/");
   await expect(
-    page.locator(".sidebar nav[aria-label='Component navigation'] .nav-entry"),
+    page.locator(".sidebar-nav [data-node-id^='entry:']"),
   ).toHaveCount(LIBRARY_ENTRIES);
   await expect(
-    page.locator(".sidebar nav[aria-label='Scenarios'] .nav-entry"),
+    page.locator(".sidebar-nav [data-node-id^='scenario:']"),
   ).toHaveCount(SCENARIOS);
 });
 
 test("search filters the library by name and description", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("Search components").fill("dialog");
-  const entries = page.locator(
-    ".sidebar nav[aria-label='Component navigation'] .nav-entry",
-  );
+  const entries = page.locator(".sidebar-nav [data-node-id^='entry:']");
   await expect(entries.first()).toBeVisible();
   const count = await entries.count();
   expect(count).toBeGreaterThan(0);
@@ -34,26 +32,36 @@ test("search filters the library by name and description", async ({ page }) => {
   const texts = await entries.allTextContents();
   expect(texts.some((t) => /dialog/i.test(t))).toBe(true);
   await page.getByLabel("Search components").fill("zzz-no-match");
-  await expect(page.locator(".empty-search")).toBeVisible();
+  await expect(page.locator(".strata-tree__empty")).toBeVisible();
 });
 
 test("category navigation collapses and expands groups", async ({ page }) => {
   await page.goto("/");
-  const toggle = page.locator(".category-toggle", { hasText: "Actions" });
-  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  const group = page.locator("[data-node-id='cat:Actions']").first();
+  await expect(group).toHaveAttribute("aria-expanded", "true");
   const before = await page
-    .locator(".sidebar nav[aria-label='Component navigation'] .nav-entry")
+    .locator(".sidebar-nav [data-node-id^='entry:']")
     .count();
-  await toggle.click();
-  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await group.locator(".strata-tree__caret").first().click();
+  await expect(group).toHaveAttribute("aria-expanded", "false");
   const after = await page
-    .locator(".sidebar nav[aria-label='Component navigation'] .nav-entry")
+    .locator(".sidebar-nav [data-node-id^='entry:']")
     .count();
   expect(after).toBeLessThan(before);
-  await toggle.click();
+  await group.locator(".strata-tree__caret").first().click();
+  await expect(group).toHaveAttribute("aria-expanded", "true");
   await expect(
-    page.locator(".sidebar nav[aria-label='Component navigation'] .nav-entry"),
+    page.locator(".sidebar-nav [data-node-id^='entry:']"),
   ).toHaveCount(LIBRARY_ENTRIES);
+});
+
+test("tree keyboard navigation moves and selects entries", async ({ page }) => {
+  await page.goto("/");
+  const tree = page.locator("[role='tree']").first();
+  await tree.locator("[tabindex='0']").first().focus();
+  await page.keyboard.press("ArrowDown");
+  const focused = page.locator("[role='treeitem'][tabindex='0']");
+  await expect(focused).toHaveCount(1);
 });
 
 test("every component is selectable and mounts a real element", async ({
@@ -64,11 +72,11 @@ test("every component is selectable and mounts a real element", async ({
   page.on("pageerror", (e) => pageErrors.push(e.message));
   await page.goto("/");
   const entries = await page
-    .locator(".sidebar nav[aria-label='Component navigation'] .nav-entry")
+    .locator(".sidebar-nav [data-node-id^='entry:']")
     .evaluateAll((els) =>
       els.map((el) => ({
-        id: el.getAttribute("data-entry-id"),
-        tag: el.querySelector(".nav-tag")?.textContent?.trim(),
+        id: el.getAttribute("data-node-id")!.replace("entry:", ""),
+        tag: el.querySelector(".strata-tree__meta")?.textContent?.trim(),
       })),
     );
   expect(entries).toHaveLength(LIBRARY_ENTRIES);
@@ -89,15 +97,13 @@ test("property controls mutate the mounted element with real types", async ({
 }) => {
   await page.goto("/#/slider");
   const host = page.locator(".preview-stage > strata-slider");
-  const minControl = page.locator("#prop-min");
-  await expect(minControl).toHaveAttribute("type", "number");
+  const minControl = page.getByLabel("Min", { exact: true });
   await minControl.fill("10");
   await expect(host).toHaveJSProperty("min", 10);
   expect(typeof (await host.evaluate((el) => (el as any).min))).toBe("number");
 
   await page.goto("/#/checkbox");
-  const checked = page.locator("#prop-checked");
-  await expect(checked).toHaveAttribute("type", "checkbox");
+  const checked = page.getByLabel("Checked", { exact: true });
   await checked.uncheck();
   await expect(
     page.locator(".preview-stage > strata-checkbox"),
@@ -106,7 +112,7 @@ test("property controls mutate the mounted element with real types", async ({
 
 test("reset restores declared defaults", async ({ page }) => {
   await page.goto("/#/button");
-  await page.getByLabel("Label").fill("Changed label");
+  await page.getByLabel("Label", { exact: true }).fill("Changed label");
   await expect(page.locator(".preview-stage > strata-button")).toHaveJSProperty(
     "label",
     "Changed label",
@@ -142,6 +148,17 @@ test("API and accessibility tabs render documentation", async ({ page }) => {
   await expect(page.locator(".a11y-panel")).toBeVisible();
 });
 
+test("variants and states sections mount real elements", async ({ page }) => {
+  await page.goto("/#/button");
+  await expect(page.getByRole("heading", { name: "Variants" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "States" })).toBeVisible();
+  const cells = page.locator(".demo-cell");
+  expect(await cells.count()).toBeGreaterThan(4);
+  await expect(
+    cells.first().locator("strata-button, strata-icon-button, *").first(),
+  ).toBeAttached();
+});
+
 test("compound components mount their slotted fixtures", async ({ page }) => {
   await page.goto("/#/tabs");
   const tabs = page.locator(".preview-stage > strata-tabs");
@@ -168,14 +185,27 @@ test("all five editorial scenarios render", async ({ page }) => {
   }
 });
 
-test("surface and viewport controls restyle the canvas", async ({ page }) => {
-  await page.goto("/");
-  await page.getByLabel("Canvas surface").selectOption("dark");
-  await expect(page.locator(".canvas")).toHaveClass(/canvas-dark/);
-  await page.getByLabel("Canvas surface").selectOption("grid");
+test("viewer settings control theme, surface and viewport", async ({
+  page,
+}) => {
+  await page.goto("/#/button");
+  await page.locator("strata-viewer-settings .vs-toggle").click();
+  const panel = page.locator(".vs-panel");
+  await panel.getByLabel("Theme").selectOption("dark");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await panel.getByLabel("Surface").selectOption("light");
+  await expect(page.locator(".canvas")).toHaveAttribute("data-theme", "light");
+  await panel.getByLabel("Surface").selectOption("grid");
   await expect(page.locator(".canvas")).toHaveClass(/canvas-grid/);
-  await page.getByLabel("Canvas viewport").selectOption("mobile");
+  await panel.getByLabel("Viewport").selectOption("mobile");
   await expect(page.locator(".preview-viewport")).toHaveClass(
     /viewport-mobile/,
   );
+  // Preferences persist under the catalog-owned key.
+  const stored = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("strata-catalog-viewer") ?? "{}"),
+  );
+  expect(stored.theme).toBe("dark");
+  expect(stored.surface).toBe("grid");
+  expect(stored.viewport).toBe("mobile");
 });

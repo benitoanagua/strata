@@ -40,7 +40,7 @@ There is intentionally no `@strata/icons` abstraction. Components use `iconify-i
 
 ## Component source of truth
 
-`packages/components/src/elements/index.ts` is the public export boundary and `ComponentCatalog.ts` is the canonical inventory (74 entries). The Svelte catalog uses a typed registry (`apps/catalog/src/lib/componentRegistry.ts`) that mirrors the canonical inventory and carries maturity, events, slots, accessibility notes and curated control metadata.
+`packages/components/src/elements/index.ts` is the public export boundary and `ComponentCatalog.ts` is the canonical inventory (76 entries). The Svelte catalog uses a typed registry (`apps/catalog/src/lib/componentRegistry.ts`) that mirrors the canonical inventory and carries maturity, events, slots, accessibility notes and curated control metadata.
 
 Catalog property controls are not a second API list: `apps/catalog/src/lib/props.ts` reads each element's Lit `elementProperties` at runtime, derives control types (text/boolean/number/select/list) and real default values, and merges the curated registry on top. `Snippet.svelte` serializes the live values back into consumer-ready HTML using the real attribute names. Editorial scenarios under `apps/catalog/src/lib/scenarios/` compose only public component APIs.
 

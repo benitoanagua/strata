@@ -1,6 +1,6 @@
 # STRATA — Component Coverage
 
-Coverage matrix for the 74 canonical components. `Mount` = `catalog-components.test.ts` mounts every entry and checks accessible names; `Axe` + `Visual` = `packages/testing/visual/components.spec.ts` scans and screenshots every entry in light and dark themes; `Focused` = dedicated unit/contract tests found by tag reference.
+Coverage matrix for the 76 canonical components. `Mount` = `catalog-components.test.ts` mounts every entry and checks accessible names; `Axe` + `Visual` = `packages/testing/visual/components.spec.ts` scans and screenshots every entry in light and dark themes; `Focused` = dedicated unit/contract tests found by tag reference.
 
 ## Actions
 
@@ -19,7 +19,7 @@ Coverage matrix for the 74 canonical components. `Mount` = `catalog-components.t
 | SearchField | `strata-search-field` | ✓     | ✓   | ✓      | —                                     | beta     |
 | NumberField | `strata-number-field` | ✓     | ✓   | ✓      | —                                     | beta     |
 | DateField   | `strata-date-field`   | ✓     | ✓   | ✓      | —                                     | beta     |
-| Select      | `strata-select`       | ✓     | ✓   | ✓      | —                                     | beta     |
+| Select      | `strata-select`       | ✓     | ✓   | ✓      | `select`                              | beta     |
 | Checkbox    | `strata-checkbox`     | ✓     | ✓   | ✓      | `components`                          | stable   |
 | Radio       | `strata-radio`        | ✓     | ✓   | ✓      | —                                     | beta     |
 | RadioGroup  | `strata-radio-group`  | ✓     | ✓   | ✓      | —                                     | beta     |
@@ -37,6 +37,7 @@ Coverage matrix for the 74 canonical components. `Mount` = `catalog-components.t
 | Breadcrumb | `strata-breadcrumb` | ✓     | ✓   | ✓      | —                             | beta     |
 | Menu       | `strata-menu`       | ✓     | ✓   | ✓      | `__gen_coverage`              | beta     |
 | MenuItem   | `strata-menu-item`  | ✓     | ✓   | ✓      | `__gen_coverage`              | beta     |
+| Tree       | `strata-tree`       | ✓     | ✓   | ✓      | `tree`                        | beta     |
 
 ## Feedback
 
@@ -53,17 +54,18 @@ Coverage matrix for the 74 canonical components. `Mount` = `catalog-components.t
 
 ## Surfaces
 
-| Component   | Tag                   | Mount | Axe | Visual | Focused tests                        | Maturity     |
-| ----------- | --------------------- | ----- | --- | ------ | ------------------------------------ | ------------ |
-| Surface     | `strata-surface`      | ✓     | ✓   | ✓      | —                                    | stable       |
-| Card        | `strata-card`         | ✓     | ✓   | ✓      | `components`                         | beta         |
-| Dialog      | `strata-dialog`       | ✓     | ✓   | ✓      | `components` `fixes`                 | beta         |
-| Modal       | `strata-modal`        | ✓     | ✓   | ✓      | `api-contracts` `components` `fixes` | beta         |
-| Drawer      | `strata-drawer`       | ✓     | ✓   | ✓      | `fixes`                              | beta         |
-| BottomSheet | `strata-bottom-sheet` | ✓     | ✓   | ✓      | `fixes`                              | beta         |
-| Popover     | `strata-popover`      | ✓     | ✓   | ✓      | —                                    | experimental |
-| Overlay     | `strata-overlay`      | ✓     | ✓   | ✓      | —                                    | beta         |
-| ThemeToggle | `strata-theme-toggle` | ✓     | ✓   | ✓      | `__gen_coverage`                     | stable       |
+| Component      | Tag                      | Mount | Axe | Visual | Focused tests                        | Maturity     |
+| -------------- | ------------------------ | ----- | --- | ------ | ------------------------------------ | ------------ |
+| Surface        | `strata-surface`         | ✓     | ✓   | ✓      | —                                    | stable       |
+| Card           | `strata-card`            | ✓     | ✓   | ✓      | `components`                         | beta         |
+| Dialog         | `strata-dialog`          | ✓     | ✓   | ✓      | `components` `fixes`                 | beta         |
+| Modal          | `strata-modal`           | ✓     | ✓   | ✓      | `api-contracts` `components` `fixes` | beta         |
+| Drawer         | `strata-drawer`          | ✓     | ✓   | ✓      | `fixes`                              | beta         |
+| BottomSheet    | `strata-bottom-sheet`    | ✓     | ✓   | ✓      | `fixes`                              | beta         |
+| Popover        | `strata-popover`         | ✓     | ✓   | ✓      | —                                    | experimental |
+| Overlay        | `strata-overlay`         | ✓     | ✓   | ✓      | —                                    | beta         |
+| ThemeToggle    | `strata-theme-toggle`    | ✓     | ✓   | ✓      | `__gen_coverage`                     | stable       |
+| ViewerSettings | `strata-viewer-settings` | ✓     | ✓   | ✓      | `viewer-settings` `select`           | beta         |
 
 ## Data & Content
 

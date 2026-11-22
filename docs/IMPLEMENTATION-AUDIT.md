@@ -1,10 +1,10 @@
 # STRATA — Implementation Audit
 
-Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
+Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
 
 ## Summary
 
-- **74 canonical entries**, all registered as custom elements (`strata-*`).
+- **76 canonical entries**, all registered as custom elements (`strata-*`).
 - **78 registered elements**: the four extra tags (`strata-accordion-item`, `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) are composition-only children, not catalog entries.
 - Catalog registry, public exports and `STRATA_COMPONENT_CATALOG` are synchronized (verified by `apps/catalog/test/catalog-registry.test.ts`).
 - Every entry mounts a real element in the catalog canvas; controls are derived from Lit `elementProperties` metadata (`apps/catalog/src/lib/props.ts`).
@@ -96,7 +96,7 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 | SearchField (`search-field`) | `strata-search-field` | `StrataSearchField` | `size`<br>`tone`<br>`value`<br>`label`<br>`placeholder`<br>`disabled`            | `size`<br>`disabled`              | `strata-input`<br>`strata-change` | —         | beta     |
 | NumberField (`number-field`) | `strata-number-field` | `StrataNumberField` | `size`<br>`tone`<br>`value`<br>`min`<br>`max`<br>`step`<br>`disabled`<br>`label` | `size`<br>`disabled`              | `strata-input`<br>`strata-change` | —         | beta     |
 | DateField (`date-field`)     | `strata-date-field`   | `StrataDateField`   | `size`<br>`tone`<br>`value`<br>`label`<br>`disabled`                             | `size`<br>`disabled`              | `strata-input`<br>`strata-change` | —         | beta     |
-| Select (`select`)            | `strata-select`       | `StrataSelect`      | `label`<br>`value`<br>`disabled`                                                 | `disabled`                        | `strata-input`<br>`strata-change` | `default` | beta     |
+| Select (`select`)            | `strata-select`       | `StrataSelect`      | `label`<br>`value`<br>`disabled`<br>`options`                                    | `disabled`                        | `strata-input`<br>`strata-change` | —         | beta     |
 | Checkbox (`checkbox`)        | `strata-checkbox`     | `StrataCheckbox`    | `checked`<br>`disabled`<br>`label`                                               | `checked`<br>`disabled`           | `strata-input`<br>`strata-change` | `default` | stable   |
 | Radio (`radio`)              | `strata-radio`        | `StrataRadio`       | `size`<br>`tone`<br>`label`<br>`checked`<br>`disabled`<br>`name`<br>`value`      | `size`<br>`checked`<br>`disabled` | `strata-input`<br>`strata-change` | `default` | beta     |
 | RadioGroup (`radio-group`)   | `strata-radio-group`  | `StrataRadioGroup`  | `size`<br>`tone`<br>`label`                                                      | `size`                            | —                                 | `default` | beta     |
@@ -156,12 +156,11 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 ### Select — `strata-select`
 
-- **Purpose:** A labelled select control; options are slotted <option> elements.
+- **Purpose:** A labelled select control with a prop-driven options API.
 - **Implementation:** `StrataSelect` in `packages/components/src/elements/Select`
-- **Properties (3):** `label` (String), `value` (String), `disabled` (Boolean, reflected)
+- **Properties (4):** `label` (String), `value` (String), `disabled` (Boolean, reflected), `options` (Array of strings or `{ value, label }`, JSON via attribute)
 - **Events:** `strata-input` — Fired on every value change while interacting.; `strata-change` — Fired when the value is committed.
-- **Slots:** `default` — <option> elements.
-- **Notes:** There is no items prop; compose with native <option> children or a framework adapter.
+- **Notes:** Options are rendered as real `<option>` children of the inner `<select>`. Slotted `<option>` elements never registered as options inside shadow DOM, so the `options` prop (or JSON `options` attribute) is the supported API.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
@@ -248,14 +247,15 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 ## Navigation
 
-| Entry                     | Tag                 | Class              | Props                                               | Reflected              | Events       | Slots                           | Maturity |
-| ------------------------- | ------------------- | ------------------ | --------------------------------------------------- | ---------------------- | ------------ | ------------------------------- | -------- |
-| NavItem (`nav-item`)      | `strata-nav-item`   | `StrataNavItem`    | `selected`<br>`label`                               | `selected`             | —            | `default`                       | stable   |
-| Tabs (`tabs`)             | `strata-tabs`       | `StrataTabs`       | `activeTab`<br>`disabled`                           | `disabled`             | `tab-change` | `tabs`<br>`panels`              | beta     |
-| Tab (`tab`)               | `strata-tab`        | `StrataTab`        | `disabled`<br>`active`<br>`panelId`                 | `disabled`<br>`active` | `tab-change` | `default`<br>`tabs`<br>`panels` | beta     |
-| Breadcrumb (`breadcrumb`) | `strata-breadcrumb` | `StrataBreadcrumb` | `size`<br>`tone`<br>`items`<br>`label`              | `size`                 | —            | —                               | beta     |
-| Menu (`menu`)             | `strata-menu`       | `StrataMenu`       | `size`<br>`tone`<br>`open`<br>`label`               | `size`                 | —            | `default`                       | beta     |
-| MenuItem (`menu-item`)    | `strata-menu-item`  | `StrataMenuItem`   | `size`<br>`tone`<br>`label`<br>`icon`<br>`disabled` | `size`                 | —            | `default`                       | beta     |
+| Entry                     | Tag                 | Class              | Props                                                             | Reflected              | Events                                                          | Slots                           | Maturity |
+| ------------------------- | ------------------- | ------------------ | ----------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------- | ------------------------------- | -------- |
+| NavItem (`nav-item`)      | `strata-nav-item`   | `StrataNavItem`    | `selected`<br>`label`                                             | `selected`             | —                                                               | `default`                       | stable   |
+| Tabs (`tabs`)             | `strata-tabs`       | `StrataTabs`       | `activeTab`<br>`disabled`                                         | `disabled`             | `tab-change`                                                    | `tabs`<br>`panels`              | beta     |
+| Tab (`tab`)               | `strata-tab`        | `StrataTab`        | `disabled`<br>`active`<br>`panelId`                               | `disabled`<br>`active` | `tab-change`                                                    | `default`<br>`tabs`<br>`panels` | beta     |
+| Breadcrumb (`breadcrumb`) | `strata-breadcrumb` | `StrataBreadcrumb` | `size`<br>`tone`<br>`items`<br>`label`                            | `size`                 | —                                                               | —                               | beta     |
+| Menu (`menu`)             | `strata-menu`       | `StrataMenu`       | `size`<br>`tone`<br>`open`<br>`label`                             | `size`                 | —                                                               | `default`                       | beta     |
+| MenuItem (`menu-item`)    | `strata-menu-item`  | `StrataMenuItem`   | `size`<br>`tone`<br>`label`<br>`icon`<br>`disabled`               | `size`                 | —                                                               | `default`                       | beta     |
+| Tree (`tree`)             | `strata-tree`       | `StrataTree`       | `label`<br>`nodes`<br>`selectedIds`<br>`multiple`<br>`emptyLabel` | —                      | `strata-select`<br>`strata-selection-change`<br>`strata-toggle` | —                               | beta     |
 
 ### NavItem — `strata-nav-item`
 
@@ -458,17 +458,18 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 ## Surfaces
 
-| Entry                        | Tag                   | Class               | Props                                                                                                                                                                                                                                                                            | Reflected                         | Events                                                | Slots                             | Maturity     |
-| ---------------------------- | --------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ----------------------------------------------------- | --------------------------------- | ------------ |
-| Surface (`surface`)          | `strata-surface`      | `StrataSurface`     | `size`<br>`outlined`                                                                                                                                                                                                                                                             | `outlined`                        | —                                                     | `default`                         | stable       |
-| Card (`card`)                | `strata-card`         | `StrataCard`        | `title`<br>`url`<br>`excerpt`<br>`feature_image`<br>`tag_name`<br>`tag_url`<br>`author_name`<br>`author_url`<br>`author_profile_image`<br>`media_align`<br>`media_width`<br>`heading`<br>`density`<br>`size`<br>`aspect_ratio`<br>`reading_time`<br>`published_at`<br>`bordered` | `heading`<br>`size`<br>`bordered` | —                                                     | —                                 | beta         |
-| Dialog (`dialog`)            | `strata-dialog`       | `StrataDialog`      | `open`<br>`title`                                                                                                                                                                                                                                                                | `open`                            | —                                                     | `default`                         | beta         |
-| Modal (`modal`)              | `strata-modal`        | `StrataModal`       | `open`<br>`title`<br>`size`<br>`position`<br>`variant`<br>`animation`<br>`closeOnOverlay`<br>`closeOnEscape`<br>`showClose`<br>`preventScroll`                                                                                                                                   | `open`                            | `modal-open`<br>`modal-before-close`<br>`modal-close` | `header`<br>`default`<br>`footer` | beta         |
-| Drawer (`drawer`)            | `strata-drawer`       | `StrataDrawer`      | `size`<br>`tone`<br>`open`<br>`title`                                                                                                                                                                                                                                            | `size`<br>`open`                  | —                                                     | `default`                         | beta         |
-| BottomSheet (`bottom-sheet`) | `strata-bottom-sheet` | `StrataBottomSheet` | `size`<br>`tone`<br>`open`<br>`title`                                                                                                                                                                                                                                            | `size`<br>`open`                  | —                                                     | `default`                         | beta         |
-| Popover (`popover`)          | `strata-popover`      | `StrataPopover`     | `size`<br>`tone`<br>`open`<br>`label`                                                                                                                                                                                                                                            | `size`<br>`open`                  | —                                                     | `default`                         | experimental |
-| Overlay (`overlay`)          | `strata-overlay`      | `StrataOverlay`     | `title`<br>`url`<br>`feature_image`<br>`tag_name`<br>`author_name`<br>`published_at`<br>`reading_time`<br>`aspect_ratio`<br>`heading`<br>`show_meta`<br>`align`<br>`position`<br>`box`<br>`fill`                                                                                 | `heading`                         | —                                                     | —                                 | beta         |
-| ThemeToggle (`theme-toggle`) | `strata-theme-toggle` | `StrataThemeToggle` | —                                                                                                                                                                                                                                                                                | —                                 | `theme-change`                                        | —                                 | stable       |
+| Entry                              | Tag                      | Class                  | Props                                                                                                                                                                                                                                                                            | Reflected                                                | Events                                                | Slots                             | Maturity     |
+| ---------------------------------- | ------------------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- | ------------ |
+| Surface (`surface`)                | `strata-surface`         | `StrataSurface`        | `size`<br>`outlined`                                                                                                                                                                                                                                                             | `outlined`                                               | —                                                     | `default`                         | stable       |
+| Card (`card`)                      | `strata-card`            | `StrataCard`           | `title`<br>`url`<br>`excerpt`<br>`feature_image`<br>`tag_name`<br>`tag_url`<br>`author_name`<br>`author_url`<br>`author_profile_image`<br>`media_align`<br>`media_width`<br>`heading`<br>`density`<br>`size`<br>`aspect_ratio`<br>`reading_time`<br>`published_at`<br>`bordered` | `heading`<br>`size`<br>`bordered`                        | —                                                     | —                                 | beta         |
+| Dialog (`dialog`)                  | `strata-dialog`          | `StrataDialog`         | `open`<br>`title`                                                                                                                                                                                                                                                                | `open`                                                   | —                                                     | `default`                         | beta         |
+| Modal (`modal`)                    | `strata-modal`           | `StrataModal`          | `open`<br>`title`<br>`size`<br>`position`<br>`variant`<br>`animation`<br>`closeOnOverlay`<br>`closeOnEscape`<br>`showClose`<br>`preventScroll`                                                                                                                                   | `open`                                                   | `modal-open`<br>`modal-before-close`<br>`modal-close` | `header`<br>`default`<br>`footer` | beta         |
+| Drawer (`drawer`)                  | `strata-drawer`          | `StrataDrawer`         | `size`<br>`tone`<br>`open`<br>`title`                                                                                                                                                                                                                                            | `size`<br>`open`                                         | —                                                     | `default`                         | beta         |
+| BottomSheet (`bottom-sheet`)       | `strata-bottom-sheet`    | `StrataBottomSheet`    | `size`<br>`tone`<br>`open`<br>`title`                                                                                                                                                                                                                                            | `size`<br>`open`                                         | —                                                     | `default`                         | beta         |
+| Popover (`popover`)                | `strata-popover`         | `StrataPopover`        | `size`<br>`tone`<br>`open`<br>`label`                                                                                                                                                                                                                                            | `size`<br>`open`                                         | —                                                     | `default`                         | experimental |
+| Overlay (`overlay`)                | `strata-overlay`         | `StrataOverlay`        | `title`<br>`url`<br>`feature_image`<br>`tag_name`<br>`author_name`<br>`published_at`<br>`reading_time`<br>`aspect_ratio`<br>`heading`<br>`show_meta`<br>`align`<br>`position`<br>`box`<br>`fill`                                                                                 | `heading`                                                | —                                                     | —                                 | beta         |
+| ThemeToggle (`theme-toggle`)       | `strata-theme-toggle`    | `StrataThemeToggle`    | —                                                                                                                                                                                                                                                                                | —                                                        | `theme-change`                                        | —                                 | stable       |
+| ViewerSettings (`viewer-settings`) | `strata-viewer-settings` | `StrataViewerSettings` | `theme`<br>`surface`<br>`viewport`<br>`motion`<br>`label`<br>`open`                                                                                                                                                                                                              | `theme`<br>`surface`<br>`viewport`<br>`motion`<br>`open` | `strata-change`                                       | —                                 | beta         |
 
 ### Surface — `strata-surface`
 
@@ -1093,4 +1094,33 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
 - **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
+- **Maturity:** beta
+
+### Tree — `strata-tree`
+
+- **Purpose:** Accessible, data-driven tree for hierarchical navigation and selection.
+- **Implementation:** `StrataTree` in `packages/components/src/elements/Tree`
+- **Properties (5):** `label` (String), `nodes` (`StrataTreeNode[]` or JSON string), `selectedIds` (string array or JSON string), `multiple` (Boolean), `emptyLabel` (String)
+- **Node shape:** `id`, `label`, `children?`, `disabled?`, `icon?` (Carbon), `href?`, `meta?`, `expanded?`
+- **Events:** `strata-select` (`{ id, node, selected }`), `strata-selection-change` (`{ ids }`), `strata-toggle` (`{ id, expanded }`)
+- **Accessibility:** `role=tree/treeitem/group` with `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded`, `aria-selected`, `aria-disabled`; roving tabindex; ArrowUp/Down/Left/Right, Home, End, Enter, Space. `setNodeExpanded(id, expanded)` offers programmatic expansion; ancestors of the selection auto-expand.
+- **Notes:** Router-agnostic — consumers read `node.href` from `strata-select` and navigate themselves. Disabled nodes cannot be selected; nested clicks do not bubble into ancestor selection.
+- **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
+- **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
+- **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
+- **Tests:** `packages/components/test/tree.test.ts` (rendering, expansion, selection, disabled, keyboard, events, JSON input); catalog mount + axe + visual baseline in `packages/testing/visual/components.spec.ts`.
+- **Maturity:** beta
+
+### ViewerSettings — `strata-viewer-settings`
+
+- **Purpose:** Compact disclosure panel with theme, surface, viewport and motion preferences for viewers and playgrounds.
+- **Implementation:** `StrataViewerSettings` in `packages/components/src/elements/ViewerSettings`
+- **Properties (6):** `theme`, `surface`, `viewport`, `motion` (all reflected strings), `label` (String), `open` (Boolean, reflected)
+- **Events:** `strata-change` — `detail.value` is the full `ViewerSettingsValue` object; inner `strata-select` events are stopped so consumers see one normalized event.
+- **Accessibility:** Toggle button exposes `aria-expanded`/`aria-controls`; the panel is a labelled group of labelled selects; Escape closes and focus returns to the toggle; outside pointerdown dismisses.
+- **Notes:** Fully controlled — persistence and theme resolution stay in the consumer. The catalog persists preferences under `strata-catalog-viewer` (never `strata-theme`).
+- **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
+- **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
+- **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
+- **Tests:** `packages/components/test/viewer-settings.test.ts` (panel, normalized event, Escape, outside dismiss); catalog mount + axe + visual baseline in `packages/testing/visual/components.spec.ts`.
 - **Maturity:** beta

@@ -7,4 +7,6 @@ export * from "./types/events.js";
 export * from "./types/modal.js";
 export * from "./types/overlay.js";
 export * from "./types/tabs.js";
+export * from "./types/tree.js";
+export * from "./types/viewer-settings.js";
 export * from "./elements/index.js";

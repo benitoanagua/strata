@@ -20,17 +20,30 @@
 
 The Svelte app (`apps/catalog`) consumes the existing `@strata/components`
 package and canonical `STRATA_COMPONENT_CATALOG` through a typed registry
-(`src/lib/componentRegistry.ts`) that mirrors all 74 entries with maturity,
+(`src/lib/componentRegistry.ts`) that mirrors all 76 entries with maturity,
 events, slots, accessibility notes and curated control metadata.
 
-The canvas mounts the registered custom element and assigns properties
-directly to its DOM node. Property controls are derived at runtime from Lit
-`elementProperties` metadata (`src/lib/props.ts`) merged with curated
+The catalog is itself built from STRATA public components. Navigation is a
+`strata-tree` fed from the registry (`src/lib/treeData.ts`); viewer
+preferences (theme, surface, viewport, motion) are a controlled
+`strata-viewer-settings` persisted under `strata-catalog-viewer`; property
+controls use `strata-text-field`, `strata-number-field`, `strata-select` and
+`strata-checkbox`; detail tabs are a real `strata-tabs`; and the preview,
+variant and state galleries mount elements through `src/lib/renderer.ts`,
+which waits for `customElements.whenDefined`, assigns typed properties and
+updates the instance in place. Property controls are derived at runtime from
+Lit `elementProperties` metadata (`src/lib/props.ts`) merged with curated
 labels/options/fixture defaults — booleans, numbers, selects and
 JSON/pipe-delimited list props keep their real types. The UI adds search,
-collapsible category navigation, hash-based routing, surface (light/dark/grid)
-and viewport (desktop/tablet/mobile) controls, reset-to-defaults, API and
-accessibility tabs, and copyable consumer snippets (`src/lib/Snippet.svelte`).
+hierarchical category navigation, hash-based routing, theme/surface/viewport/
+motion controls, reset-to-defaults, API and accessibility tabs, variant/state
+galleries and copyable consumer snippets (`src/lib/Snippet.svelte`).
+
+Two components were added to the public library for this work:
+`strata-tree` (generic accessible tree) and `strata-viewer-settings`
+(normalized viewer preferences). `strata-select` gained a prop-driven
+`options` API after the audit showed slotted `<option>` elements never
+registered inside its shadow `<select>`.
 
 Five composed scenarios (`src/lib/scenarios/`) demonstrate real pages: an
 editorial article, a wiki article with TOC/reading chrome, social comments,
@@ -47,7 +60,7 @@ APIs. See `docs/CATALOG-GUIDE.md`.
 
 ## Component audit fixes
 
-A full audit of the 74 canonical entries (`docs/IMPLEMENTATION-AUDIT.md`)
+A full audit of the 76 canonical entries (`docs/IMPLEMENTATION-AUDIT.md`)
 found and fixed real defects: duplicate `role` and missing focus/Escape
 handling in the overlay family (dialog, modal, drawer, bottom-sheet), a
 DataTable slot API that could never render (table internals are dropped by
@@ -64,4 +77,4 @@ Regression coverage lives in `packages/components/test/fixes.test.ts`.
 
 ## Validation
 
-`pnpm check` runs audit, format check, lint, typecheck, unit/contract tests, build and the catalog build. Browser tests (`pnpm test:visual`, `pnpm test:a11y`) run Playwright against `apps/catalog`; Google Fonts requests are stubbed in tests so rendering does not depend on the network. The catalog suite (`packages/testing/visual/catalog.spec.ts`) verifies inventory counts, search, categories, selection of all 74 entries, typed controls, reset, snippets, clipboard copy, scenarios and canvas controls; `apps/catalog/test/catalog-registry.test.ts` verifies registry/canonical/export synchronization.
+`pnpm check` runs audit, format check, lint, typecheck, unit/contract tests, build and the catalog build. Browser tests (`pnpm test:visual`, `pnpm test:a11y`) run Playwright against `apps/catalog`; Google Fonts requests are stubbed in tests so rendering does not depend on the network. The catalog suite (`packages/testing/visual/catalog.spec.ts`) verifies inventory counts, search, categories, selection of all 76 entries, typed controls, reset, snippets, clipboard copy, scenarios and canvas controls; `apps/catalog/test/catalog-registry.test.ts` verifies registry/canonical/export synchronization.

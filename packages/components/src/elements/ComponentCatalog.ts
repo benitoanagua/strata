@@ -73,6 +73,8 @@ export const STRATA_COMPONENT_CATALOG = [
   "hatnote",
   "article-nav",
   "heading-anchors",
+  "tree",
+  "viewer-settings",
 ] as const;
 
 export type StrataComponentName = (typeof STRATA_COMPONENT_CATALOG)[number];
