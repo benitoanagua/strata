@@ -1,8 +1,8 @@
 {
   "name": "Strata",
-  "version": "1.0.0",
-  "author": ["STRATA Design System"],
-  "url": "https://github.com/strata-design-system",
+  "version": "1.1.0",
+  "author": ["Benito Anagua"],
+  "url": "https://github.com/benitoanagua/strata",
   "descriptionmsg": "strata-skin-desc",
   "namemsg": "skinname-strata",
   "license-name": "MIT",

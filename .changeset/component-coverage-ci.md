@@ -1,6 +1,5 @@
 ---
 "@strata/components": minor
-"@strata/testing": minor
 "@strata/core": minor
 ---
 
