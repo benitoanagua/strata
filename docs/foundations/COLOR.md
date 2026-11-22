@@ -38,6 +38,18 @@ an icon, underline, weight or filete must accompany them.
 - `--strata-color-status-warning`
 - `--strata-color-status-success`
 
+**Statuses are never color alone.** Alert renders a distinct Carbon icon per
+tone, Badge prefixes status tones with an icon, and `strata-text-field` pairs
+`error` with `aria-invalid`, a `role="alert"` message and an icon — enforced
+by `packages/components/test/status.test.ts`.
+
+### Strict monochrome
+
+Setting `strictMonochrome: true` in `tokens.json` replaces the three status
+colors with the grayscale ramp in `monochromeStatus` (still ≥ 4.5:1 on every
+surface, verified by `packages/testing/src/strict-monochrome.test.ts`). The
+non-color cues above are what keep statuses distinguishable in that mode.
+
 ## Accent (off by default)
 
 A single optional accent for links and focus lives in `tokens.json` under

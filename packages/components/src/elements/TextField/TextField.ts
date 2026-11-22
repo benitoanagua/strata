@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { emitValueEvent } from "../../events.js";
 
@@ -31,12 +31,31 @@ export class StrataTextField extends LitElement {
         color-mix(in srgb, var(--strata-color-focus-ring) 25%, transparent);
       outline-offset: 1px;
     }
+    input[aria-invalid="true"] {
+      border-color: var(--strata-color-status-error);
+    }
+    .strata-text-field__error {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      font: var(--strata-type-label-medium) var(--strata-font-sans);
+      color: var(--strata-color-status-error);
+    }
+    .strata-text-field__error iconify-icon {
+      font-size: 1em;
+    }
   `;
 
   @property() label = "";
   @property() placeholder = "";
   @property() value = "";
   @property({ type: Boolean, reflect: true }) disabled = false;
+  @property({ type: Boolean, reflect: true }) error = false;
+  @property() errorMessage = "";
+  private readonly errorId = `strata-tf-error-${Math.random()
+    .toString(36)
+    .slice(2, 9)}`;
 
   private handleInput(event: Event) {
     if (this.disabled) return;
@@ -55,9 +74,28 @@ export class StrataTextField extends LitElement {
         .value=${this.value}
         .placeholder=${this.placeholder}
         ?disabled=${this.disabled}
+        aria-invalid=${this.error ? "true" : "false"}
+        aria-describedby=${
+          this.error && this.errorMessage ? this.errorId : nothing
+        }
         @input=${this.handleInput}
         @change=${this.handleChange}
       />
+      ${
+        this.error && this.errorMessage
+          ? html`<p
+              id=${this.errorId}
+              class="strata-text-field__error"
+              role="alert"
+            >
+              <iconify-icon
+                icon="carbon:error"
+                aria-hidden="true"
+              ></iconify-icon
+              >${this.errorMessage}
+            </p>`
+          : nothing
+      }
     </div>`;
   }
 }

@@ -41,10 +41,14 @@ for (const [key, value] of Object.entries(tokens.editorial))
 for (const [key, value] of Object.entries(tokens.icon))
   vars.push(`--strata-icon-${kebab(key)}: ${value}px;`);
 
-const themeVars = (theme) =>
-  Object.entries(tokens.semantic[theme])
+const themeVars = (theme) => {
+  const semantic = { ...tokens.semantic[theme] };
+  if (tokens.strictMonochrome)
+    Object.assign(semantic, tokens.monochromeStatus?.[theme] ?? {});
+  return Object.entries(semantic)
     .map(([key, value]) => `--strata-color-${kebab(key)}: ${value};`)
     .join("");
+};
 
 const accentVars = (theme) =>
   tokens.accent?.enabled

@@ -4,6 +4,12 @@ import { customElement, property } from "lit/decorators.js";
 export type StrataBadgeTone =
   "neutral" | "error" | "warning" | "success" | "info";
 
+const TONE_ICONS = {
+  error: "carbon:error",
+  warning: "carbon:warning-alt",
+  success: "carbon:checkmark",
+} as const;
+
 @customElement("strata-badge")
 export class StrataBadge extends LitElement {
   static styles = css`
@@ -46,11 +52,19 @@ export class StrataBadge extends LitElement {
       );
       color: var(--strata-color-status-success);
     }
+    .strata-badge iconify-icon {
+      font-size: 0.9em;
+    }
   `;
   @property({ reflect: true }) tone: StrataBadgeTone = "neutral";
   render() {
-    return html`<span class="strata-badge strata-badge--${this.tone}"
-      ><slot></slot
-    ></span>`;
+    const icon = TONE_ICONS[this.tone as keyof typeof TONE_ICONS];
+    return html`<span class="strata-badge strata-badge--${this.tone}">
+      ${
+        icon
+          ? html`<iconify-icon icon=${icon} aria-hidden="true"></iconify-icon>`
+          : ""
+      }<slot></slot>
+    </span>`;
   }
 }
