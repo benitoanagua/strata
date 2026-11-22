@@ -1,6 +1,6 @@
 # STRATA component catalog
 
-STRATA ships a 74-component catalog. The catalog is deliberately broad enough for mobile product UI while keeping each component small and composable.
+STRATA ships a 74-component catalog. The catalog is deliberately broad enough for mobile product UI and long-form reading while keeping each component small and composable.
 
 ## Actions
 
@@ -12,36 +12,47 @@ TextField · SearchField · NumberField · DateField · Select · Checkbox · Ra
 
 ## Navigation
 
-NavItem · Tabs · Tab · TabPanel · Breadcrumb · Menu · MenuItem
+NavItem · Tabs · Breadcrumb · Menu · MenuItem
+
+(`strata-tab` and `strata-tab-panel` are composition children of Tabs.)
 
 ## Feedback
 
-Alert · Progress · Skeleton · Snackbar · Spinner · Badge · Tag
+Alert · Badge · Tag · Progress · Skeleton · Spinner · Snackbar · Tooltip
 
-## Surfaces / overlays
+## Surfaces
 
-Surface · Card · Dialog · Modal · Drawer · BottomSheet · Popover · Tooltip · Overlay
+Surface · Card · Dialog · Modal · Drawer · BottomSheet · Popover · Overlay · ThemeToggle
 
-## Data / content
+## Data & Content
 
-DataTable · Pagination · List · ListItem · Accordion · Carousel · Grille · Avatar · Divider · Logo · ThemeToggle
+DataTable · Pagination · List · ListItem · Accordion · Carousel · Grille · Avatar · Divider · Logo · Prose
 
-## Editorial (news / wiki)
+## Editorial
 
 Meta · TagList · SectionHeader · AuthorBox · Share · Comment · CommentThread · ArticleHeader · Entry · Quote · Ticker · FilterBar · IndexList · RankedList · Gallery · PageLayout
 
-Ported from the Vue/Tailwind _UI Components Library_ news kit. See `docs/EDITORIAL-COMPONENTS.md` for the mapping, wiki uses and what was deliberately left out.
-
-## Article navigation (wiki)
+## Article Navigation
 
 Toc · ReadingTime · ReadingProgress · BackToTop · Cite · References · Hatnote · ArticleNav · HeadingAnchors
 
-See `docs/ARTICLE-NAVIGATION.md`.
+See `docs/EDITORIAL-COMPONENTS.md` and `docs/ARTICLE-NAVIGATION.md` for the
+editorial mapping and wiki uses.
+
+## Interactive catalog
+
+`apps/catalog` renders every entry with live property controls derived from
+Lit metadata, copyable snippets, API/accessibility tabs and five composed
+editorial scenarios. See `docs/CATALOG-GUIDE.md`.
 
 ## Contract
 
-Every component should document: purpose, anatomy, variants, size, states, accessibility, responsive behavior, tokens, examples, and tests.
+Every component documents: purpose, anatomy, variants, size, states,
+accessibility, responsive behavior, tokens, examples and tests — enforced by
+`docs/IMPLEMENTATION-AUDIT.md` and `docs/COMPONENT-COVERAGE.md`.
 
 ## Maturity
 
-Every component is shipped as a composable baseline. Components that gain complex interaction semantics (dialogs, menus, date fields, data tables, etc.) must complete the full checklist before being marked Stable.
+Every component ships as a composable baseline. Components with complex
+interaction semantics must complete `docs/COMPONENT-CHECKLIST.md` before
+being marked Stable. Current counts: 18 stable, 55 beta, 1 experimental.

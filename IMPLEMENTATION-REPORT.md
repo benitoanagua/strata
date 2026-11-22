@@ -18,9 +18,24 @@
 
 ## Component catalog
 
-The Svelte app consumes the existing `@strata/components` package and canonical `STRATA_COMPONENT_CATALOG`. Its typed registry describes examples and control metadata; it does not implement component behavior or copy component styles.
+The Svelte app (`apps/catalog`) consumes the existing `@strata/components`
+package and canonical `STRATA_COMPONENT_CATALOG` through a typed registry
+(`src/lib/componentRegistry.ts`) that mirrors all 74 entries with maturity,
+events, slots, accessibility notes and curated control metadata.
 
-The canvas mounts the registered custom element and assigns properties directly to its DOM node. This preserves booleans and typed property values rather than serializing them into attributes. The controls support text, boolean, number and select types, with reset to defaults, background/surface modes and responsive viewports.
+The canvas mounts the registered custom element and assigns properties
+directly to its DOM node. Property controls are derived at runtime from Lit
+`elementProperties` metadata (`src/lib/props.ts`) merged with curated
+labels/options/fixture defaults — booleans, numbers, selects and
+JSON/pipe-delimited list props keep their real types. The UI adds search,
+collapsible category navigation, hash-based routing, surface (light/dark/grid)
+and viewport (desktop/tablet/mobile) controls, reset-to-defaults, API and
+accessibility tabs, and copyable consumer snippets (`src/lib/Snippet.svelte`).
+
+Five composed scenarios (`src/lib/scenarios/`) demonstrate real pages: an
+editorial article, a wiki article with TOC/reading chrome, social comments,
+a data dashboard and a full form suite — all built only from public component
+APIs. See `docs/CATALOG-GUIDE.md`.
 
 ## STRATA visual laws
 
@@ -30,6 +45,23 @@ The canvas mounts the registered custom element and assigns properties directly 
 - The catalog imports the published token stylesheet and component stylesheet, and uses the existing semantic CSS variables.
 - Carbon via `iconify-icon` remains the only permitted icon collection.
 
+## Component audit fixes
+
+A full audit of the 74 canonical entries (`docs/IMPLEMENTATION-AUDIT.md`)
+found and fixed real defects: duplicate `role` and missing focus/Escape
+handling in the overlay family (dialog, modal, drawer, bottom-sheet), a
+DataTable slot API that could never render (table internals are dropped by
+the HTML parser inside custom elements — replaced with `columns`/`rows`
+props), a FileUpload with no events or drop handling, a Breadcrumb without
+links or `aria-current`, a Menu without keyboard navigation, an unassociated
+TextField label, an ungrouped Pagination landmark, and smaller semantic gaps
+in Tooltip, Popover, Tab, MenuItem and AccordionItem. The axe sweep then
+surfaced three further defects, also fixed: `strata-comment`'s `role`
+property collided with the global ARIA `role` attribute (badge attribute is
+now `role-label`), `strata-filter-bar`'s `<ul role="group">` broke list
+semantics, and `strata-ticker`'s scrollable list was not keyboard-focusable.
+Regression coverage lives in `packages/components/test/fixes.test.ts`.
+
 ## Validation
 
-`pnpm check` runs audit, format check, lint, typecheck, unit/contract tests, build and the catalog build. Browser tests (`pnpm test:visual`, `pnpm test:a11y`) run Playwright against `apps/catalog`; Google Fonts requests are stubbed in tests so rendering does not depend on the network.
+`pnpm check` runs audit, format check, lint, typecheck, unit/contract tests, build and the catalog build. Browser tests (`pnpm test:visual`, `pnpm test:a11y`) run Playwright against `apps/catalog`; Google Fonts requests are stubbed in tests so rendering does not depend on the network. The catalog suite (`packages/testing/visual/catalog.spec.ts`) verifies inventory counts, search, categories, selection of all 74 entries, typed controls, reset, snippets, clipboard copy, scenarios and canvas controls; `apps/catalog/test/catalog-registry.test.ts` verifies registry/canonical/export synchronization.

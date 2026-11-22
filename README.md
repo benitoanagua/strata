@@ -31,10 +31,17 @@ See `docs/ARCHITECTURE.md` for the layout convention: `apps/` are executables, `
 
 ```bash
 pnpm install
-pnpm catalog
+pnpm catalog        # dev server → http://localhost:5174
 pnpm check
 pnpm test:visual
 pnpm test:a11y
 ```
 
-The Svelte catalog is a private development tool under `apps/catalog`. Published Web Components remain in `@strata/components`.
+The Svelte catalog is a private development tool under `apps/catalog`. It renders all 74 canonical components with live property controls derived from Lit metadata, copyable snippets and five editorial scenarios — see `docs/CATALOG-GUIDE.md`. Published Web Components remain in `@strata/components`.
+
+## Documentation
+
+- `docs/IMPLEMENTATION-AUDIT.md` — per-component audit matrix (74 entries).
+- `docs/COMPONENT-COVERAGE.md` — test coverage per component.
+- `docs/COMPONENT-STATUS.md` — maturity counts and promotion rules.
+- `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/COMPONENT-CONTRACT.md`.

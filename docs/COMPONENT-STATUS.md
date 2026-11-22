@@ -1,19 +1,26 @@
 # Component status
 
-The v2.5 catalog contains 48 canonical element entries. Existing product components remain available under `strata-*`; new entries are intentionally small and composable.
+The catalog contains **74 canonical entries** (`STRATA_COMPONENT_CATALOG`),
+plus four composition-only elements (`strata-accordion-item`,
+`strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) that are
+exported for slot composition but are not standalone catalog entries.
 
-Before a component is considered stable, complete:
+Maturity counts in the interactive registry
+(`apps/catalog/src/lib/componentRegistry.ts`):
 
-- API contract
-- size and state model
-- token-only visual values
-- keyboard/focus behavior
-- accessible name/semantics
-- light/dark verification
-- mobile viewport verification
-- contract test
-- accessibility test
-- visual baseline
-- documentation
+- **18 stable** — button, icon-button, text-field, checkbox, switch, nav-item,
+  alert, badge, progress, skeleton, spinner, surface, theme-toggle, list,
+  list-item, avatar, divider, logo.
+- **55 beta** — everything else, including the editorial and article
+  navigation families.
+- **1 experimental** — popover (no trigger/anchor API yet).
 
-The presence of an element in the catalog does not by itself mean that every advanced interaction pattern is complete; complex components must satisfy the checklist before promotion to Stable.
+The full per-component matrix — properties, reflected attributes, events,
+slots, keyboard behavior, accessibility, tests and maturity — lives in
+`docs/IMPLEMENTATION-AUDIT.md`; test coverage per component is summarized in
+`docs/COMPONENT-COVERAGE.md`.
+
+Before a component is promoted to Stable it must satisfy the checklist in
+`docs/COMPONENT-CHECKLIST.md`: API contract, size/state model, token-only
+visuals, keyboard/focus, accessible name, light/dark and mobile verification,
+contract test, axe check, visual baseline and documentation.
