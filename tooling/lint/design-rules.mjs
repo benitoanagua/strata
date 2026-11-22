@@ -1,30 +1,73 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const root = path.resolve("packages/components/src");
+const root = process.cwd();
+const roots = [
+  path.join(root, "packages/components/src"),
+  path.join(root, "integrations/mediawiki"),
+];
 const violations = [];
-const allowedRadius =
-  /var\(--strata-radius-(micro|small|medium|large|hero)\)|var\(--strata-component-radius\)|999px|50%|inherit|0/;
-const allowedShadow =
-  /var\(--strata-elevation-(micro|small|medium|large|hero)\)|var\(--strata-component-elevation\)|none/;
+
+// Radius law: scale tokens only (max 2px). Literal radii are allowed solely
+// on the circular-element allowlist documented in docs/DESIGN-LAWS.md.
+const allowedRadiusValue =
+  /var\(--strata-radius-[\w-]+\)|var\(--strata-component-radius\)|inherit|^0(?:px)?$/;
+const circularRadius = /^(?:50%|999px|9999px|100%)$/;
+const allowedRadiusSelectors = [
+  // Button ripple + spinner: inherently circular effects.
+  { files: ["Button.css"], selectors: ["__ripple-effect", "__spinner"] },
+  // StrataBase spinner.
+  { files: ["StrataBase.ts"], selectors: [".strata-spinner"] },
+  // Card author avatars.
+  { files: ["Card.css"], selectors: ["__author-image", "__author-bullet"] },
+  // Carousel pagination dots.
+  { files: ["Carousel.css"], selectors: ["__dot"] },
+  // Switch thumb.
+  { files: ["Switch.ts"], selectors: ["__thumb"] },
+];
+
+// Elevation is abolished: box-shadow may only ever be `none`.
+const allowedShadow = /^none$/;
+
 const allowedBorderWidth =
   /var\(--strata-border-(micro|small|medium|large|hero)\)|0|thin|medium|thick/;
 const rawColor = /#[0-9a-fA-F]{3,8}\b|\brgb\(|\brgba\(|\bhsl\(|\bhsla\(/;
 const removedColorToken =
   /--strata-color-(?:red|orange|yellow|green|blue|indigo|violet)\b|--strata-color-status-(?:info|caution|context|special)\b/;
 
+// Generated artifacts synced from @strata/tokens / @strata/prose.
+const GENERATED = /^strata-(tokens|fonts|prose)\.css$/;
+
 function walk(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
-    if (entry.name === "dist" || entry.name.startsWith(".")) continue;
+    if (
+      entry.name === "node_modules" ||
+      entry.name === "dist" ||
+      entry.name.startsWith(".")
+    )
+      continue;
     if (entry.isDirectory()) walk(full);
-    else if (/\.(ts|css)$/.test(entry.name)) checkFile(full);
+    else if (/\.(ts|css)$/.test(entry.name) && !GENERATED.test(entry.name))
+      checkFile(full);
   }
+}
+
+function radiusAllowed(file, blockText, value) {
+  if (allowedRadiusValue.test(value.trim())) return true;
+  if (!circularRadius.test(value.trim())) return false;
+  const base = path.basename(file);
+  return allowedRadiusSelectors.some(
+    (entry) =>
+      entry.files.includes(base) &&
+      entry.selectors.some((sel) => blockText.includes(sel)),
+  );
 }
 
 function checkFile(file) {
   const text = fs.readFileSync(file, "utf8");
   const lines = text.split(/\n/);
+  let blockText = "";
   lines.forEach((line, i) => {
     const n = i + 1;
     if (rawColor.test(line))
@@ -34,11 +77,15 @@ function checkFile(file) {
         `${file}:${n} removed spectrum/status token; use semantic or status-* tokens`,
       );
     const shadow = line.match(/box-shadow\s*:\s*([^;]+)/);
-    if (shadow && !allowedShadow.test(shadow[1]))
-      violations.push(`${file}:${n} non-token shadow`);
+    if (shadow && !allowedShadow.test(shadow[1].trim()))
+      violations.push(
+        `${file}:${n} box-shadow is abolished (only "none" allowed)`,
+      );
     const radius = line.match(/border-radius\s*:\s*([^;]+)/);
-    if (radius && !allowedRadius.test(radius[1]))
-      violations.push(`${file}:${n} non-token radius`);
+    if (radius && !radiusAllowed(file, blockText, radius[1]))
+      violations.push(
+        `${file}:${n} border-radius exceeds the 2px scale law; circular shapes need an explicit allowlist entry`,
+      );
     const border = line.match(
       /(?:^|[;{])border(?:-(?:width|top|right|bottom|left))?\s*:\s*([^;]+)/,
     );
@@ -70,10 +117,14 @@ function checkFile(file) {
       /icon\s*=\s*["'](?!carbon:)/.test(line)
     )
       violations.push(`${file}:${n} icon must use carbon:*`);
+    blockText += line + "\n";
+    if (line.includes("}")) blockText = "";
   });
 }
 
-walk(root);
+for (const dir of roots) {
+  if (fs.existsSync(dir)) walk(dir);
+}
 
 if (violations.length) {
   console.error("STRATA design-rule lint failed:");

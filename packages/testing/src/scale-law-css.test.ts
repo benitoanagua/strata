@@ -24,7 +24,10 @@ describe("STRATA component geometry follows the Scale Law", () => {
     expect(source).toContain("var(--strata-radius-large)");
     expect(source).toContain("var(--strata-border-small)");
     expect(source).toContain("var(--strata-border-large)");
-    expect(source).toContain("var(--strata-elevation-small)");
-    expect(source).toContain("var(--strata-elevation-large)");
+    // Elevation is abolished: no component may reference elevation tokens.
+    expect(source).not.toContain("--strata-elevation-");
+    expect(source).not.toContain("--strata-component-elevation");
+    for (const match of source.matchAll(/box-shadow\s*:\s*([^;]+)/g))
+      expect(match[1].trim()).toBe("none");
   });
 });

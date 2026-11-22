@@ -4,24 +4,20 @@
   color: var(--strata-color-text-primary);
   border: 0 solid transparent;
   border-radius: var(--strata-radius-medium);
-  box-shadow: var(--strata-elevation-medium);
   overflow: hidden;
   font-family: var(--strata-font-sans);
 }
 .strata-card--size-small {
   border-width: 0;
   border-radius: var(--strata-radius-small);
-  box-shadow: var(--strata-elevation-small);
 }
 .strata-card--size-large {
   border-width: 0;
   border-radius: var(--strata-radius-large);
-  box-shadow: var(--strata-elevation-large);
 }
 .strata-card--size-hero {
   border-width: 0;
   border-radius: var(--strata-radius-hero);
-  box-shadow: var(--strata-elevation-hero);
 }
 .strata-card__container {
   display: flex;

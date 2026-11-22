@@ -6,7 +6,7 @@
 
 `micro → small → medium → large → hero`
 
-Radius stays within 0–2 px and borders are filetes of 0, 0.5 or 1 px; both are monotonic across the scale. Elevation is abolished (`--strata-elevation-*` always resolves to `none`): separation comes from hairlines, whitespace and tonal surfaces, in the manner of the LaTeX CVs. Circular controls (switches, avatars, spinners, dots) are exempt from the radius cap. Once the scale saturates, larger components differ through space and typography, not heavier chrome.
+Radius stays within 0–2 px and borders are filetes of 0, 0.5 or 1 px; both are monotonic across the scale. Elevation is abolished (`--strata-elevation-*` always resolves to `none`): separation comes from hairlines, whitespace and tonal surfaces, in the manner of the LaTeX CVs. Circular shapes are allowed only where geometry demands it, via an explicit allowlist enforced by `tooling/lint/design-rules.mjs`: the switch thumb (`.strata-switch__thumb`), carousel pagination dots (`.strata-carousel__dot`), button ripple and spinner effects, `.strata-spinner`, and card author avatars. Everything else — carousel nav buttons, modal close, overlay chips, theme toggle, switch track — uses the 0–2 px scale like any other control. Once the scale saturates, larger components differ through space and typography, not heavier chrome.
 
 ## 2. Emphasis Law
 

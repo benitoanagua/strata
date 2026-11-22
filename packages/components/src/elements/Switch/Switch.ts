@@ -13,7 +13,7 @@ export class StrataSwitch extends LitElement {
       height: 24px;
       padding: 2px;
       border: 0;
-      border-radius: 999px;
+      border-radius: var(--strata-radius-medium);
       background: var(--strata-color-gray-300);
       cursor: pointer;
     }
@@ -21,7 +21,7 @@ export class StrataSwitch extends LitElement {
       cursor: not-allowed;
       opacity: 0.6;
     }
-    span {
+    .strata-switch__thumb {
       display: block;
       width: 20px;
       height: 20px;
@@ -32,11 +32,11 @@ export class StrataSwitch extends LitElement {
     button[aria-checked="true"] {
       background: var(--strata-color-action-primary);
     }
-    button[aria-checked="true"] span {
+    button[aria-checked="true"] .strata-switch__thumb {
       transform: translateX(16px);
     }
     @media (prefers-reduced-motion: reduce) {
-      span {
+      .strata-switch__thumb {
         transition: none;
       }
     }
@@ -61,7 +61,7 @@ export class StrataSwitch extends LitElement {
       ?disabled=${this.disabled}
       @click=${this.toggle}
     >
-      <span></span>
+      <span class="strata-switch__thumb"></span>
     </button>`;
   }
 }

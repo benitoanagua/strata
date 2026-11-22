@@ -423,8 +423,8 @@ body {
   }
 
   body {
-    background: #fff;
-    color: #000;
+    background: Canvas;
+    color: CanvasText;
     font-size: 11pt;
   }
 
@@ -445,16 +445,16 @@ body {
     float: none;
     width: auto;
     margin: 1em auto;
-    border: 1pt solid #999;
+    border: 1pt solid GrayText;
   }
 
   .mw-parser-output table.wikitable th,
   .mw-parser-output table.wikitable td {
-    border: 0.5pt solid #999;
+    border: 0.5pt solid GrayText;
   }
 
   #toc {
-    border: 0.5pt solid #999;
+    border: 0.5pt solid GrayText;
     background: none;
   }
 }

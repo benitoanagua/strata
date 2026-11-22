@@ -171,7 +171,7 @@
   padding-bottom: var(--strata-space-1);
   padding-left: var(--strata-space-3);
   padding-right: var(--strata-space-3);
-  border-radius: 9999px;
+  border-radius: var(--strata-radius-medium);
   transition-property: all;
   transition-duration: 200ms;
   background-color: transparent;

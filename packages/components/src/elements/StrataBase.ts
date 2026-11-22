@@ -28,27 +28,22 @@ export const strataComponentStyles = css`
   :host {
     --strata-component-radius: var(--strata-radius-medium);
     --strata-component-border: var(--strata-border-medium);
-    --strata-component-elevation: var(--strata-elevation-medium);
   }
   :host([size="micro"]) {
     --strata-component-radius: var(--strata-radius-micro);
     --strata-component-border: var(--strata-border-micro);
-    --strata-component-elevation: var(--strata-elevation-micro);
   }
   :host([size="small"]) {
     --strata-component-radius: var(--strata-radius-small);
     --strata-component-border: var(--strata-border-small);
-    --strata-component-elevation: var(--strata-elevation-small);
   }
   :host([size="large"]) {
     --strata-component-radius: var(--strata-radius-large);
     --strata-component-border: var(--strata-border-large);
-    --strata-component-elevation: var(--strata-elevation-large);
   }
   :host([size="hero"]) {
     --strata-component-radius: var(--strata-radius-hero);
     --strata-component-border: var(--strata-border-hero);
-    --strata-component-elevation: var(--strata-elevation-hero);
   }
   .strata-title {
     margin: 0;
@@ -110,7 +105,6 @@ export const strataComponentStyles = css`
     padding: 4px;
     border-radius: var(--strata-component-radius);
     background: var(--strata-color-surface-raised);
-    box-shadow: var(--strata-component-elevation);
   }
   .strata-menu button {
     display: flex;
@@ -187,12 +181,10 @@ export const strataComponentStyles = css`
     padding: 12px;
     border-radius: var(--strata-component-radius);
     background: var(--strata-color-surface-raised);
-    box-shadow: var(--strata-component-elevation);
   }
   .strata-drawer,
   .strata-bottom-sheet {
     background: var(--strata-color-surface-raised);
-    box-shadow: var(--strata-elevation-large);
     padding: 16px;
   }
   .strata-drawer {
@@ -230,7 +222,6 @@ export const strataComponentStyles = css`
     background: var(--strata-color-black);
     color: var(--strata-color-white);
     border-radius: var(--strata-radius-small);
-    box-shadow: var(--strata-component-elevation);
   }
   .strata-tag {
     display: inline-flex;

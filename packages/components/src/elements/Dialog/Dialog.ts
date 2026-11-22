@@ -29,7 +29,6 @@ export class StrataDialog extends LitElement {
       padding: 24px;
       border: var(--strata-border-large) solid var(--strata-color-border-strong);
       border-radius: var(--strata-radius-large);
-      box-shadow: var(--strata-elevation-large);
     }
     .strata-dialog__content:focus-visible {
       outline: 2px solid var(--strata-color-focus-ring);

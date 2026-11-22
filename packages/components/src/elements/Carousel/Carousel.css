@@ -107,7 +107,7 @@
   transition-duration: 200ms;
   cursor: pointer;
 
-  border-radius: 9999px;
+  border-radius: var(--strata-radius-medium);
 
   width: 2.5rem;
   height: 2.5rem;
@@ -280,7 +280,7 @@
     var(--strata-color-border-strong) 40%,
     transparent
   );
-  border-radius: 9999px;
+  border-radius: var(--strata-radius-medium);
 
   transition-property: all;
   transition-duration: 200ms;

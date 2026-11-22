@@ -338,7 +338,7 @@
 
   cursor: pointer;
   padding: 0.5rem;
-  border-radius: 9999px;
+  border-radius: var(--strata-radius-medium);
 
   transition-property: all;
   transition-duration: 200ms;
@@ -443,7 +443,7 @@
     var(--strata-color-border-strong) 30%,
     transparent
   );
-  border-radius: 9999px;
+  border-radius: var(--strata-radius-small);
 }
 
 .strata-modal__body::-webkit-scrollbar-thumb:hover {
