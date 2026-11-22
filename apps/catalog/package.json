@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json",
-    "lint": "svelte-check --tsconfig ./tsconfig.json"
+    "lint": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest run"
   },
   "dependencies": {
     "@strata/components": "workspace:*",
@@ -20,7 +21,9 @@
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
     "svelte-check": "^4.1.0",
     "typescript": "^5.7.0",
-    "vite": "^6.0.0"
+    "vite": "^6.0.0",
+    "vitest": "^4.1.12",
+    "jsdom": "^26.0.0"
   },
   "license": "MIT"
 }

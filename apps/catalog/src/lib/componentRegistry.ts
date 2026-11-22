@@ -1,5 +1,7 @@
-export type ControlType = "text" | "boolean" | "number" | "select";
+export type ControlType = "text" | "boolean" | "number" | "select" | "list";
 export type ControlValue = string | number | boolean;
+export type Maturity = "experimental" | "beta" | "stable";
+
 export interface PropControl {
   name: string;
   label: string;
@@ -7,16 +9,45 @@ export interface PropControl {
   defaultValue: ControlValue;
   options?: readonly string[];
 }
+
+export interface EventDoc {
+  name: string;
+  detail?: string;
+  description: string;
+}
+
+export interface SlotDoc {
+  name: string;
+  description: string;
+}
+
 export interface CatalogEntry {
   id: string;
   name: string;
-  category: string;
+  category: Category;
   tagName: string;
   description: string;
+  maturity: Maturity;
   controls: readonly PropControl[];
   slotContent?: string;
   slotHtml?: string;
+  events?: readonly EventDoc[];
+  slots?: readonly SlotDoc[];
+  a11y?: string;
+  notes?: string;
 }
+
+export const CATEGORIES = [
+  "Actions",
+  "Forms",
+  "Navigation",
+  "Feedback",
+  "Surfaces",
+  "Data & Content",
+  "Editorial",
+  "Article Navigation",
+] as const;
+export type Category = (typeof CATEGORIES)[number];
 
 const text = (name: string, label: string, defaultValue = ""): PropControl => ({
   name,
@@ -50,14 +81,35 @@ const select = (
   defaultValue: string,
   options: readonly string[],
 ): PropControl => ({ name, label, type: "select", defaultValue, options });
+const list = (name: string, label: string, defaultValue = ""): PropControl => ({
+  name,
+  label,
+  type: "list",
+  defaultValue,
+});
+
+const VALUE_EVENTS: readonly EventDoc[] = [
+  {
+    name: "strata-input",
+    detail: "{ value }",
+    description: "Fired on every value change while interacting.",
+  },
+  {
+    name: "strata-change",
+    detail: "{ value }",
+    description: "Fired when the value is committed.",
+  },
+];
 
 export const catalog: readonly CatalogEntry[] = [
+  // ── Actions ────────────────────────────────────────────────────────────
   {
     id: "button",
     name: "Button",
     category: "Actions",
     tagName: "strata-button",
     description: "A clear action with semantic variants and states.",
+    maturity: "stable",
     controls: [
       text("label", "Label", "Continue"),
       select("variant", "Variant", "outlined", [
@@ -75,10 +127,15 @@ export const catalog: readonly CatalogEntry[] = [
         "success",
         "warning",
       ]),
+      text("href", "Href"),
+      select("type", "Type", "button", ["button", "submit", "reset"]),
+      text("icon", "Icon", ""),
+      bool("trailingIcon", "Trailing icon"),
       bool("disabled", "Disabled"),
       bool("loading", "Loading"),
       bool("fullWidth", "Full width"),
     ],
+    a11y: "Renders a native <button> (or <a role=button> when href is set) with an accessible name from label.",
   },
   {
     id: "icon-button",
@@ -86,12 +143,14 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Actions",
     tagName: "strata-icon-button",
     description: "A compact action identified by a Carbon icon.",
+    maturity: "stable",
     controls: [
       select("size", "Size", "medium", ["small", "medium", "large"]),
       text("label", "Label", "Add item"),
       text("icon", "Icon", "carbon:add"),
       bool("disabled", "Disabled"),
     ],
+    a11y: "Icon is decorative; the button is named by label via aria-label.",
   },
   {
     id: "button-group",
@@ -99,6 +158,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Actions",
     tagName: "strata-button-group",
     description: "Groups related actions with a shared orientation.",
+    maturity: "beta",
     controls: [
       select("orientation", "Orientation", "horizontal", [
         "horizontal",
@@ -109,6 +169,7 @@ export const catalog: readonly CatalogEntry[] = [
       '<strata-button variant="outlined" label="One"></strata-button>' +
       '<strata-button variant="outlined" label="Two"></strata-button>' +
       '<strata-button variant="outlined" label="Three"></strata-button>',
+    slots: [{ name: "default", description: "strata-button children." }],
   },
   {
     id: "stepper",
@@ -116,26 +177,34 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Actions",
     tagName: "strata-stepper",
     description: "Increments or decrements a bounded numeric value.",
+    maturity: "beta",
     controls: [
       num("value", "Value", 3),
       num("min", "Min", 0),
       num("max", "Max", 10),
       bool("disabled", "Disabled"),
     ],
+    a11y: "Minus/plus buttons carry aria-labels; the value uses tabular mono numerals.",
   },
 
+  // ── Forms ──────────────────────────────────────────────────────────────
   {
     id: "text-field",
     name: "TextField",
     category: "Forms",
     tagName: "strata-text-field",
-    description: "A labelled single-line text input.",
+    description: "A labelled single-line text input with error state.",
+    maturity: "stable",
     controls: [
       text("label", "Label", "Display name"),
       text("placeholder", "Placeholder", "Enter a value"),
       text("value", "Value"),
       bool("disabled", "Disabled"),
+      bool("error", "Error"),
+      text("errorMessage", "Error message", "This field is required."),
     ],
+    events: VALUE_EVENTS,
+    a11y: "Label is associated via for/id; errors use aria-invalid, aria-describedby and role=alert.",
   },
   {
     id: "search-field",
@@ -143,12 +212,15 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Forms",
     tagName: "strata-search-field",
     description: "A text input specialised for search queries.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Search"),
       text("placeholder", "Placeholder", "Search components"),
       text("value", "Value"),
       bool("disabled", "Disabled"),
     ],
+    events: VALUE_EVENTS,
+    a11y: "Wrapping label names the input; decorative search icon is aria-hidden.",
   },
   {
     id: "number-field",
@@ -156,36 +228,50 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Forms",
     tagName: "strata-number-field",
     description: "A numeric input with step control.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Quantity"),
       num("value", "Value", 1),
+      num("min", "Min", 0),
+      num("max", "Max", 100),
       num("step", "Step", 1),
       bool("disabled", "Disabled"),
     ],
+    events: VALUE_EVENTS,
   },
   {
     id: "date-field",
     name: "DateField",
     category: "Forms",
     tagName: "strata-date-field",
-    description: "A labelled date input.",
+    description: "A labelled native date input.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Date"),
       text("value", "Value", "2026-11-21"),
       bool("disabled", "Disabled"),
     ],
+    events: VALUE_EVENTS,
   },
   {
     id: "select",
     name: "Select",
     category: "Forms",
     tagName: "strata-select",
-    description: "A labelled select control for option lists.",
+    description:
+      "A labelled select control; options are slotted <option> elements.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Choose an option"),
       text("value", "Value"),
       bool("disabled", "Disabled"),
     ],
+    slotHtml:
+      '<option value="a">Option A</option><option value="b">Option B</option><option value="c">Option C</option>',
+    slots: [{ name: "default", description: "<option> elements." }],
+    events: VALUE_EVENTS,
+    notes:
+      "There is no items prop; compose with native <option> children or a framework adapter.",
   },
   {
     id: "checkbox",
@@ -193,11 +279,13 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Forms",
     tagName: "strata-checkbox",
     description: "A binary choice with an accessible label.",
+    maturity: "stable",
     controls: [
       text("label", "Label", "Accept terms"),
       bool("checked", "Checked"),
       bool("disabled", "Disabled"),
     ],
+    events: VALUE_EVENTS,
   },
   {
     id: "radio",
@@ -205,6 +293,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Forms",
     tagName: "strata-radio",
     description: "A single option inside a radio group.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Option A"),
       text("name", "Name", "demo"),
@@ -212,18 +301,22 @@ export const catalog: readonly CatalogEntry[] = [
       bool("checked", "Checked"),
       bool("disabled", "Disabled"),
     ],
+    events: VALUE_EVENTS,
   },
   {
     id: "radio-group",
     name: "RadioGroup",
     category: "Forms",
     tagName: "strata-radio-group",
-    description: "Groups related radio options under one label.",
+    description: "Groups related radio options under one fieldset legend.",
+    maturity: "beta",
     controls: [text("label", "Label", "Plan")],
     slotHtml:
       '<strata-radio name="plan" label="Starter" value="starter" checked></strata-radio>' +
       '<strata-radio name="plan" label="Pro" value="pro"></strata-radio>' +
       '<strata-radio name="plan" label="Enterprise" value="enterprise"></strata-radio>',
+    slots: [{ name: "default", description: "strata-radio children." }],
+    a11y: "Uses a real <fieldset>/<legend> grouping.",
   },
   {
     id: "switch",
@@ -231,11 +324,14 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Forms",
     tagName: "strata-switch",
     description: "A toggle for an immediate on/off setting.",
+    maturity: "stable",
     controls: [
       text("label", "Label", "Enable alerts"),
       bool("checked", "Checked"),
       bool("disabled", "Disabled"),
     ],
+    events: VALUE_EVENTS,
+    a11y: "role=switch with aria-checked; Space/Enter toggles.",
   },
   {
     id: "slider",
@@ -243,6 +339,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Forms",
     tagName: "strata-slider",
     description: "A continuous value selector within a range.",
+    maturity: "beta",
     controls: [
       num("value", "Value", 50),
       num("min", "Min", 0),
@@ -250,33 +347,49 @@ export const catalog: readonly CatalogEntry[] = [
       num("step", "Step", 1),
       bool("disabled", "Disabled"),
     ],
+    events: VALUE_EVENTS,
   },
   {
     id: "file-upload",
     name: "FileUpload",
     category: "Forms",
     tagName: "strata-file-upload",
-    description: "A drop target for one or more files.",
+    description:
+      "A file picker with drag & drop; lists selected file names and emits strata-change.",
+    maturity: "beta",
     controls: [
+      text("label", "Label", "Choose file"),
       text("accept", "Accept", "image/*"),
       bool("multiple", "Multiple"),
     ],
+    events: [
+      {
+        name: "strata-change",
+        detail: "{ value: string[] }",
+        description: "Fired with the selected file names.",
+      },
+    ],
+    a11y: "Native file input inside a label; selected names are listed for review.",
   },
 
+  // ── Navigation ─────────────────────────────────────────────────────────
   {
     id: "nav-item",
     name: "NavItem",
     category: "Navigation",
     tagName: "strata-nav-item",
     description: "A labelled navigation entry with selected state.",
+    maturity: "stable",
     controls: [text("label", "Label", "Home"), bool("selected", "Selected")],
+    a11y: "Selection is exposed via aria-current=page, not color alone.",
   },
   {
     id: "tabs",
     name: "Tabs",
     category: "Navigation",
     tagName: "strata-tabs",
-    description: "Organises content into switchable panels.",
+    description: "Organises content into switchable panels with arrow-key nav.",
+    maturity: "beta",
     controls: [num("activeTab", "Active tab", 0), bool("disabled", "Disabled")],
     slotHtml:
       '<strata-tab slot="tabs" panel-id="p1">Overview</strata-tab>' +
@@ -285,6 +398,18 @@ export const catalog: readonly CatalogEntry[] = [
       '<strata-tab-panel slot="panels" panel-id="p1">Overview panel content.</strata-tab-panel>' +
       '<strata-tab-panel slot="panels" panel-id="p2">Details panel content.</strata-tab-panel>' +
       '<strata-tab-panel slot="panels" panel-id="p3">History panel content.</strata-tab-panel>',
+    slots: [
+      { name: "tabs", description: "strata-tab children." },
+      { name: "panels", description: "strata-tab-panel children." },
+    ],
+    events: [
+      {
+        name: "tab-change",
+        detail: "{ activeTab, previousTab }",
+        description: "Fired when the active tab changes.",
+      },
+    ],
+    a11y: "role=tablist/tab/tabpanel with roving tabindex; arrows, Home and End move between tabs.",
   },
   {
     id: "tab",
@@ -292,32 +417,48 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Navigation",
     tagName: "strata-tab",
     description: "A single tab inside a tabs container.",
+    maturity: "beta",
     controls: [
       text("panelId", "Panel id", "panel-1"),
       bool("active", "Active"),
       bool("disabled", "Disabled"),
     ],
     slotContent: "Tab label",
+    notes: "Managed by strata-tabs; standalone use is not supported.",
   },
   {
     id: "breadcrumb",
     name: "Breadcrumb",
     category: "Navigation",
     tagName: "strata-breadcrumb",
-    description: "Shows the path to the current location.",
-    controls: [text("items", "Items", "Home|Products|Details")],
+    description:
+      "Shows the path to the current location; supports links and marks the last item.",
+    maturity: "beta",
+    controls: [
+      list(
+        "items",
+        "Items (JSON or pipe)",
+        '[{"label":"Home","href":"/"},{"label":"Docs","href":"/docs"},{"label":"Components"}]',
+      ),
+      text("label", "Label", "Breadcrumb"),
+    ],
+    a11y: "nav landmark; last item carries aria-current=page.",
   },
   {
     id: "menu",
     name: "Menu",
     category: "Navigation",
     tagName: "strata-menu",
-    description: "A container for a list of menu items.",
-    controls: [bool("open", "Open", true)],
+    description: "A menu of actionable items with arrow-key navigation.",
+    maturity: "beta",
+    controls: [bool("open", "Open", true), text("label", "Label", "Menu")],
     slotHtml:
       '<strata-menu-item label="Profile"></strata-menu-item>' +
       '<strata-menu-item label="Settings"></strata-menu-item>' +
       '<strata-menu-item label="Sign out"></strata-menu-item>',
+    slots: [{ name: "default", description: "strata-menu-item children." }],
+    a11y: "role=menu/menuitem; ArrowUp/Down, Home and End move focus; Escape closes.",
+    notes: "No trigger/anchor API yet — control open state from the host page.",
   },
   {
     id: "menu-item",
@@ -325,23 +466,28 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Navigation",
     tagName: "strata-menu-item",
     description: "A single actionable entry inside a menu.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Settings"),
       text("icon", "Icon", "carbon:settings"),
       bool("disabled", "Disabled"),
     ],
+    notes: "Used inside strata-menu; emits no events of its own yet.",
   },
 
+  // ── Feedback ───────────────────────────────────────────────────────────
   {
     id: "alert",
     name: "Alert",
     category: "Feedback",
     tagName: "strata-alert",
     description: "A semantic message that communicates feedback and status.",
+    maturity: "stable",
     controls: [
       select("tone", "Tone", "info", ["error", "warning", "success", "info"]),
     ],
     slotContent: "Changes saved successfully.",
+    a11y: "role=status; tone is paired with an icon, never color alone.",
   },
   {
     id: "badge",
@@ -349,6 +495,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Feedback",
     tagName: "strata-badge",
     description: "A compact label for status and classification.",
+    maturity: "stable",
     controls: [
       select("tone", "Tone", "neutral", [
         "neutral",
@@ -359,6 +506,7 @@ export const catalog: readonly CatalogEntry[] = [
       ]),
     ],
     slotContent: "In review",
+    a11y: "Status tones render a distinct Carbon icon alongside the text.",
   },
   {
     id: "tag",
@@ -366,6 +514,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Feedback",
     tagName: "strata-tag",
     description: "A removable label for categorising content.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Draft"),
       select("hue", "Hue", "neutral", [
@@ -379,16 +528,26 @@ export const catalog: readonly CatalogEntry[] = [
         "indigo",
         "violet",
       ]),
+      text("href", "Href"),
       bool("removable", "Removable"),
     ],
+    events: [
+      {
+        name: "remove",
+        description: "Fired when the remove button is clicked.",
+      },
+    ],
+    a11y: "Taxonomy hues always pair the color with the text label.",
   },
   {
     id: "progress",
     name: "Progress",
     category: "Feedback",
     tagName: "strata-progress",
-    description: "Indeterminate-free progress along a 0–100 scale.",
+    description: "Determinate progress along a 0–100 scale.",
+    maturity: "stable",
     controls: [num("value", "Value", 65), text("label", "Label", "Progress")],
+    a11y: "role=progressbar with aria-valuemin/max/now and a label.",
   },
   {
     id: "skeleton",
@@ -396,7 +555,9 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Feedback",
     tagName: "strata-skeleton",
     description: "A placeholder shape shown while content loads.",
+    maturity: "stable",
     controls: [text("width", "Width", "60%")],
+    a11y: "aria-hidden; purely decorative loading affordance.",
   },
   {
     id: "spinner",
@@ -404,7 +565,9 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Feedback",
     tagName: "strata-spinner",
     description: "An indeterminate loading indicator.",
+    maturity: "stable",
     controls: [text("label", "Label", "Loading")],
+    a11y: "role=status with an accessible label.",
   },
   {
     id: "snackbar",
@@ -412,27 +575,35 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Feedback",
     tagName: "strata-snackbar",
     description: "A transient confirmation message.",
+    maturity: "beta",
     controls: [
       bool("open", "Open", true),
       text("message", "Message", "Item saved."),
     ],
+    a11y: "role=status announces the message politely.",
+    notes: "No auto-dismiss timer; control open state from the host.",
   },
   {
     id: "tooltip",
     name: "Tooltip",
     category: "Feedback",
     tagName: "strata-tooltip",
-    description: "Reveals helper text when the trigger is hovered.",
+    description: "Reveals helper text on hover or focus; Escape dismisses.",
+    maturity: "beta",
     controls: [text("text", "Text", "Helpful hint")],
     slotContent: "Hover target",
+    slots: [{ name: "default", description: "The trigger element." }],
+    a11y: "role=tooltip shown on hover/focus-within; aria-hidden toggles with visibility. For full AT support prefer visible text or aria-describedby on the trigger.",
   },
 
+  // ── Surfaces ───────────────────────────────────────────────────────────
   {
     id: "surface",
     name: "Surface",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-surface",
     description: "A foundational container at a physical scale step.",
+    maturity: "stable",
     controls: [
       select("size", "Size", "medium", ["small", "medium", "large", "hero"]),
       bool("outlined", "Outlined"),
@@ -442,34 +613,48 @@ export const catalog: readonly CatalogEntry[] = [
   {
     id: "card",
     name: "Card",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-card",
-    description: "A content container for editorial material.",
+    description: "A content container for editorial material and media.",
+    maturity: "beta",
     controls: [
+      num("heading", "Heading level", 4),
       text("title", "Title", "Card title"),
+      text("url", "Url", "/article"),
       text("excerpt", "Excerpt", "A short supporting excerpt."),
       select("density", "Density", "normal", ["normal", "compact", "minimal"]),
+      select("media_align", "Media align", "top", [
+        "top",
+        "left",
+        "right",
+        "bottom",
+      ]),
       bool("bordered", "Bordered"),
     ],
+    a11y: "Title renders as a configurable heading level (h2–h6).",
   },
   {
     id: "dialog",
     name: "Dialog",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-dialog",
     description: "A modal surface for focused interactions.",
+    maturity: "beta",
     controls: [
       bool("open", "Open", true),
       text("title", "Title", "Dialog title"),
     ],
     slotContent: "Dialog body content.",
+    events: [],
+    a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
   },
   {
     id: "modal",
     name: "Modal",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-modal",
     description: "An overlay dialog with size, position and animation.",
+    maturity: "beta",
     controls: [
       bool("open", "Open", true),
       text("title", "Title", "Modal title"),
@@ -480,6 +665,13 @@ export const catalog: readonly CatalogEntry[] = [
         "xlarge",
         "full",
       ]),
+      select("position", "Position", "center", [
+        "center",
+        "top",
+        "bottom",
+        "left",
+        "right",
+      ]),
       select("variant", "Variant", "default", [
         "default",
         "minimal",
@@ -489,107 +681,192 @@ export const catalog: readonly CatalogEntry[] = [
         "accent-top",
         "accent-left",
       ]),
+      select("animation", "Animation", "slide-up", [
+        "slide-up",
+        "slide-down",
+        "slide-left",
+        "slide-right",
+        "zoom",
+        "flip",
+        "fade",
+      ]),
+      bool("closeOnOverlay", "Close on overlay"),
+      bool("closeOnEscape", "Close on escape"),
+      bool("showClose", "Show close"),
+      bool("preventScroll", "Prevent scroll"),
     ],
-    slotContent: "Modal body content.",
+    slotHtml:
+      "<p>Modal body content.</p>" +
+      '<button slot="footer" type="button">Action</button>',
+    slots: [
+      { name: "header", description: "Replaces the generated title header." },
+      { name: "default", description: "Body content." },
+      { name: "footer", description: "Footer actions." },
+    ],
+    events: [
+      { name: "modal-open", description: "Fired after the modal opens." },
+      {
+        name: "modal-before-close",
+        detail: "cancelable",
+        description: "Fired before closing; preventDefault cancels.",
+      },
+      { name: "modal-close", description: "Fired after the modal closes." },
+    ],
+    a11y: "role=dialog aria-modal; scroll lock, focus trap and Escape handling; focus restored on close.",
   },
   {
     id: "drawer",
     name: "Drawer",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-drawer",
     description: "A side panel that slides in from the edge.",
+    maturity: "beta",
     controls: [bool("open", "Open", true), text("title", "Title", "Drawer")],
     slotContent: "Drawer body content.",
+    a11y: "role=dialog aria-modal; Escape closes, focus moves to the close button and is restored.",
   },
   {
     id: "bottom-sheet",
     name: "BottomSheet",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-bottom-sheet",
     description: "A sheet anchored to the bottom edge.",
+    maturity: "beta",
     controls: [bool("open", "Open", true), text("title", "Title", "Sheet")],
     slotContent: "Bottom sheet content.",
+    a11y: "role=dialog aria-modal; Escape closes, focus moves to the close button and is restored.",
   },
   {
     id: "popover",
     name: "Popover",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-popover",
-    description: "A floating panel anchored to a trigger.",
-    controls: [bool("open", "Open", true)],
+    description: "A floating panel toggled by the open property.",
+    maturity: "experimental",
+    controls: [bool("open", "Open", true), text("label", "Label", "Popover")],
     slotContent: "Popover content.",
+    a11y: "role=dialog with aria-label; Escape closes. No anchor positioning yet.",
+    notes:
+      "Experimental: no trigger/anchor API; position it from the host page.",
   },
   {
     id: "overlay",
     name: "Overlay",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-overlay",
     description: "Text and metadata layered over media.",
+    maturity: "beta",
     controls: [
+      num("heading", "Heading level", 4),
       text("title", "Title", "Overlay title"),
+      text("tag_name", "Tag", "Reportaje"),
+      text("author_name", "Author", "Ana Ríos"),
+      text("reading_time", "Reading time", "4 min"),
       select("position", "Position", "center", ["top", "center", "bottom"]),
       select("align", "Align", "center", ["start", "center", "end"]),
+      select("box", "Box", "background", [
+        "border",
+        "background",
+        "transparent",
+      ]),
+      select("fill", "Fill", "full", ["full", "gradient", "none"]),
     ],
+    a11y: "Title renders at a configurable heading level over the media.",
   },
   {
     id: "theme-toggle",
     name: "ThemeToggle",
-    category: "Surfaces / overlays",
+    category: "Surfaces",
     tagName: "strata-theme-toggle",
     description: "Switches between light and dark themes.",
+    maturity: "stable",
     controls: [],
+    events: [
+      {
+        name: "theme-change",
+        detail: "{ theme }",
+        description: "Window event with the new theme (light|dark).",
+      },
+    ],
+    a11y: "Button with an accessible label describing the action.",
   },
 
+  // ── Data & Content ─────────────────────────────────────────────────────
   {
     id: "data-table",
     name: "DataTable",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-data-table",
     description: "A semantic table for tabular data.",
-    controls: [],
-    slotHtml:
-      "<thead><tr><th>Name</th><th>Status</th></tr></thead>" +
-      "<tbody><tr><td>Alpha</td><td>Active</td></tr>" +
-      "<tr><td>Beta</td><td>Paused</td></tr></tbody>",
+    maturity: "beta",
+    controls: [
+      list("columns", "Columns", "Región|Zona|Artículos"),
+      list(
+        "rows",
+        "Rows",
+        "Altiplano|Oeste|42\nLitoral|Este|57\nChaco|Norte|33\nValles|Centro|21",
+      ),
+    ],
+    a11y: 'Renders a native <table>; mark numeric columns with {"numeric":true} for mono/tabular figures.',
+    notes:
+      "Columns/rows accept JSON or pipe-delimited strings; there is no slotted markup API.",
   },
   {
     id: "pagination",
     name: "Pagination",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-pagination",
-    description: "Navigates between pages of content.",
-    controls: [num("page", "Page", 1), num("pages", "Pages", 5)],
+    description: "Navigates between pages of content (up to 7 buttons).",
+    maturity: "beta",
+    controls: [
+      num("page", "Page", 1),
+      num("pages", "Pages", 5),
+      text("label", "Label", "Pagination"),
+    ],
+    events: [
+      {
+        name: "pagination-change",
+        detail: "{ page, pages }",
+        description: "Fired when a page button is activated.",
+      },
+    ],
+    a11y: "nav landmark; current page carries aria-current=page.",
   },
   {
     id: "list",
     name: "List",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-list",
     description: "A vertical stack of list items.",
+    maturity: "stable",
     controls: [bool("divided", "Divided")],
     slotHtml:
       '<strata-list-item title="First item" description="Supporting text."></strata-list-item>' +
       '<strata-list-item title="Second item" description="Supporting text."></strata-list-item>' +
       '<strata-list-item title="Third item" description="Supporting text."></strata-list-item>',
+    slots: [{ name: "default", description: "strata-list-item children." }],
   },
   {
     id: "list-item",
     name: "ListItem",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-list-item",
     description: "A titled row inside a list.",
+    maturity: "stable",
     controls: [
       text("title", "Title", "Item title"),
       text("description", "Description", "Supporting description."),
       text("href", "Href"),
     ],
+    a11y: "Renders as article role=listitem inside strata-list.",
   },
   {
     id: "accordion",
     name: "Accordion",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-accordion",
     description: "Expands and collapses grouped content.",
+    maturity: "beta",
     controls: [
       bool("multiple", "Multiple"),
       select("variant", "Variant", "default", [
@@ -602,15 +879,21 @@ export const catalog: readonly CatalogEntry[] = [
       '<strata-accordion-item open><span slot="header">Section one</span>Content for the first section.</strata-accordion-item>' +
       '<strata-accordion-item><span slot="header">Section two</span>Content for the second section.</strata-accordion-item>' +
       '<strata-accordion-item><span slot="header">Section three</span>Content for the third section.</strata-accordion-item>',
+    slots: [
+      { name: "default", description: "strata-accordion-item children." },
+    ],
+    a11y: "Header buttons expose aria-expanded; Enter/Space toggles; single-open by default.",
   },
   {
     id: "carousel",
     name: "Carousel",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-carousel",
-    description: "Cycles through a set of slides.",
+    description: "Cycles through a set of slides with arrows, dots and swipe.",
+    maturity: "beta",
     controls: [
-      num("desktop", "Desktop slides", 1),
+      num("desktop", "Desktop slides", 3),
+      num("mobile", "Mobile slides", 1),
       select("gap", "Gap", "medium", [
         "none",
         "small",
@@ -618,22 +901,34 @@ export const catalog: readonly CatalogEntry[] = [
         "large",
         "xlarge",
       ]),
+      num("interval", "Interval (ms)", 5000),
       bool("autoPlay", "Auto play"),
+      bool("showArrows", "Show arrows"),
       bool("showDots", "Show dots"),
     ],
     slotHtml:
       "<strata-carousel-item>Slide one</strata-carousel-item>" +
       "<strata-carousel-item>Slide two</strata-carousel-item>" +
       "<strata-carousel-item>Slide three</strata-carousel-item>",
+    slots: [{ name: "default", description: "strata-carousel-item children." }],
+    events: [
+      { name: "carousel-change", description: "Fired when the slide changes." },
+      {
+        name: "carousel-navigation",
+        description: "Fired on arrow/dDot navigation.",
+      },
+    ],
   },
   {
     id: "grille",
     name: "Grille",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-grille",
     description: "A responsive grid for content tiles.",
+    maturity: "beta",
     controls: [
       num("desktop", "Desktop columns", 2),
+      num("mobile", "Mobile columns", 1),
       select("gap", "Gap", "medium", ["small", "medium", "large"]),
     ],
     slotHtml:
@@ -641,25 +936,29 @@ export const catalog: readonly CatalogEntry[] = [
       "<strata-grille-item>Tile two</strata-grille-item>" +
       "<strata-grille-item>Tile three</strata-grille-item>" +
       "<strata-grille-item>Tile four</strata-grille-item>",
+    slots: [{ name: "default", description: "strata-grille-item children." }],
   },
   {
     id: "avatar",
     name: "Avatar",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-avatar",
     description: "Represents a user with initials or an image.",
+    maturity: "stable",
     controls: [
       text("label", "Label", "AB"),
       text("alt", "Alt", "User avatar"),
       text("src", "Src"),
     ],
+    a11y: "role=img with aria-label, or presentation when unnamed.",
   },
   {
     id: "divider",
     name: "Divider",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-divider",
     description: "A horizontal rule separating content.",
+    maturity: "stable",
     controls: [
       select("variant", "Variant", "solid", ["solid", "double", "dashed"]),
     ],
@@ -667,46 +966,34 @@ export const catalog: readonly CatalogEntry[] = [
   {
     id: "logo",
     name: "Logo",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-logo",
     description: "The STRATA brand mark.",
+    maturity: "stable",
     controls: [],
   },
   {
     id: "prose",
     name: "Prose",
-    category: "Data / content",
+    category: "Data & Content",
     tagName: "strata-prose",
     description:
       "Reading wrapper for long-form content. Requires @strata/prose/prose.css.",
+    maturity: "beta",
     controls: [],
     slotHtml: `<h1>On the architecture of quiet interfaces</h1>
 <p class="hatnote">An editorial note on restraint, measure and the filete.</p>
 <p>Typography is the voice of an interface. When a page is meant to be read rather than operated, the first decision is not which components to use but how much noise to remove. STRATA answers that question the way a well-set page of LaTeX does: a single serif voice for the text, a modest scale for headings, hairline rules instead of shadows, and a measure narrow enough that the eye never loses the line.</p>
-<p>The body is set at roughly ten and a half points with a leading near one and a half — dense enough to feel like print, airy enough to survive a screen. Headings do not shout; they mark sections the way a chapter heading does in a monograph, with a modest weight and a fine rule beneath the first two levels.</p>
 <h2>Measure and rhythm</h2>
 <p>A line of text should carry about sixty-five to seventy-five characters. Beyond that, the eye must travel too far to return; below that, the text breaks into choppy fragments. The prose layer enforces this with a <code>ch</code>-based measure, so the column breathes at any font size.</p>
-<ul>
-<li>Serif for reading: <em>Source Serif 4</em> carries paragraphs, quotes and tables.</li>
-<li>Sans for chrome: menus, buttons and labels stay in <em>Source Sans 3</em>.</li>
-<li>Mono for data: tags, identifiers and figures use <em>Source Code Pro</em>.</li>
-</ul>
 <blockquote><p>Simplicity is not the absence of detail; it is the presence of only the detail that matters.</p></blockquote>
-<h2>Structure in markup</h2>
-<p>Long-form content arrives as plain HTML or wikitext. The prose stylesheet understands the usual vocabulary: headings, lists, <code>inline code</code>, <pre><code>blocks</code></pre>, tables, figures and references.</p>
-<table>
-<thead><tr><th>Role</th><th>Family</th><th>Used for</th></tr></thead>
-<tbody>
-<tr><td>Reading</td><td>Serif</td><td>Paragraphs, quotes, article body</td></tr>
-<tr><td>Interface</td><td>Sans</td><td>Menus, buttons, forms, labels</td></tr>
-<tr><td>Data</td><td>Mono</td><td>Tags, badges, identifiers, numbers</td></tr>
-</tbody>
-</table>
-<p>Press <kbd>Ctrl</kbd>+<kbd>K</kbd> to search, or jump to the <a href="#notes">notes</a>. A footnote marker looks like this.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup></p>
-<h2>Details that carry weight</h2>
-<p>Small decisions accumulate: the offset of an underline, the silence between paragraphs, the exact gray of a hairline. The goal is a page that disappears — where the reader remembers the argument, not the interface.</p>
+<p>Press <kbd>Ctrl</kbd>+<kbd>K</kbd> to search. A footnote marker looks like this.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup></p>
 <div class="footnotes"><ol><li id="fn1">See <em>Design Laws</em>, §3, for the measure contract.</li></ol></div>`,
+    notes:
+      "Import '@strata/prose/prose.css' in the host page; the element only adds the .strata-prose class.",
   },
+
+  // ── Editorial ──────────────────────────────────────────────────────────
   {
     id: "meta",
     name: "Meta",
@@ -714,27 +1001,26 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-meta",
     description:
       "Metadata line (date, category, author) with slanted filete separators.",
+    maturity: "beta",
     controls: [
-      text(
+      list(
         "items",
-        "Items (pipe-separated)",
+        "Items (JSON or pipe)",
         "21 nov 2026|Ciencia|Ana Ríos|4 min",
       ),
+      text("label", "Label", "Article metadata"),
     ],
   },
   {
     id: "tag-list",
-    name: "Tag list",
+    name: "TagList",
     category: "Editorial",
     tagName: "strata-tag-list",
     description:
       "Wrapping group of tags; hue=auto gives every category a stable rainbow hue.",
+    maturity: "beta",
     controls: [
-      text(
-        "items",
-        "Items",
-        "Historia|Ciencia|Arte|Geografía|Música|Lengua|Política",
-      ),
+      list("items", "Items (JSON or pipe)", "Historia|Ciencia|Arte|Geografía"),
       select("hue", "Hue", "auto", [
         "auto",
         "neutral",
@@ -746,39 +1032,48 @@ export const catalog: readonly CatalogEntry[] = [
         "indigo",
         "violet",
       ]),
+      text("baseHref", "Base href"),
+      text("label", "Label", "Tags"),
     ],
   },
   {
     id: "section-header",
-    name: "Section header",
+    name: "SectionHeader",
     category: "Editorial",
     tagName: "strata-section-header",
     description:
       "Title with a hairline rule and an emphasised segment over the title.",
+    maturity: "beta",
     controls: [
       text("heading", "Heading", "Autor"),
       text("subheading", "Subheading", "Ana Ríos"),
-      select("size", "Size", "medium", ["small", "medium", "large"]),
+      num("level", "Heading level", 2),
     ],
+    a11y: "Renders role=heading with aria-level matching the level prop.",
   },
   {
     id: "author-box",
-    name: "Author box",
+    name: "AuthorBox",
     category: "Editorial",
     tagName: "strata-author-box",
     description:
       "Contributor card: avatar, name, role line, bio and links slot.",
+    maturity: "beta",
     controls: [
       text("name", "Name", "Ana Ríos"),
+      text("avatar", "Avatar label", "AR"),
+      text("eyebrow", "Eyebrow", "Autora"),
       text("meta", "Meta", "Editora|Desde 2021|128 artículos"),
       text(
         "description",
         "Description",
         "Escribe sobre ciencia y cultura en los Andes.",
       ),
+      text("href", "Href", "/autores/ana-rios"),
     ],
     slotHtml:
       '<strata-share slot="links" networks="x|linkedin|email" text="Ana Ríos" url="https://example.org"></strata-share>',
+    slots: [{ name: "links", description: "Share links or profile actions." }],
   },
   {
     id: "share",
@@ -787,15 +1082,19 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-share",
     description:
       "Share actions as monochrome glyphs: x, facebook, linkedin, whatsapp, telegram, email, copy.",
+    maturity: "beta",
     controls: [
-      text(
+      list(
         "networks",
         "Networks",
         "x|facebook|linkedin|whatsapp|telegram|email|copy",
       ),
       text("url", "URL", "https://example.org/articulo"),
+      text("text", "Text", ""),
+      text("label", "Label", "Share"),
       select("direction", "Direction", "row", ["row", "col"]),
     ],
+    a11y: "ul with per-network aria-labels; copy feedback via role=status.",
   },
   {
     id: "comment",
@@ -804,22 +1103,38 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-comment",
     description:
       "A comment or talk-page message with role badge, permalink, reply action and nested replies.",
+    maturity: "beta",
     controls: [
       text("author", "Author", "Luis Mamani"),
+      text("avatar", "Avatar", "LM"),
       text("date", "Date", "21 nov 2026"),
+      text("dateTime", "Datetime", "2026-11-21"),
       text("role", "Role", "Moderador"),
-      text("reply-label", "Reply label", "Responder"),
+      text("href", "Permalink", "#c1"),
+      text("replyLabel", "Reply label", "Responder"),
+      bool("replyable", "Replyable", true),
     ],
     slotHtml:
       "<p>Buen resumen. Falta citar la fuente del segundo párrafo.</p>" +
-      '<strata-comment slot="replies" author="Ana Ríos" date="21 nov 2026" role="Autor"><p>Gracias, lo corrijo.</p></strata-comment>',
+      '<strata-comment slot="replies" author="Ana Ríos" date="21 nov 2026" role-label="Autor"><p>Gracias, lo corrijo.</p></strata-comment>',
+    slots: [
+      { name: "default", description: "Comment body (prose HTML)." },
+      { name: "replies", description: "Nested strata-comment children." },
+    ],
+    events: [
+      {
+        name: "strata-reply",
+        description: "Fired when the reply action is activated.",
+      },
+    ],
   },
   {
     id: "comment-thread",
-    name: "Comment thread",
+    name: "CommentThread",
     category: "Editorial",
     tagName: "strata-comment-thread",
     description: "Titled region holding comments, with a form slot.",
+    maturity: "beta",
     controls: [
       text("heading", "Heading", "Discusión"),
       num("count", "Count", 2),
@@ -827,14 +1142,19 @@ export const catalog: readonly CatalogEntry[] = [
     slotHtml:
       '<strata-comment author="Luis Mamani" date="hoy"><p>Primer comentario.</p></strata-comment>' +
       '<strata-comment author="Ana Ríos" date="hoy"><p>Segundo comentario.</p></strata-comment>',
+    slots: [
+      { name: "default", description: "strata-comment children." },
+      { name: "form", description: "Comment submission form." },
+    ],
   },
   {
     id: "article-header",
-    name: "Article header",
+    name: "ArticleHeader",
     category: "Editorial",
     tagName: "strata-article-header",
     description:
       "Kicker, headline, deck, byline meta, share slot and optional lead figure.",
+    maturity: "beta",
     controls: [
       text("heading", "Heading", "El río que cambió de rumbo"),
       text(
@@ -845,9 +1165,14 @@ export const catalog: readonly CatalogEntry[] = [
       text("category", "Category", "Geografía"),
       text("author", "Author", "Ana Ríos"),
       text("date", "Date", "21 nov 2026"),
+      text("meta", "Meta", ""),
+      text("imageAlt", "Image alt", ""),
+      text("caption", "Caption", ""),
     ],
     slotHtml:
       '<strata-share slot="share" networks="x|email|copy"></strata-share>',
+    slots: [{ name: "share", description: "Share actions row." }],
+    a11y: "Header landmark with h1 headline and metadata list.",
   },
   {
     id: "entry",
@@ -855,18 +1180,23 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Editorial",
     tagName: "strata-entry",
     description: "Listing row for articles, search results and recent changes.",
+    maturity: "beta",
     controls: [
       text("heading", "Heading", "Crónica de una cuenca"),
+      text("href", "Href", "/articulo"),
       text(
         "excerpt",
         "Excerpt",
         "Cómo se organizó el agua en el valle durante el siglo XIX.",
       ),
       text("category", "Category", "Historia"),
+      text("author", "Author", "Ana Ríos"),
       text("date", "Date", "20 nov 2026"),
-      text("tags", "Tags", "Agua|Valles"),
+      list("tags", "Tags", "Agua|Valles"),
       select("layout", "Layout", "stacked", ["stacked", "inline"]),
+      bool("mediaEnd", "Media end"),
     ],
+    a11y: "Article element with configurable heading level.",
   },
   {
     id: "quote",
@@ -875,11 +1205,14 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-quote",
     description:
       "Block quote with left filete, or pull quote framed by double rules.",
+    maturity: "beta",
     controls: [
       select("variant", "Variant", "block", ["block", "pull"]),
       text("cite", "Cite", "Ana Ríos"),
+      text("source", "Source url", ""),
     ],
     slotContent: "La cartografía es una forma de memoria compartida.",
+    a11y: "figure > blockquote > figcaption > cite semantics.",
   },
   {
     id: "ticker",
@@ -888,41 +1221,55 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-ticker",
     description:
       "Scroll-snapping strip of short headlines; optional auto-advance.",
+    maturity: "beta",
     controls: [
       text("label", "Label", "Últimas"),
-      text(
+      list(
         "items",
-        "Items",
-        "Nueva página: Cuenca del Pilcomayo|Actualizada: Quebrada de Humahuaca|Revisión pendiente: Lago Titicaca|Fusionada: Salar de Uyuni",
+        "Items (JSON or pipe)",
+        "Nueva página: Cuenca del Pilcomayo|Actualizada: Quebrada de Humahuaca|Revisión pendiente: Lago Titicaca",
       ),
       num("interval", "Interval (ms)", 0),
     ],
   },
   {
     id: "filter-bar",
-    name: "Filter bar",
+    name: "FilterBar",
     category: "Editorial",
     tagName: "strata-filter-bar",
     description:
       "Category chips with view and sort toggles; emits strata-change.",
+    maturity: "beta",
     controls: [
-      text("items", "Items", "Historia|Ciencia|Arte|Geografía"),
+      list("items", "Items (JSON or pipe)", "Historia|Ciencia|Arte|Geografía"),
       text("value", "Value", ""),
+      text("allLabel", "All label", "Todos"),
       select("view", "View", "list", ["list", "grid"]),
+      select("sort", "Sort", "", ["", "asc", "desc"]),
       bool("hues", "Rainbow chips", true),
-      bool("hide-tools", "Hide tools"),
+      bool("hideTools", "Hide tools"),
+      text("label", "Label", "Filter"),
     ],
+    events: [
+      {
+        name: "strata-change",
+        detail: "{ value, view, sort }",
+        description: "Fired when a chip or tool toggles.",
+      },
+    ],
+    a11y: "Chips use aria-pressed; view/sort tools are toggle buttons.",
   },
   {
     id: "index-list",
-    name: "Index list",
+    name: "IndexList",
     category: "Editorial",
     tagName: "strata-index-list",
     description:
       "Grouped index of links: site map, category index, alphabetical wiki index.",
+    maturity: "beta",
     controls: [
       num("columns", "Columns", 2),
-      text(
+      list(
         "groups",
         "Groups (JSON)",
         '[{"heading":"A","items":[{"label":"Altiplano","href":"/a"},{"label":"Andes","href":"/b"}]},{"heading":"B","items":[{"label":"Bosque seco","href":"/c"}]}]',
@@ -931,19 +1278,21 @@ export const catalog: readonly CatalogEntry[] = [
   },
   {
     id: "ranked-list",
-    name: "Ranked list",
+    name: "RankedList",
     category: "Editorial",
     tagName: "strata-ranked-list",
     description: "Numbered list with tabular numerals: most read, most edited.",
+    maturity: "beta",
     controls: [
-      text(
+      list(
         "items",
-        "Items",
-        "Salar de Uyuni|Lago Titicaca|Río Pilcomayo|Cordillera Real",
+        "Items (JSON or pipe)",
+        "Salar de Uyuni|Lago Titicaca|Río Pilcomayo",
       ),
       select("variant", "Variant", "ordered", ["ordered", "none"]),
       bool("divider", "Divider", true),
       bool("striped", "Striped"),
+      text("label", "Label", "Ranking"),
     ],
   },
   {
@@ -953,161 +1302,218 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-gallery",
     description:
       "Masonry columns of figures with a keyboard-friendly lightbox.",
+    maturity: "beta",
     controls: [
       num("columns", "Columns", 3),
       bool("lightbox", "Lightbox", true),
+      text("label", "Label", "Gallery"),
     ],
     slotHtml:
       '<figure><div style="height:120px;background:var(--strata-color-surface-selected)"></div><figcaption>Figura 1</figcaption></figure>' +
       '<figure><div style="height:180px;background:var(--strata-color-surface-hover)"></div><figcaption>Figura 2</figcaption></figure>' +
       '<figure><div style="height:90px;background:var(--strata-color-surface-selected)"></div><figcaption>Figura 3</figcaption></figure>',
+    slots: [{ name: "default", description: "figure children." }],
+    a11y: "Lightbox is a dialog with Close/Previous/Next buttons and Escape support.",
   },
   {
     id: "page-layout",
-    name: "Page layout",
+    name: "PageLayout",
     category: "Editorial",
     tagName: "strata-page-layout",
     description:
       "Start aside (TOC) · article · end aside (infobox); empty asides collapse.",
-    controls: [bool("sticky", "Sticky asides")],
+    maturity: "beta",
+    controls: [bool("sticky", "Sticky asides", true)],
     slotHtml:
       '<strata-ranked-list slot="aside-start" label="Contenido" items="Introducción|Historia|Geografía" variant="none"></strata-ranked-list>' +
       "<strata-prose><p>Cuerpo del artículo con medida de lectura.</p></strata-prose>" +
       '<strata-tag-list slot="aside-end" items="Historia|Geografía"></strata-tag-list>',
+    slots: [
+      { name: "aside-start", description: "Left rail (TOC, index)." },
+      { name: "default", description: "Article body." },
+      { name: "aside-end", description: "Right rail (infobox, tags)." },
+    ],
   },
+
+  // ── Article Navigation ─────────────────────────────────────────────────
   {
     id: "toc",
-    name: "Table of contents",
-    category: "Article navigation",
+    name: "TableOfContents",
+    category: "Article Navigation",
     tagName: "strata-toc",
     description:
       "Scroll-spy TOC built from a target's headings (or a manual list); list or rail variant, numbering, collapsible groups.",
+    maturity: "beta",
     controls: [
+      text("label", "Label", "Contents"),
       text("heading", "Heading", "Contenidos"),
+      text("target", "Target selector", ""),
       select("variant", "Variant", "list", ["list", "rail"]),
       bool("numbered", "Numbered", true),
       bool("collapsible", "Collapsible"),
       text("levels", "Levels", "2-3"),
-      text(
+      num("offset", "Scroll offset", 0),
+      bool("sticky", "Sticky"),
+      text("expandLabel", "Expand label", "Show subsections"),
+      list(
         "items",
         "Manual items (JSON)",
-        '[{"label":"Introducción","level":2},{"label":"Historia","level":2},{"label":"Orígenes","level":3},{"label":"Siglo XX","level":3},{"label":"Geografía","level":2},{"label":"Referencias","level":2}]',
+        '[{"label":"Introducción","level":2},{"label":"Historia","level":2},{"label":"Orígenes","level":3}]',
       ),
     ],
+    a11y: "nav landmark; current section marked with aria-current=location.",
   },
   {
     id: "reading-time",
-    name: "Reading time",
-    category: "Article navigation",
+    name: "ReadingTime",
+    category: "Article Navigation",
     tagName: "strata-reading-time",
     description:
       "Estimated reading time from a target's words (skipping references) or a fixed count.",
+    maturity: "beta",
     controls: [
+      text("target", "Target selector", ""),
       num("words", "Words", 1450),
       num("wpm", "Words per minute", 220),
       text("label", "Label", "min de lectura"),
-      bool("show-words", "Show words", true),
+      text("wordsLabel", "Words label", "palabras"),
+      bool("showWords", "Show words", true),
+      text("exclude", "Exclude selector", ""),
     ],
   },
   {
     id: "reading-progress",
-    name: "Reading progress",
-    category: "Article navigation",
+    name: "ReadingProgress",
+    category: "Article Navigation",
     tagName: "strata-reading-progress",
     description:
       "Thin progress bar showing how far the reader is through the article.",
+    maturity: "beta",
     controls: [
-      select("placement", "Placement", "inline", ["inline", "fixed"]),
-      text("label", "Label", "Progreso de lectura"),
+      text("target", "Target selector", ""),
+      select("placement", "Placement", "fixed", ["fixed", "inline"]),
+      text("label", "Label", "Reading progress"),
     ],
+    a11y: "role=progressbar with aria-valuenow updated on scroll.",
   },
   {
     id: "back-to-top",
-    name: "Back to top",
-    category: "Article navigation",
+    name: "BackToTop",
+    category: "Article Navigation",
     tagName: "strata-back-to-top",
     description:
       "Returns to the top and moves focus there; floating after a scroll threshold, or inline.",
+    maturity: "beta",
     controls: [
-      select("variant", "Variant", "inline", ["inline", "floating"]),
-      bool("show-label", "Show label", true),
-      text("label", "Label", "Volver arriba"),
+      select("variant", "Variant", "floating", ["floating", "inline"]),
+      bool("showLabel", "Show label"),
+      text("label", "Label", "Back to top"),
       num("threshold", "Threshold (px)", 400),
+      text("target", "Focus target", ""),
     ],
+    a11y: "After scrolling, focus moves to the target heading for keyboard users.",
   },
   {
     id: "cite",
     name: "Cite",
-    category: "Article navigation",
+    category: "Article Navigation",
     tagName: "strata-cite",
     description:
       "Inline [n] citation marker, numbered by first appearance; pairs with References.",
+    maturity: "beta",
     controls: [
       text("ref", "Reference id", "r1"),
-      text("note", "Tooltip note", "Rios, A. (2021). Cartografía andina."),
+      text("label", "Label override", ""),
+      text("note", "Tooltip note", "Ríos, A. (2021). Cartografía andina."),
     ],
+    notes:
+      "Numbers are assigned globally by order of first appearance in the document.",
   },
   {
     id: "references",
     name: "References",
-    category: "Article navigation",
+    category: "Article Navigation",
     tagName: "strata-references",
     description:
       "Numbered references in citation order, with lettered back-links to each citation.",
+    maturity: "beta",
     controls: [
       text("heading", "Heading", "Referencias"),
-      text(
+      list(
         "items",
         "Items (JSON)",
         '[{"id":"r1","label":"Ríos, A. (2021). Cartografía andina. La Paz: Editorial Andes."},{"id":"r2","label":"Servicio Geográfico Militar. Atlas de Bolivia.","href":"https://example.org/atlas"}]',
       ),
     ],
+    slots: [{ name: "default", description: "Fallback manual entries." }],
   },
   {
     id: "hatnote",
     name: "Hatnote",
-    category: "Article navigation",
+    category: "Article Navigation",
     tagName: "strata-hatnote",
     description: "Disambiguation / see-also line above an article.",
+    maturity: "beta",
     controls: [
       text("lead", "Lead", "Para otros usos, véase"),
-      text(
+      list(
         "items",
         "Items (JSON)",
         '[{"label":"Pilcomayo (desambiguación)","href":"/d"},{"label":"Río Paraguay","href":"/p"}]',
       ),
+      text("separator", "Separator", "·"),
     ],
   },
   {
     id: "article-nav",
-    name: "Article nav",
-    category: "Article navigation",
+    name: "ArticleNav",
+    category: "Article Navigation",
     tagName: "strata-article-nav",
     description: "Previous / next links at the end of an article or series.",
+    maturity: "beta",
     controls: [
+      text("label", "Label", "Article navigation"),
       text("prev", "Previous", "Cuenca del Plata"),
-      text("prev-href", "Previous URL", "/prev"),
+      text("prevHref", "Previous URL", "/prev"),
+      text("prevLabel", "Previous label", "Anterior"),
       text("next", "Next", "Río Bermejo"),
-      text("next-href", "Next URL", "/next"),
+      text("nextHref", "Next URL", "/next"),
+      text("nextLabel", "Next label", "Siguiente"),
     ],
+    a11y: "nav landmark with rel=prev/next semantics.",
   },
   {
     id: "heading-anchors",
-    name: "Heading anchors",
-    category: "Article navigation",
+    name: "HeadingAnchors",
+    category: "Article Navigation",
     tagName: "strata-heading-anchors",
     description:
       "Adds permalink anchors to a target's headings (renders nothing itself).",
+    maturity: "beta",
     controls: [
       text("target", "Target selector", "article"),
       text("levels", "Levels", "2-4"),
+      text("label", "Anchor label", "Link to this section"),
     ],
+    notes:
+      "Progressive enhancement: appends a.strata-anchor links to headings in the target subtree. Pair with @strata/prose for styling.",
   },
 ];
 
-export const categories = [...new Set(catalog.map((entry) => entry.category))];
-export function defaultsFor(entry: CatalogEntry): Record<string, ControlValue> {
+export const categories: readonly Category[] = CATEGORIES;
+
+export function entryById(id: string): CatalogEntry | undefined {
+  return catalog.find((entry) => entry.id === id);
+}
+
+export function entriesInCategory(category: Category): CatalogEntry[] {
+  return catalog.filter((entry) => entry.category === category);
+}
+
+export function defaultsFor(
+  controls: readonly PropControl[],
+): Record<string, ControlValue> {
   return Object.fromEntries(
-    entry.controls.map(({ name, defaultValue }) => [name, defaultValue]),
+    controls.map(({ name, defaultValue }) => [name, defaultValue]),
   );
 }
