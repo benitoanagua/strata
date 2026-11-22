@@ -55,7 +55,24 @@ export { StrataSpinner } from "./Spinner/Spinner.js";
 export { StrataFileUpload } from "./FileUpload/FileUpload.js";
 export { StrataStepper } from "./Stepper/Stepper.js";
 export { StrataProse } from "./Prose/Prose.js";
+export { StrataMeta } from "./Meta/Meta.js";
+export { StrataTagList } from "./TagList/TagList.js";
+export { StrataSectionHeader } from "./SectionHeader/SectionHeader.js";
+export { StrataAuthorBox } from "./AuthorBox/AuthorBox.js";
+export { StrataShare } from "./Share/Share.js";
+export { StrataComment } from "./Comment/Comment.js";
+export { StrataCommentThread } from "./Comment/CommentThread.js";
+export { StrataArticleHeader } from "./ArticleHeader/ArticleHeader.js";
+export { StrataEntry } from "./Entry/Entry.js";
+export { StrataQuote } from "./Quote/Quote.js";
+export { StrataTicker } from "./Ticker/Ticker.js";
+export { StrataFilterBar } from "./FilterBar/FilterBar.js";
+export { StrataIndexList } from "./IndexList/IndexList.js";
+export { StrataRankedList } from "./RankedList/RankedList.js";
+export { StrataGallery } from "./Gallery/Gallery.js";
+export { StrataPageLayout } from "./PageLayout/PageLayout.js";
 
+export { STRATA_SHARE_NETWORKS } from "./Share/Share.js";
 export { STRATA_COMPONENT_CATALOG } from "./ComponentCatalog.js";
 export type { StrataComponentName } from "./ComponentCatalog.js";
 export type { StrataIconName } from "../types/iconify.js";
@@ -63,6 +80,22 @@ export type { StrataIconName } from "../types/iconify.js";
 // Global element typing is kept here so IDEs know every public element.
 declare global {
   interface HTMLElementTagNameMap {
+    "strata-meta": import("./Meta/Meta.js").StrataMeta;
+    "strata-tag-list": import("./TagList/TagList.js").StrataTagList;
+    "strata-section-header": import("./SectionHeader/SectionHeader.js").StrataSectionHeader;
+    "strata-author-box": import("./AuthorBox/AuthorBox.js").StrataAuthorBox;
+    "strata-share": import("./Share/Share.js").StrataShare;
+    "strata-comment": import("./Comment/Comment.js").StrataComment;
+    "strata-comment-thread": import("./Comment/CommentThread.js").StrataCommentThread;
+    "strata-article-header": import("./ArticleHeader/ArticleHeader.js").StrataArticleHeader;
+    "strata-entry": import("./Entry/Entry.js").StrataEntry;
+    "strata-quote": import("./Quote/Quote.js").StrataQuote;
+    "strata-ticker": import("./Ticker/Ticker.js").StrataTicker;
+    "strata-filter-bar": import("./FilterBar/FilterBar.js").StrataFilterBar;
+    "strata-index-list": import("./IndexList/IndexList.js").StrataIndexList;
+    "strata-ranked-list": import("./RankedList/RankedList.js").StrataRankedList;
+    "strata-gallery": import("./Gallery/Gallery.js").StrataGallery;
+    "strata-page-layout": import("./PageLayout/PageLayout.js").StrataPageLayout;
     "strata-accordion": import("./Accordion/Accordion.js").StrataAccordion;
     "strata-accordion-item": import("./Accordion/AccordionItem.js").StrataAccordionItem;
     "strata-button": import("./Button/Button.js").StrataButton;

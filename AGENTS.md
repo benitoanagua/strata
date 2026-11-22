@@ -16,6 +16,7 @@ Rules for agents working in this repository.
 ## Design laws
 
 - Grayscale-first; the single accent is optional and disabled by default.
+- The rainbow exists only as taxonomy hues (`--strata-tag-*`) for tags/categories; a hue is always paired with its text label.
 - Statuses are never color alone (icon, weight, underline or text required).
 - No raw colors outside `packages/tokens`; no `box-shadow` except `none`;
   radii stay within the 0–2 px scale except the explicit lint allowlist.

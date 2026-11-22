@@ -1,6 +1,6 @@
 # STRATA component catalog
 
-STRATA v2.5 ships a 48-component catalog. The catalog is deliberately broad enough for mobile product UI while keeping each component small and composable.
+STRATA ships a 65-component catalog. The catalog is deliberately broad enough for mobile product UI while keeping each component small and composable.
 
 ## Actions
 
@@ -25,6 +25,12 @@ Surface · Card · Dialog · Modal · Drawer · BottomSheet · Popover · Toolti
 ## Data / content
 
 DataTable · Pagination · List · ListItem · Accordion · Carousel · Grille · Avatar · Divider · Logo · ThemeToggle
+
+## Editorial (news / wiki)
+
+Meta · TagList · SectionHeader · AuthorBox · Share · Comment · CommentThread · ArticleHeader · Entry · Quote · Ticker · FilterBar · IndexList · RankedList · Gallery · PageLayout
+
+Ported from the Vue/Tailwind _UI Components Library_ news kit. See `docs/EDITORIAL-COMPONENTS.md` for the mapping, wiki uses and what was deliberately left out.
 
 ## Contract
 

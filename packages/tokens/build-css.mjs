@@ -57,22 +57,47 @@ const accentVars = (theme) =>
         .join("")
     : "";
 
+const kebabHue = (h) => h.replace(/([A-Z])/g, "-$1").toLowerCase();
+// Taxonomy hues (tags, categories, labels). The only chromatic family besides
+// status/accent; always paired with a text label (see docs/DESIGN-LAWS.md §4).
+const tagHueVars = (theme) =>
+  tokens.tagHue?.enabled
+    ? Object.entries(tokens.tagHue[theme])
+        .map(
+          ([hue, v]) =>
+            `--strata-tag-${kebabHue(hue)}-ink: ${v.ink};--strata-tag-${kebabHue(hue)}-tint: ${v.tint};`,
+        )
+        .join("")
+    : "";
+// Opt-out: <html data-tag-hues="mono"> collapses every hue to the ink ramp.
+const tagHueMono = tokens.tagHue?.enabled
+  ? Object.keys(tokens.tagHue.light)
+      .map(
+        (hue) =>
+          `--strata-tag-${kebabHue(hue)}-ink: var(--strata-color-text-secondary);--strata-tag-${kebabHue(hue)}-tint: var(--strata-color-surface-subtle);`,
+      )
+      .join("")
+  : "";
+
 const css = `:root {
   ${vars.join("\n  ")}
   ${themeVars("light")}
   ${accentVars("light")}
+  ${tagHueVars("light")}
   color-scheme: light;
 }
 
 [data-theme="light"] {
   ${themeVars("light")}
   ${accentVars("light")}
+  ${tagHueVars("light")}
   color-scheme: light;
 }
 
 [data-theme="dark"] {
   ${themeVars("dark")}
   ${accentVars("dark")}
+  ${tagHueVars("dark")}
   color-scheme: dark;
 }
 
@@ -80,8 +105,13 @@ const css = `:root {
   :root:not([data-theme="light"]) {
     ${themeVars("dark")}
     ${accentVars("dark")}
+    ${tagHueVars("dark")}
     color-scheme: dark;
   }
+}
+
+:root[data-tag-hues="mono"] {
+  ${tagHueMono}
 }
 `;
 

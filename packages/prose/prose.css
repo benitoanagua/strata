@@ -241,6 +241,82 @@
   margin: 0.4em 0;
 }
 
+/* ---------- Editorial inline styles (news / wiki) ---------- */
+
+.strata-prose blockquote cite,
+.strata-prose blockquote footer {
+  display: block;
+  margin-top: 0.4em;
+  font: var(--strata-type-label-medium) var(--strata-font-sans);
+  font-style: normal;
+  color: var(--strata-color-text-secondary);
+}
+
+.strata-prose blockquote cite::before {
+  content: "— ";
+}
+
+/* Drop cap: opt in on a paragraph with class="strata-dropcap". */
+.strata-prose .strata-dropcap::first-letter {
+  float: left;
+  margin: 0.05em 0.1em 0 0;
+  font-family: var(--strata-font-serif);
+  font-weight: 600;
+  font-size: 3.4em;
+  line-height: 0.85;
+  color: var(--strata-color-text-primary);
+}
+
+.strata-prose .strata-lead::first-line {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+}
+
+.strata-prose mark {
+  padding: 0 0.15em;
+  background: var(--strata-color-surface-selected);
+  color: inherit;
+}
+
+.strata-prose abbr[title] {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.strata-prose del {
+  text-decoration: line-through;
+  color: var(--strata-color-text-secondary);
+}
+
+.strata-prose ins {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Decoration utilities: solid / double / dotted / dashed / wavy. */
+.strata-prose .strata-u-double {
+  text-decoration: underline double;
+  text-underline-offset: 3px;
+}
+.strata-prose .strata-u-dotted {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+.strata-prose .strata-u-dashed {
+  text-decoration: underline dashed;
+  text-underline-offset: 3px;
+}
+.strata-prose .strata-u-wavy {
+  text-decoration: underline wavy;
+  text-underline-offset: 3px;
+}
+
+/* Zebra tables: opt in with class="strata-zebra". */
+.strata-prose table.strata-zebra tbody tr:nth-child(even) {
+  background: var(--strata-color-surface-subtle);
+}
+
 /* ---------- Small text ---------- */
 
 .strata-prose small {

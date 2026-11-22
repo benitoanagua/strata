@@ -58,3 +58,30 @@ describe("strict-monochrome status colors", () => {
     },
   );
 });
+
+describe("taxonomy tag hues", () => {
+  const hues = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+  it.each(["light", "dark"] as const)(
+    "%s hues keep AA ink on tint and surfaces",
+    (theme) => {
+      for (const hue of hues) {
+        const { ink, tint } = tokens.tagHue[theme][hue];
+        expect(contrast(ink, tint), `${hue} ink/tint`).toBeGreaterThanOrEqual(
+          4.5,
+        );
+        for (const bg of SURFACES[theme])
+          expect(contrast(ink, bg), `${hue} on ${bg}`).toBeGreaterThanOrEqual(
+            4.5,
+          );
+      }
+    },
+  );
+  it("emits hue variables and a mono opt-out", () => {
+    const css = fs.readFileSync(
+      path.resolve(here, "../../tokens/dist/styles.css"),
+      "utf8",
+    );
+    expect(css).toContain("--strata-tag-violet-ink");
+    expect(css).toContain(':root[data-tag-hues="mono"]');
+  });
+});

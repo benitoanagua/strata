@@ -87,6 +87,35 @@ if (t.accent?.enabled) {
   }
 }
 
+if (t.tagHue?.enabled) {
+  // Taxonomy hues: ink must read on its own tint and on every surface.
+  const required = [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "indigo",
+    "violet",
+  ];
+  for (const theme of ["light", "dark"]) {
+    const s = t.semantic[theme];
+    for (const hue of required) {
+      const v = t.tagHue[theme]?.[hue];
+      if (!v) throw new Error(`Tag hue contract: missing ${theme}.${hue}`);
+      if (contrast(v.ink, v.tint) < 4.5)
+        throw new Error(
+          `Contrast contract: tagHue.${theme}.${hue} ink on tint below 4.5:1`,
+        );
+      for (const surface of ["surfaceDefault", "surfaceRaised"])
+        if (contrast(v.ink, s[surface]) < 4.5)
+          throw new Error(
+            `Contrast contract: tagHue.${theme}.${hue} ink on ${surface} below 4.5:1`,
+          );
+    }
+  }
+}
+
 if (
   !t.fontsUrl?.startsWith("https://fonts.googleapis.com/") ||
   !["Source+Serif+4", "Source+Sans+3", "Source+Code+Pro"].every((f) =>

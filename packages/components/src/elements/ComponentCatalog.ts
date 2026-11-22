@@ -48,6 +48,22 @@ export const STRATA_COMPONENT_CATALOG = [
   "file-upload",
   "stepper",
   "prose",
+  "meta",
+  "tag-list",
+  "section-header",
+  "author-box",
+  "share",
+  "comment",
+  "comment-thread",
+  "article-header",
+  "entry",
+  "quote",
+  "ticker",
+  "filter-bar",
+  "index-list",
+  "ranked-list",
+  "gallery",
+  "page-layout",
 ] as const;
 
 export type StrataComponentName = (typeof STRATA_COMPONENT_CATALOG)[number];

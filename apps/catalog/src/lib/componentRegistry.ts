@@ -366,7 +366,21 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Feedback",
     tagName: "strata-tag",
     description: "A removable label for categorising content.",
-    controls: [text("label", "Label", "Draft"), bool("removable", "Removable")],
+    controls: [
+      text("label", "Label", "Draft"),
+      select("hue", "Hue", "neutral", [
+        "neutral",
+        "auto",
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "blue",
+        "indigo",
+        "violet",
+      ]),
+      bool("removable", "Removable"),
+    ],
   },
   {
     id: "progress",
@@ -692,6 +706,274 @@ export const catalog: readonly CatalogEntry[] = [
 <h2>Details that carry weight</h2>
 <p>Small decisions accumulate: the offset of an underline, the silence between paragraphs, the exact gray of a hairline. The goal is a page that disappears — where the reader remembers the argument, not the interface.</p>
 <div class="footnotes"><ol><li id="fn1">See <em>Design Laws</em>, §3, for the measure contract.</li></ol></div>`,
+  },
+  {
+    id: "meta",
+    name: "Meta",
+    category: "Editorial",
+    tagName: "strata-meta",
+    description:
+      "Metadata line (date, category, author) with slanted filete separators.",
+    controls: [
+      text(
+        "items",
+        "Items (pipe-separated)",
+        "21 nov 2026|Ciencia|Ana Ríos|4 min",
+      ),
+    ],
+  },
+  {
+    id: "tag-list",
+    name: "Tag list",
+    category: "Editorial",
+    tagName: "strata-tag-list",
+    description:
+      "Wrapping group of tags; hue=auto gives every category a stable rainbow hue.",
+    controls: [
+      text(
+        "items",
+        "Items",
+        "Historia|Ciencia|Arte|Geografía|Música|Lengua|Política",
+      ),
+      select("hue", "Hue", "auto", [
+        "auto",
+        "neutral",
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "blue",
+        "indigo",
+        "violet",
+      ]),
+    ],
+  },
+  {
+    id: "section-header",
+    name: "Section header",
+    category: "Editorial",
+    tagName: "strata-section-header",
+    description:
+      "Title with a hairline rule and an emphasised segment over the title.",
+    controls: [
+      text("heading", "Heading", "Autor"),
+      text("subheading", "Subheading", "Ana Ríos"),
+      select("size", "Size", "medium", ["small", "medium", "large"]),
+    ],
+  },
+  {
+    id: "author-box",
+    name: "Author box",
+    category: "Editorial",
+    tagName: "strata-author-box",
+    description:
+      "Contributor card: avatar, name, role line, bio and links slot.",
+    controls: [
+      text("name", "Name", "Ana Ríos"),
+      text("meta", "Meta", "Editora|Desde 2021|128 artículos"),
+      text(
+        "description",
+        "Description",
+        "Escribe sobre ciencia y cultura en los Andes.",
+      ),
+    ],
+    slotHtml:
+      '<strata-share slot="links" networks="x|linkedin|email" text="Ana Ríos" url="https://example.org"></strata-share>',
+  },
+  {
+    id: "share",
+    name: "Share",
+    category: "Editorial",
+    tagName: "strata-share",
+    description:
+      "Share actions as monochrome glyphs: x, facebook, linkedin, whatsapp, telegram, email, copy.",
+    controls: [
+      text(
+        "networks",
+        "Networks",
+        "x|facebook|linkedin|whatsapp|telegram|email|copy",
+      ),
+      text("url", "URL", "https://example.org/articulo"),
+      select("direction", "Direction", "row", ["row", "col"]),
+    ],
+  },
+  {
+    id: "comment",
+    name: "Comment",
+    category: "Editorial",
+    tagName: "strata-comment",
+    description:
+      "A comment or talk-page message with role badge, permalink, reply action and nested replies.",
+    controls: [
+      text("author", "Author", "Luis Mamani"),
+      text("date", "Date", "21 nov 2026"),
+      text("role", "Role", "Moderador"),
+      text("reply-label", "Reply label", "Responder"),
+    ],
+    slotHtml:
+      "<p>Buen resumen. Falta citar la fuente del segundo párrafo.</p>" +
+      '<strata-comment slot="replies" author="Ana Ríos" date="21 nov 2026" role="Autor"><p>Gracias, lo corrijo.</p></strata-comment>',
+  },
+  {
+    id: "comment-thread",
+    name: "Comment thread",
+    category: "Editorial",
+    tagName: "strata-comment-thread",
+    description: "Titled region holding comments, with a form slot.",
+    controls: [
+      text("heading", "Heading", "Discusión"),
+      num("count", "Count", 2),
+    ],
+    slotHtml:
+      '<strata-comment author="Luis Mamani" date="hoy"><p>Primer comentario.</p></strata-comment>' +
+      '<strata-comment author="Ana Ríos" date="hoy"><p>Segundo comentario.</p></strata-comment>',
+  },
+  {
+    id: "article-header",
+    name: "Article header",
+    category: "Editorial",
+    tagName: "strata-article-header",
+    description:
+      "Kicker, headline, deck, byline meta, share slot and optional lead figure.",
+    controls: [
+      text("heading", "Heading", "El río que cambió de rumbo"),
+      text(
+        "deck",
+        "Deck",
+        "Una cronología de tres siglos de cartografía fluvial.",
+      ),
+      text("category", "Category", "Geografía"),
+      text("author", "Author", "Ana Ríos"),
+      text("date", "Date", "21 nov 2026"),
+    ],
+    slotHtml:
+      '<strata-share slot="share" networks="x|email|copy"></strata-share>',
+  },
+  {
+    id: "entry",
+    name: "Entry",
+    category: "Editorial",
+    tagName: "strata-entry",
+    description: "Listing row for articles, search results and recent changes.",
+    controls: [
+      text("heading", "Heading", "Crónica de una cuenca"),
+      text(
+        "excerpt",
+        "Excerpt",
+        "Cómo se organizó el agua en el valle durante el siglo XIX.",
+      ),
+      text("category", "Category", "Historia"),
+      text("date", "Date", "20 nov 2026"),
+      text("tags", "Tags", "Agua|Valles"),
+      select("layout", "Layout", "stacked", ["stacked", "inline"]),
+    ],
+  },
+  {
+    id: "quote",
+    name: "Quote",
+    category: "Editorial",
+    tagName: "strata-quote",
+    description:
+      "Block quote with left filete, or pull quote framed by double rules.",
+    controls: [
+      select("variant", "Variant", "block", ["block", "pull"]),
+      text("cite", "Cite", "Ana Ríos"),
+    ],
+    slotContent: "La cartografía es una forma de memoria compartida.",
+  },
+  {
+    id: "ticker",
+    name: "Ticker",
+    category: "Editorial",
+    tagName: "strata-ticker",
+    description:
+      "Scroll-snapping strip of short headlines; optional auto-advance.",
+    controls: [
+      text("label", "Label", "Últimas"),
+      text(
+        "items",
+        "Items",
+        "Nueva página: Cuenca del Pilcomayo|Actualizada: Quebrada de Humahuaca|Revisión pendiente: Lago Titicaca|Fusionada: Salar de Uyuni",
+      ),
+      num("interval", "Interval (ms)", 0),
+    ],
+  },
+  {
+    id: "filter-bar",
+    name: "Filter bar",
+    category: "Editorial",
+    tagName: "strata-filter-bar",
+    description:
+      "Category chips with view and sort toggles; emits strata-change.",
+    controls: [
+      text("items", "Items", "Historia|Ciencia|Arte|Geografía"),
+      text("value", "Value", ""),
+      select("view", "View", "list", ["list", "grid"]),
+      bool("hues", "Rainbow chips", true),
+      bool("hide-tools", "Hide tools"),
+    ],
+  },
+  {
+    id: "index-list",
+    name: "Index list",
+    category: "Editorial",
+    tagName: "strata-index-list",
+    description:
+      "Grouped index of links: site map, category index, alphabetical wiki index.",
+    controls: [
+      num("columns", "Columns", 2),
+      text(
+        "groups",
+        "Groups (JSON)",
+        '[{"heading":"A","items":[{"label":"Altiplano","href":"/a"},{"label":"Andes","href":"/b"}]},{"heading":"B","items":[{"label":"Bosque seco","href":"/c"}]}]',
+      ),
+    ],
+  },
+  {
+    id: "ranked-list",
+    name: "Ranked list",
+    category: "Editorial",
+    tagName: "strata-ranked-list",
+    description: "Numbered list with tabular numerals: most read, most edited.",
+    controls: [
+      text(
+        "items",
+        "Items",
+        "Salar de Uyuni|Lago Titicaca|Río Pilcomayo|Cordillera Real",
+      ),
+      select("variant", "Variant", "ordered", ["ordered", "none"]),
+      bool("divider", "Divider", true),
+      bool("striped", "Striped"),
+    ],
+  },
+  {
+    id: "gallery",
+    name: "Gallery",
+    category: "Editorial",
+    tagName: "strata-gallery",
+    description:
+      "Masonry columns of figures with a keyboard-friendly lightbox.",
+    controls: [
+      num("columns", "Columns", 3),
+      bool("lightbox", "Lightbox", true),
+    ],
+    slotHtml:
+      '<figure><div style="height:120px;background:var(--strata-color-surface-selected)"></div><figcaption>Figura 1</figcaption></figure>' +
+      '<figure><div style="height:180px;background:var(--strata-color-surface-hover)"></div><figcaption>Figura 2</figcaption></figure>' +
+      '<figure><div style="height:90px;background:var(--strata-color-surface-selected)"></div><figcaption>Figura 3</figcaption></figure>',
+  },
+  {
+    id: "page-layout",
+    name: "Page layout",
+    category: "Editorial",
+    tagName: "strata-page-layout",
+    description:
+      "Start aside (TOC) · article · end aside (infobox); empty asides collapse.",
+    controls: [bool("sticky", "Sticky asides")],
+    slotHtml:
+      '<strata-ranked-list slot="aside-start" label="Contenido" items="Introducción|Historia|Geografía" variant="none"></strata-ranked-list>' +
+      "<strata-prose><p>Cuerpo del artículo con medida de lectura.</p></strata-prose>" +
+      '<strata-tag-list slot="aside-end" items="Historia|Geografía"></strata-tag-list>',
   },
 ];
 

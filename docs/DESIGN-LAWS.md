@@ -24,11 +24,12 @@ Black, white and gray build the interface, editorial hierarchy, surfaces, naviga
 
 **Color is an exception, never a system.**
 
-STRATA has no spectrum. The seven-color family system was removed; there is no `spectrum` token group and components may not reference it.
+STRATA has no general-purpose spectrum. The seven-color family system was removed; there is no `spectrum` token group and components may not reference it. The only rainbow is the scoped **taxonomy exception** below.
 
 - A **single optional accent** may exist for links and focus, defined in `tokens.accent` and **disabled by default**. Enabling it emits `--strata-color-accent-link` / `--strata-color-accent-focus`, which must satisfy the WCAG AA contrast contract.
 - **Functional status colors** (`status-error`, `status-warning`, `status-success`) are the only other hues, deliberately desaturated. They are always accompanied by an icon, underline, weight or filete — never color alone.
-- If the accent and status colors can be removed without breaking comprehension, the interface is correct.
+- **Taxonomy exception (`tokens.tagHue`)**: seven hues (red, orange, yellow, green, blue, indigo, violet) plus `neutral` exist solely to tell tags, categories and labels apart. They are exposed as `--strata-tag-<hue>-ink` / `-tint`, consumed only by tag-like components (`strata-tag`, `strata-tag-list`, `strata-filter-bar`, comment role badges, entry/article kickers), and every ink must reach 4.5:1 on its tint and on both surfaces (enforced by `tooling/token-validator`). A hue never carries meaning alone: the label text is always rendered. `hue="auto"` derives a stable hue from the label. Set `<html data-tag-hues="mono">` (or `tagHue.enabled: false`) to collapse them to the ink ramp.
+- If the accent, status and taxonomy colors can be removed without breaking comprehension, the interface is correct.
 
 Decision note: the brief "que deje ser monocromático" was ambiguous between "strictly monochrome" and "monochrome-led". STRATA resolves it as _monochrome-led with a minimal optional exception_: the default theme emits zero chromatic variables.
 
