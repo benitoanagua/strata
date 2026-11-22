@@ -41,6 +41,15 @@ export class StrataTree extends LitElement {
   selectedIds: string[] | string = [];
   /** Allow several selected nodes at once. */
   @property({ type: Boolean }) multiple = false;
+  /**
+   * Expansion behaviour. `"multiple"` (default) lets any number of sibling
+   * nodes stay expanded. `"single"` applies accordion semantics: within each
+   * sibling group only one node may be expanded at a time; expanding a node
+   * collapses its expanded siblings. Ancestors of the current selection are
+   * always kept expanded.
+   */
+  @property({ attribute: "expand-mode", type: String })
+  expandMode: "multiple" | "single" = "multiple";
   /** Message rendered when `nodes` is empty. */
   @property({ attribute: "empty-label", type: String })
   emptyLabel = "No items";
@@ -58,6 +67,10 @@ export class StrataTree extends LitElement {
       this.rebuildIndex();
       this.seedExpanded();
       this.pruneState();
+      // Data changes (e.g. a search filter being cleared) must not strand
+      // the selection: selected ids survive filtering, so re-expand their
+      // ancestors — nodes that return become visible again.
+      this.expandAncestorsOfSelection();
       this.ensureFocus();
     }
     if (changed.has("selectedIds")) {
@@ -96,19 +109,79 @@ export class StrataTree extends LitElement {
       }
     };
     walk(this.nodeList());
+    this.enforceExclusive(next);
     this.expandedIds = next;
   }
 
   private pruneState() {
+    // Expansion state for removed nodes is dropped; selection is kept so a
+    // filtered-out node stays selected and reappears with its ancestors
+    // expanded once the data contains it again.
     const expanded = new Set(
       [...this.expandedIds].filter((id) => this.nodeMap.has(id)),
     );
-    const selected = new Set(
-      [...this.selectedIdSet].filter((id) => this.nodeMap.has(id)),
-    );
     if (expanded.size !== this.expandedIds.size) this.expandedIds = expanded;
-    if (selected.size !== this.selectedIdSet.size)
-      this.selectedIdSet = selected;
+    for (const id of [...this.seededExpanded]) {
+      if (!this.nodeMap.has(id)) this.seededExpanded.delete(id);
+    }
+  }
+
+  /** All sibling groups in the tree: the root list plus each node's children. */
+  private siblingGroups(): StrataTreeNode[][] {
+    const groups: StrataTreeNode[][] = [this.nodeList()];
+    for (const node of this.nodeMap.values()) {
+      if (node.children?.length) groups.push(node.children);
+    }
+    return groups;
+  }
+
+  /**
+   * In `single` expand mode, keeps at most one expanded node per sibling
+   * group. Ancestors of `priority` ids (the current selection by default)
+   * win; otherwise the first node in document order survives. Mutates
+   * `next` and returns the ids that were collapsed.
+   */
+  private enforceExclusive(
+    next: Set<string>,
+    priority: Iterable<string> = this.selectedIdSet,
+  ): string[] {
+    if (this.expandMode !== "single") return [];
+    const keep = new Set<string>();
+    for (const id of priority) {
+      // Only nodes present in the current data may claim a sibling group.
+      if (!this.nodeMap.has(id)) continue;
+      keep.add(id);
+      let parent = this.parentMap.get(id);
+      while (parent) {
+        keep.add(parent);
+        parent = this.parentMap.get(parent);
+      }
+    }
+    const removed: string[] = [];
+    for (const children of this.siblingGroups()) {
+      const open = children.filter((child) => next.has(child.id));
+      if (open.length < 2) continue;
+      const winner = open.find((child) => keep.has(child.id)) ?? open[0];
+      for (const child of open) {
+        if (child.id !== winner.id) {
+          next.delete(child.id);
+          removed.push(child.id);
+        }
+      }
+    }
+    return removed;
+  }
+
+  private dispatchToggles(entries: { id: string; expanded: boolean }[]) {
+    for (const entry of entries) {
+      this.dispatchEvent(
+        new CustomEvent("strata-toggle", {
+          bubbles: true,
+          composed: true,
+          detail: entry,
+        }),
+      );
+    }
   }
 
   private expandAncestorsOfSelection() {
@@ -120,7 +193,11 @@ export class StrataTree extends LitElement {
         parent = this.parentMap.get(parent);
       }
     }
+    const collapsed = this.enforceExclusive(next);
     this.expandedIds = next;
+    if (collapsed.length) {
+      this.dispatchToggles(collapsed.map((id) => ({ id, expanded: false })));
+    }
   }
 
   private nodeList(): StrataTreeNode[] {
@@ -219,14 +296,12 @@ export class StrataTree extends LitElement {
     const next = new Set(this.expandedIds);
     if (expanded) next.add(id);
     else next.delete(id);
+    const collapsed = this.enforceExclusive(next, [id]);
     this.expandedIds = next;
-    this.dispatchEvent(
-      new CustomEvent("strata-toggle", {
-        bubbles: true,
-        composed: true,
-        detail: { id, expanded },
-      }),
-    );
+    this.dispatchToggles([
+      { id, expanded },
+      ...collapsed.map((cid) => ({ id: cid, expanded: false })),
+    ]);
   }
 
   expandAll() {
@@ -240,6 +315,7 @@ export class StrataTree extends LitElement {
       }
     };
     walk(this.nodeList());
+    this.enforceExclusive(next);
     this.expandedIds = next;
   }
 
@@ -265,7 +341,13 @@ export class StrataTree extends LitElement {
       next.add(parent);
       parent = this.parentMap.get(parent);
     }
+    const collapsed = this.enforceExclusive(next, [id]);
     this.expandedIds = next;
+    if (collapsed.length) {
+      this.dispatchToggles(
+        collapsed.map((cid) => ({ id: cid, expanded: false })),
+      );
+    }
   }
 
   private onKeydown(event: KeyboardEvent) {

@@ -1100,10 +1100,11 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 - **Purpose:** Accessible, data-driven tree for hierarchical navigation and selection.
 - **Implementation:** `StrataTree` in `packages/components/src/elements/Tree`
-- **Properties (5):** `label` (String), `nodes` (`StrataTreeNode[]` or JSON string), `selectedIds` (string array or JSON string), `multiple` (Boolean), `emptyLabel` (String)
+- **Properties (6):** `label` (String), `nodes` (`StrataTreeNode[]` or JSON string), `selectedIds` (string array or JSON string), `multiple` (Boolean), `expandMode` (`"multiple"` default | `"single"`), `emptyLabel` (String)
 - **Node shape:** `id`, `label`, `children?`, `disabled?`, `icon?` (Carbon), `href?`, `meta?`, `expanded?`
 - **Events:** `strata-select` (`{ id, node, selected }`), `strata-selection-change` (`{ ids }`), `strata-toggle` (`{ id, expanded }`)
 - **Accessibility:** `role=tree/treeitem/group` with `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded`, `aria-selected`, `aria-disabled`; roving tabindex; ArrowUp/Down/Left/Right, Home, End, Enter, Space. `setNodeExpanded(id, expanded)` offers programmatic expansion; ancestors of the selection auto-expand.
+- **Expansion modes:** `expandMode="multiple"` (default) keeps the original behaviour — any number of siblings may stay expanded. `expandMode="single"` applies accordion semantics per sibling group: expanding a node collapses its expanded siblings while ancestors of the selection always remain open. `expanded: true` node flags are honoured on data load (used by the catalog while searching); expansion state for removed nodes is pruned, selection survives filtering and re-expands its ancestors when the data returns.
 - **Notes:** Router-agnostic — consumers read `node.href` from `strata-select` and navigate themselves. Disabled nodes cannot be selected; nested clicks do not bubble into ancestor selection.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.

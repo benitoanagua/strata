@@ -43,6 +43,10 @@ function entryNode(entry: CatalogEntry): StrataTreeNode {
  */
 export function buildTreeNodes(search = ""): StrataTreeNode[] {
   const q = search.trim().toLowerCase();
+  // While searching, matching branches carry `expanded: true` so the tree
+  // reveals its results; the component's expand-mode keeps only the
+  // selection's branch (or the first match) open per sibling group.
+  const searching = q.length > 0;
 
   const scenarioNodes = scenarios
     .filter((s) => !q || s.name.toLowerCase().includes(q) || s.id.includes(q))
@@ -63,30 +67,39 @@ export function buildTreeNodes(search = ""): StrataTreeNode[] {
         label: category,
         icon: CATEGORY_ICONS[category],
         meta: String(entries.length),
-        expanded: true,
+        ...(searching ? { expanded: true } : {}),
         children: entries.map(entryNode),
       };
     })
     .filter((n): n is StrataTreeNode => n !== undefined);
 
+  const libraryMatches = libraryChildren.reduce(
+    (sum, cat) => sum + (cat.children?.length ?? 0),
+    0,
+  );
+
+  // Library is listed first: with `expand-mode="single"` the first sibling
+  // wins expansion ties, and the library is the primary browsing surface.
   const roots: StrataTreeNode[] = [];
-  if (scenarioNodes.length) {
-    roots.push({
-      id: SCENARIOS_NODE_ID,
-      label: "Scenarios",
-      icon: "carbon:grid",
-      expanded: true,
-      children: scenarioNodes,
-    });
-  }
   if (libraryChildren.length) {
     roots.push({
       id: LIBRARY_NODE_ID,
       label: "Library",
       icon: "carbon:folder",
-      meta: String(catalog.length),
-      expanded: true,
+      meta: searching ? String(libraryMatches) : String(catalog.length),
+      ...(searching ? { expanded: true } : {}),
       children: libraryChildren,
+    });
+  }
+  if (scenarioNodes.length) {
+    roots.push({
+      id: SCENARIOS_NODE_ID,
+      label: "Scenarios",
+      icon: "carbon:grid",
+      ...(searching
+        ? { expanded: true, meta: String(scenarioNodes.length) }
+        : {}),
+      children: scenarioNodes,
     });
   }
   return roots;

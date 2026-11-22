@@ -19,7 +19,11 @@
 }
 
 .strata-button:hover {
-  background: var(--strata-color-gray-700);
+  background: color-mix(
+    in srgb,
+    var(--strata-color-text-primary) 85%,
+    var(--strata-color-surface-page)
+  );
 }
 
 .strata-button:active {

@@ -21,14 +21,19 @@ const SAMPLE: StrataTreeNode[] = [
   },
 ];
 
-async function mount(nodes: StrataTreeNode[] = SAMPLE) {
+async function mount(
+  nodes: StrataTreeNode[] = SAMPLE,
+  expandMode: "multiple" | "single" = "multiple",
+) {
   const el = document.createElement("strata-tree") as HTMLElement & {
     nodes: StrataTreeNode[];
     selectedIds: string[];
     multiple: boolean;
+    expandMode: "multiple" | "single";
     updateComplete: Promise<unknown>;
   };
   el.nodes = nodes;
+  el.expandMode = expandMode;
   document.body.appendChild(el);
   await el.updateComplete;
   await el.updateComplete;
@@ -232,6 +237,104 @@ describe("strata-tree", () => {
   it("renders the empty label when there are no nodes", async () => {
     const el = await mount([]);
     expect(el.shadowRoot?.textContent).toContain("No items");
+    el.remove();
+  });
+
+  it("expandMode=single collapses expanded siblings", async () => {
+    // SAMPLE seeds cat-b expanded; opening cat-a must collapse cat-b.
+    const el = await mount(SAMPLE, "single");
+    const caret = (id: string) =>
+      el.shadowRoot?.querySelector(
+        `[data-node-id="${id}"] .strata-tree__caret`,
+      ) as HTMLElement;
+    caret("cat-a").click();
+    await el.updateComplete;
+    const ids = items(el).map((i) => i.getAttribute("data-node-id"));
+    expect(ids).toContain("a-1");
+    expect(ids).not.toContain("b-2"); // cat-b collapsed as a sibling
+    const catB = items(el).find(
+      (i) => i.getAttribute("data-node-id") === "cat-b",
+    );
+    expect(catB?.getAttribute("aria-expanded")).toBe("false");
+    el.remove();
+  });
+
+  it("expandMode=single keeps only one expanded node per level", async () => {
+    const el = await mount(SAMPLE, "single");
+    const api = el as unknown as {
+      setNodeExpanded: (id: string, v: boolean) => void;
+    };
+    api.setNodeExpanded("cat-a", true);
+    api.setNodeExpanded("cat-b", true);
+    await el.updateComplete;
+    const ids = items(el).map((i) => i.getAttribute("data-node-id"));
+    expect(ids).toContain("b-2");
+    expect(ids).not.toContain("a-1"); // cat-a lost the sibling group
+    el.remove();
+  });
+
+  it("expandMode=single keeps ancestors of the selection expanded", async () => {
+    const el = await mount(SAMPLE, "single");
+    el.selectedIds = ["a-1"];
+    await el.updateComplete;
+    await el.updateComplete;
+    const ids = items(el).map((i) => i.getAttribute("data-node-id"));
+    // cat-a (selection ancestor) wins over seeded cat-b.
+    expect(ids).toEqual(
+      expect.arrayContaining(["cat-a", "a-1", "a-2", "b-1", "cat-b"]),
+    );
+    expect(ids).not.toContain("b-2");
+    el.remove();
+  });
+
+  it("expandMode=single allows nested expansion under an open parent", async () => {
+    const nested: StrataTreeNode[] = [
+      {
+        id: "p",
+        label: "Parent",
+        children: [
+          {
+            id: "c1",
+            label: "Child 1",
+            children: [{ id: "g1", label: "Grandchild" }],
+          },
+          { id: "c2", label: "Child 2" },
+        ],
+      },
+      { id: "other", label: "Other", children: [{ id: "o1", label: "O1" }] },
+    ];
+    const el = await mount(nested, "single");
+    const api = el as unknown as {
+      setNodeExpanded: (id: string, v: boolean) => void;
+    };
+    api.setNodeExpanded("p", true);
+    api.setNodeExpanded("c1", true);
+    api.setNodeExpanded("other", true); // sibling of p -> collapses p subtree
+    await el.updateComplete;
+    let ids = items(el).map((i) => i.getAttribute("data-node-id"));
+    expect(ids).toContain("o1");
+    expect(ids).not.toContain("c1");
+    // Re-open p: it wins the root sibling group again; c1 kept its own
+    // expanded state while hidden under the collapsed p.
+    api.setNodeExpanded("p", true);
+    await el.updateComplete;
+    ids = items(el).map((i) => i.getAttribute("data-node-id"));
+    expect(ids).toContain("c1");
+    expect(ids).not.toContain("o1");
+    el.remove();
+  });
+
+  it("expandMode defaults to multiple (siblings coexist)", async () => {
+    const el = await mount();
+    const caret = (id: string) =>
+      el.shadowRoot?.querySelector(
+        `[data-node-id="${id}"] .strata-tree__caret`,
+      ) as HTMLElement;
+    caret("cat-a").click();
+    await el.updateComplete;
+    const ids = items(el).map((i) => i.getAttribute("data-node-id"));
+    expect(ids).toContain("a-1");
+    expect(ids).toContain("b-2"); // cat-b still expanded
     el.remove();
   });
 

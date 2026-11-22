@@ -26,12 +26,17 @@ pnpm changeset status   # changeset validity (run before releases)
 - `packages/testing/visual/` — Playwright against the built catalog
   (`vite preview` on port 5174):
   - `smoke.spec.ts` — catalog loads, property updates, reset.
-  - `catalog.spec.ts` — inventory counts, search, category collapse,
-    selection of all 76 entries, typed controls (boolean/number), reset,
-    snippet generation + clipboard copy, API/a11y tabs, compound fixtures,
-    all five scenarios, surface/viewport controls.
+  - `catalog.spec.ts` — inventory counts, compact tree state (only route
+    ancestors expanded), exclusive sibling expansion, deep links, search and
+    restore-on-clear, selection of all 76 entries, typed controls
+    (boolean/number), reset, snippet generation + clipboard copy, API/a11y
+    tabs, compound fixtures, all five scenarios, surface/viewport controls.
   - `components.spec.ts` — axe scan (critical+serious) and visual baseline
     for every catalog entry in light and dark themes.
+  - `dark-mode.spec.ts` — theme/surface matrix (light/dark × auto/light/
+    dark/grid), `prefers-color-scheme` system theme, preference persistence,
+    computed-background assertions on sidebar/topbar/canvas, the viewer
+    settings panel, and representative light/dark page snapshots.
   - `design-system.spec.ts`, `regression.spec.ts` — catalog contract and
     responsive layout checks.
   - `a11y.spec.ts` — critical axe violations on the catalog shell.

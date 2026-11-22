@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { stubRemoteFonts } from "./font-stub";
 
 test.beforeEach(async ({ page }) => {
@@ -8,16 +8,119 @@ test.beforeEach(async ({ page }) => {
 const LIBRARY_ENTRIES = 76;
 const SCENARIOS = 5;
 
+/**
+ * The sidebar tree runs in `expand-mode="single"`, so entries are only in
+ * the DOM while their category is expanded. This walks every category —
+ * accordion-style, one at a time — and harvests all entry/scenario ids.
+ */
+async function harvestTreeIds(page: Page) {
+  const entryIds = new Set<string>();
+  const scenarioIds = new Set<string>();
+  const isOpen = async (id: string) =>
+    (await page
+      .locator(`.sidebar-nav [data-node-id='${id}']`)
+      .first()
+      .getAttribute("aria-expanded")) === "true";
+  const toggle = async (id: string) => {
+    await page
+      .locator(`.sidebar-nav [data-node-id='${id}'] .strata-tree__caret`)
+      .first()
+      .click();
+  };
+
+  if (!(await isOpen("root:library"))) await toggle("root:library");
+  const cats = await page
+    .locator(".sidebar-nav [data-node-id^='cat:']")
+    .evaluateAll((els) => els.map((el) => el.getAttribute("data-node-id")!));
+  for (const cat of cats) {
+    if (!(await isOpen(cat))) await toggle(cat);
+    const ids = await page
+      .locator(`.sidebar-nav [data-node-id='${cat}'] [data-node-id^='entry:']`)
+      .evaluateAll((els) =>
+        els.map((el) =>
+          el.getAttribute("data-node-id")!.slice("entry:".length),
+        ),
+      );
+    ids.forEach((id) => entryIds.add(id));
+  }
+
+  if (!(await isOpen("root:scenarios"))) await toggle("root:scenarios");
+  const sids = await page
+    .locator(
+      ".sidebar-nav [data-node-id='root:scenarios'] [data-node-id^='scenario:']",
+    )
+    .evaluateAll((els) =>
+      els.map((el) =>
+        el.getAttribute("data-node-id")!.slice("scenario:".length),
+      ),
+    );
+  sids.forEach((id) => scenarioIds.add(id));
+  return { entryIds: [...entryIds], scenarioIds: [...scenarioIds] };
+}
+
 test("catalog lists every canonical component and scenario", async ({
   page,
 }) => {
   await page.goto("/");
+  const { entryIds, scenarioIds } = await harvestTreeIds(page);
+  expect(entryIds).toHaveLength(LIBRARY_ENTRIES);
+  expect(scenarioIds).toHaveLength(SCENARIOS);
+});
+
+test("tree starts compact: only the route ancestors are expanded", async ({
+  page,
+}) => {
+  await page.goto("/");
+  // Default route is #/button (Actions): Library + Actions open, nothing else.
   await expect(
-    page.locator(".sidebar-nav [data-node-id^='entry:']"),
-  ).toHaveCount(LIBRARY_ENTRIES);
+    page.locator(".sidebar-nav [data-node-id='root:library']"),
+  ).toHaveAttribute("aria-expanded", "true");
   await expect(
-    page.locator(".sidebar-nav [data-node-id^='scenario:']"),
-  ).toHaveCount(SCENARIOS);
+    page.locator(".sidebar-nav [data-node-id='cat:Actions']"),
+  ).toHaveAttribute("aria-expanded", "true");
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='root:scenarios']"),
+  ).toHaveAttribute("aria-expanded", "false");
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='cat:Forms']"),
+  ).toHaveAttribute("aria-expanded", "false");
+  // Not every component is rendered up front.
+  const visible = await page
+    .locator(".sidebar-nav [data-node-id^='entry:']")
+    .count();
+  expect(visible).toBeGreaterThan(0);
+  expect(visible).toBeLessThan(LIBRARY_ENTRIES);
+});
+
+test("expansion is exclusive between sibling categories", async ({ page }) => {
+  await page.goto("/");
+  const actions = page.locator("[data-node-id='cat:Actions']").first();
+  const forms = page.locator("[data-node-id='cat:Forms']").first();
+  await forms.locator(".strata-tree__caret").first().click();
+  await expect(forms).toHaveAttribute("aria-expanded", "true");
+  await expect(actions).toHaveAttribute("aria-expanded", "false");
+  // The previously open category's entries leave the DOM.
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='entry:button']"),
+  ).toHaveCount(0);
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='entry:checkbox']"),
+  ).toBeVisible();
+});
+
+test("deep links expand only the ancestors of the selected entry", async ({
+  page,
+}) => {
+  await page.goto("/#/checkbox");
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='cat:Forms']"),
+  ).toHaveAttribute("aria-expanded", "true");
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='cat:Actions']"),
+  ).toHaveAttribute("aria-expanded", "false");
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='entry:checkbox']"),
+  ).toHaveAttribute("aria-selected", "true");
 });
 
 test("search filters the library by name and description", async ({ page }) => {
@@ -28,9 +131,23 @@ test("search filters the library by name and description", async ({ page }) => {
   const count = await entries.count();
   expect(count).toBeGreaterThan(0);
   expect(count).toBeLessThan(LIBRARY_ENTRIES);
-  // Every visible entry must relate to the query (name, tag, category or description).
+  // Only categories with results stay in the tree.
+  const cats = await page
+    .locator(".sidebar-nav [data-node-id^='cat:']")
+    .count();
+  expect(cats).toBeGreaterThan(0);
+  expect(cats).toBeLessThan(8);
+  // The expanded result category reveals matching entries.
   const texts = await entries.allTextContents();
   expect(texts.some((t) => /dialog/i.test(t))).toBe(true);
+  // Clearing the search restores the compact route-driven state.
+  await page.getByLabel("Search components").fill("");
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='entry:button']"),
+  ).toBeVisible();
+  await expect(
+    page.locator(".sidebar-nav [data-node-id='entry:checkbox']"),
+  ).toHaveCount(0);
   await page.getByLabel("Search components").fill("zzz-no-match");
   await expect(page.locator(".strata-tree__empty")).toBeVisible();
 });
@@ -51,8 +168,8 @@ test("category navigation collapses and expands groups", async ({ page }) => {
   await group.locator(".strata-tree__caret").first().click();
   await expect(group).toHaveAttribute("aria-expanded", "true");
   await expect(
-    page.locator(".sidebar-nav [data-node-id^='entry:']"),
-  ).toHaveCount(LIBRARY_ENTRIES);
+    page.locator(".sidebar-nav [data-node-id='entry:button']"),
+  ).toBeVisible();
 });
 
 test("tree keyboard navigation moves and selects entries", async ({ page }) => {
@@ -71,23 +188,21 @@ test("every component is selectable and mounts a real element", async ({
   const pageErrors: string[] = [];
   page.on("pageerror", (e) => pageErrors.push(e.message));
   await page.goto("/");
-  const entries = await page
-    .locator(".sidebar-nav [data-node-id^='entry:']")
-    .evaluateAll((els) =>
-      els.map((el) => ({
-        id: el.getAttribute("data-node-id")!.replace("entry:", ""),
-        tag: el.querySelector(".strata-tree__meta")?.textContent?.trim(),
-      })),
-    );
-  expect(entries).toHaveLength(LIBRARY_ENTRIES);
-  for (const { id, tag } of entries) {
+  const { entryIds } = await harvestTreeIds(page);
+  expect(entryIds).toHaveLength(LIBRARY_ENTRIES);
+  // Re-open the library on the default route before driving by hash.
+  const libRoot = page.locator("[data-node-id='root:library']").first();
+  if ((await libRoot.getAttribute("aria-expanded")) !== "true") {
+    await libRoot.locator(".strata-tree__caret").first().click();
+  }
+  for (const id of entryIds) {
     await page.evaluate((hash) => (location.hash = hash), `#/${id}`);
     const mounted = page.locator(".preview-stage > *").first();
     await expect
       .poll(() => mounted.evaluate((el) => el.tagName.toLowerCase()), {
         timeout: 5_000,
       })
-      .toBe(`strata-${tag}`);
+      .toBe(`strata-${id}`);
   }
   expect(pageErrors).toEqual([]);
 });

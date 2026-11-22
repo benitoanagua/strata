@@ -78,7 +78,7 @@
   object-fit: cover;
 }
 .strata-card__author-bullet {
-  background: var(--strata-color-gray-300);
+  background: var(--strata-color-surface-selected);
 }
 .strata-card__author-link {
   color: var(--strata-color-text-secondary);

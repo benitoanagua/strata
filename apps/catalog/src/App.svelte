@@ -305,6 +305,7 @@
     <nav class="sidebar-nav" aria-label="Component navigation">
       <strata-tree
         label="Component library"
+        expand-mode="single"
         empty-label={'No components match "' + search + '".'}
         nodes={JSON.stringify(treeNodes)}
         selected-ids={JSON.stringify([selectedNodeId])}

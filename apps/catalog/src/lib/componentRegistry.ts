@@ -1514,6 +1514,7 @@ export const catalog: readonly CatalogEntry[] = [
         '[{"id":"cat","label":"Category","meta":"2","children":[{"id":"one","label":"First item"},{"id":"two","label":"Second item","disabled":true}]},{"id":"solo","label":"Standalone node","icon":"carbon:document"}]',
       ),
       list("selectedIds", "Selected ids (JSON)", '["one"]'),
+      select("expandMode", "Expand mode", "multiple", ["multiple", "single"]),
       bool("multiple", "Multiple selection"),
       text("emptyLabel", "Empty label", "No items"),
     ],

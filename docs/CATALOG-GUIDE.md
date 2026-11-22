@@ -26,8 +26,12 @@ pnpm --filter @strata/catalog preview --port 5174
   (`apps/catalog/src/lib/treeData.ts`) with two roots: _Scenarios_ (the five
   editorial compositions) and _Library_ (all components grouped by category:
   Actions, Forms, Navigation, Feedback, Surfaces, Data & Content, Editorial,
-  Article Navigation). Categories expand/collapse, show entry counts and keep
-  the selected node highlighted; ancestors of the current route auto-expand.
+  Article Navigation). The tree starts compact — only the ancestors of the
+  current route are expanded — and runs with `expand-mode="single"`, so at
+  most one sibling per level is open (accordion behavior). Categories show
+  entry counts and keep the selected node highlighted; deep links expand
+  just the selected entry's ancestors. While searching, matching branches
+  expand temporarily and the route-driven state is restored on clear.
 - **Top bar** — breadcrumb (`Library / Category / Component`), maturity badge,
   the element tag, and `strata-viewer-settings` (theme / surface / viewport /
   motion).

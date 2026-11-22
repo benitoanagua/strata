@@ -30,11 +30,19 @@ test.describe("STRATA component contracts in the catalog", () => {
 
   test("navigation selects another registered component", async ({ page }) => {
     await page.goto("/");
-    await page.locator("[data-node-id='entry:badge']").click();
+    // Badge lives under Feedback: expand its category, then click the node.
+    const cat = page.locator("[data-node-id='cat:Feedback']").first();
+    if ((await cat.getAttribute("aria-expanded")) !== "true") {
+      await cat.locator(".strata-tree__caret").first().click();
+    }
+    await page.locator("[data-node-id='entry:badge']").first().click();
     await expect(page.getByRole("heading", { name: "Badge." })).toBeVisible();
     await expect(page.locator(".preview-stage > strata-badge")).toContainText(
       "In review",
     );
+    await expect(
+      page.locator(".sidebar-nav [data-node-id='entry:badge']"),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   test("viewer settings control surface and viewport", async ({ page }) => {

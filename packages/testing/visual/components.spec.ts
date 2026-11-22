@@ -41,11 +41,13 @@ async function seedViewerPrefs(page: Page, surface: string) {
 
 async function openComponent(page: Page, entryId: string, surface: string) {
   await seedViewerPrefs(page, surface);
-  await page.goto("/");
-  await page.locator(`[data-node-id="entry:${entryId}"]`).click();
+  await page.goto(`/#/${entryId}`);
   const preview = page.locator(".preview-stage > *").last();
   await expect(preview).toBeAttached();
-  await page.waitForTimeout(150);
+  // Shadow-DOM CSS animations (e.g. strata-modal's 300ms transitions) are not
+  // covered by Playwright's `animations: "disabled"`, so wait them out before
+  // screenshots compare pixels.
+  await page.waitForTimeout(400);
 }
 
 test.describe("STRATA component axe coverage", () => {
@@ -56,7 +58,7 @@ test.describe("STRATA component axe coverage", () => {
       }) => {
         await stubRemoteFonts(page);
         await seedViewerPrefs(page, theme);
-        await page.goto("/");
+        await page.goto(`/#/${entry.id}`);
 
         const fixture = PARENT_FIXTURES[entry.id];
         if (fixture) {
@@ -65,7 +67,6 @@ test.describe("STRATA component axe coverage", () => {
           }, fixture);
           await page.waitForTimeout(200);
         } else {
-          await page.locator(`[data-node-id="entry:${entry.id}"]`).click();
           const preview = page.locator(".preview-stage > *").last();
           await expect(preview).toBeAttached();
           await page.waitForTimeout(150);
