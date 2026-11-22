@@ -975,6 +975,134 @@ export const catalog: readonly CatalogEntry[] = [
       "<strata-prose><p>Cuerpo del artículo con medida de lectura.</p></strata-prose>" +
       '<strata-tag-list slot="aside-end" items="Historia|Geografía"></strata-tag-list>',
   },
+  {
+    id: "toc",
+    name: "Table of contents",
+    category: "Article navigation",
+    tagName: "strata-toc",
+    description:
+      "Scroll-spy TOC built from a target's headings (or a manual list); list or rail variant, numbering, collapsible groups.",
+    controls: [
+      text("heading", "Heading", "Contenidos"),
+      select("variant", "Variant", "list", ["list", "rail"]),
+      bool("numbered", "Numbered", true),
+      bool("collapsible", "Collapsible"),
+      text("levels", "Levels", "2-3"),
+      text(
+        "items",
+        "Manual items (JSON)",
+        '[{"label":"Introducción","level":2},{"label":"Historia","level":2},{"label":"Orígenes","level":3},{"label":"Siglo XX","level":3},{"label":"Geografía","level":2},{"label":"Referencias","level":2}]',
+      ),
+    ],
+  },
+  {
+    id: "reading-time",
+    name: "Reading time",
+    category: "Article navigation",
+    tagName: "strata-reading-time",
+    description:
+      "Estimated reading time from a target's words (skipping references) or a fixed count.",
+    controls: [
+      num("words", "Words", 1450),
+      num("wpm", "Words per minute", 220),
+      text("label", "Label", "min de lectura"),
+      bool("show-words", "Show words", true),
+    ],
+  },
+  {
+    id: "reading-progress",
+    name: "Reading progress",
+    category: "Article navigation",
+    tagName: "strata-reading-progress",
+    description:
+      "Thin progress bar showing how far the reader is through the article.",
+    controls: [
+      select("placement", "Placement", "inline", ["inline", "fixed"]),
+      text("label", "Label", "Progreso de lectura"),
+    ],
+  },
+  {
+    id: "back-to-top",
+    name: "Back to top",
+    category: "Article navigation",
+    tagName: "strata-back-to-top",
+    description:
+      "Returns to the top and moves focus there; floating after a scroll threshold, or inline.",
+    controls: [
+      select("variant", "Variant", "inline", ["inline", "floating"]),
+      bool("show-label", "Show label", true),
+      text("label", "Label", "Volver arriba"),
+      num("threshold", "Threshold (px)", 400),
+    ],
+  },
+  {
+    id: "cite",
+    name: "Cite",
+    category: "Article navigation",
+    tagName: "strata-cite",
+    description:
+      "Inline [n] citation marker, numbered by first appearance; pairs with References.",
+    controls: [
+      text("ref", "Reference id", "r1"),
+      text("note", "Tooltip note", "Rios, A. (2021). Cartografía andina."),
+    ],
+  },
+  {
+    id: "references",
+    name: "References",
+    category: "Article navigation",
+    tagName: "strata-references",
+    description:
+      "Numbered references in citation order, with lettered back-links to each citation.",
+    controls: [
+      text("heading", "Heading", "Referencias"),
+      text(
+        "items",
+        "Items (JSON)",
+        '[{"id":"r1","label":"Ríos, A. (2021). Cartografía andina. La Paz: Editorial Andes."},{"id":"r2","label":"Servicio Geográfico Militar. Atlas de Bolivia.","href":"https://example.org/atlas"}]',
+      ),
+    ],
+  },
+  {
+    id: "hatnote",
+    name: "Hatnote",
+    category: "Article navigation",
+    tagName: "strata-hatnote",
+    description: "Disambiguation / see-also line above an article.",
+    controls: [
+      text("lead", "Lead", "Para otros usos, véase"),
+      text(
+        "items",
+        "Items (JSON)",
+        '[{"label":"Pilcomayo (desambiguación)","href":"/d"},{"label":"Río Paraguay","href":"/p"}]',
+      ),
+    ],
+  },
+  {
+    id: "article-nav",
+    name: "Article nav",
+    category: "Article navigation",
+    tagName: "strata-article-nav",
+    description: "Previous / next links at the end of an article or series.",
+    controls: [
+      text("prev", "Previous", "Cuenca del Plata"),
+      text("prev-href", "Previous URL", "/prev"),
+      text("next", "Next", "Río Bermejo"),
+      text("next-href", "Next URL", "/next"),
+    ],
+  },
+  {
+    id: "heading-anchors",
+    name: "Heading anchors",
+    category: "Article navigation",
+    tagName: "strata-heading-anchors",
+    description:
+      "Adds permalink anchors to a target's headings (renders nothing itself).",
+    controls: [
+      text("target", "Target selector", "article"),
+      text("levels", "Levels", "2-4"),
+    ],
+  },
 ];
 
 export const categories = [...new Set(catalog.map((entry) => entry.category))];

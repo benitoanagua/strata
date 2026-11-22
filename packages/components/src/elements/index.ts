@@ -72,6 +72,15 @@ export { StrataRankedList } from "./RankedList/RankedList.js";
 export { StrataGallery } from "./Gallery/Gallery.js";
 export { StrataPageLayout } from "./PageLayout/PageLayout.js";
 
+export { StrataToc } from "./Toc/Toc.js";
+export { StrataReadingTime } from "./ReadingTime/ReadingTime.js";
+export { StrataReadingProgress } from "./ReadingProgress/ReadingProgress.js";
+export { StrataBackToTop } from "./BackToTop/BackToTop.js";
+export { StrataCite } from "./Cite/Cite.js";
+export { StrataReferences } from "./References/References.js";
+export { StrataHatnote } from "./Hatnote/Hatnote.js";
+export { StrataArticleNav } from "./ArticleNav/ArticleNav.js";
+export { StrataHeadingAnchors } from "./HeadingAnchors/HeadingAnchors.js";
 export { STRATA_SHARE_NETWORKS } from "./Share/Share.js";
 export { STRATA_COMPONENT_CATALOG } from "./ComponentCatalog.js";
 export type { StrataComponentName } from "./ComponentCatalog.js";
@@ -80,6 +89,15 @@ export type { StrataIconName } from "../types/iconify.js";
 // Global element typing is kept here so IDEs know every public element.
 declare global {
   interface HTMLElementTagNameMap {
+    "strata-toc": import("./Toc/Toc.js").StrataToc;
+    "strata-reading-time": import("./ReadingTime/ReadingTime.js").StrataReadingTime;
+    "strata-reading-progress": import("./ReadingProgress/ReadingProgress.js").StrataReadingProgress;
+    "strata-back-to-top": import("./BackToTop/BackToTop.js").StrataBackToTop;
+    "strata-cite": import("./Cite/Cite.js").StrataCite;
+    "strata-references": import("./References/References.js").StrataReferences;
+    "strata-hatnote": import("./Hatnote/Hatnote.js").StrataHatnote;
+    "strata-article-nav": import("./ArticleNav/ArticleNav.js").StrataArticleNav;
+    "strata-heading-anchors": import("./HeadingAnchors/HeadingAnchors.js").StrataHeadingAnchors;
     "strata-meta": import("./Meta/Meta.js").StrataMeta;
     "strata-tag-list": import("./TagList/TagList.js").StrataTagList;
     "strata-section-header": import("./SectionHeader/SectionHeader.js").StrataSectionHeader;

@@ -64,6 +64,15 @@ export const STRATA_COMPONENT_CATALOG = [
   "ranked-list",
   "gallery",
   "page-layout",
+  "toc",
+  "reading-time",
+  "reading-progress",
+  "back-to-top",
+  "cite",
+  "references",
+  "hatnote",
+  "article-nav",
+  "heading-anchors",
 ] as const;
 
 export type StrataComponentName = (typeof STRATA_COMPONENT_CATALOG)[number];

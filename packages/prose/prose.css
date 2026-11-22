@@ -317,6 +317,32 @@
   background: var(--strata-color-surface-subtle);
 }
 
+/* Permalink anchors added by <strata-heading-anchors>. */
+.strata-prose .strata-anchor {
+  margin-left: 0.4em;
+  font-family: var(--strata-font-sans);
+  font-weight: 400;
+  text-decoration: none;
+  color: var(--strata-color-text-secondary);
+  opacity: 0;
+}
+
+.strata-prose :is(h1, h2, h3, h4, h5, h6):hover > .strata-anchor,
+.strata-prose .strata-anchor:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .strata-prose .strata-anchor {
+    opacity: 0.6;
+  }
+}
+
+/* Cite targets: highlight the entry/marker you jumped to. */
+.strata-prose :target {
+  background: var(--strata-color-surface-selected);
+}
+
 /* ---------- Small text ---------- */
 
 .strata-prose small {
