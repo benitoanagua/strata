@@ -1,5 +1,10 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { stubRemoteFonts } from "./font-stub";
+
+test.beforeEach(async ({ page }) => {
+  await stubRemoteFonts(page);
+});
 
 test("STRATA catalog has no critical accessibility violations", async ({
   page,

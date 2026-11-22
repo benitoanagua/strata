@@ -1,4 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { stubRemoteFonts } from "./font-stub";
+
+test.beforeEach(async ({ page }) => {
+  await stubRemoteFonts(page);
+});
 
 test.describe("STRATA responsive layout", () => {
   test("catalog canvas remains usable at mobile width", async ({ page }) => {

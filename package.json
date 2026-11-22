@@ -20,7 +20,8 @@
     "test:contracts": "pnpm --filter @strata/testing test:contracts",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "test:all": "pnpm test && pnpm test:visual && pnpm test:a11y"
+    "test:all": "pnpm test && pnpm test:visual && pnpm test:a11y",
+    "test:visual:update": "pnpm build && pnpm --filter @strata/testing exec playwright test visual --update-snapshots"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.0",

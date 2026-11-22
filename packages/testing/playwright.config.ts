@@ -5,7 +5,14 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:5174",
     colorScheme: "light",
+    reducedMotion: "reduce",
     viewport: { width: 1280, height: 900 },
+  },
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.02,
+      animations: "disabled",
+    },
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {

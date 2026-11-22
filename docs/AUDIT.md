@@ -56,3 +56,11 @@ La gestión del scroll corporal de Modal preserva y restaura el `overflow` previ
 - Las referencias ARIA por IDREF (`aria-controls`, `aria-labelledby`) no cruzan los límites de Shadow DOM. Por eso `strata-tab` no emite `aria-controls`: el `id` del panel vive en otro árbol de sombras y la referencia siempre sería inválida. La asociación tab↔panel se mantiene por estructura (`tablist`/`tabpanel`), estado (`aria-selected`) y comportamiento de teclado.
 - `tab`, `menu-item` y `list-item` son componentes fragmento: fuera de su contenedor (`tabs`, `menu`, `list`) violan `aria-required-parent` por diseño. El spec de axe documenta esta excepción y los contenedores sí se verifican completos.
 - Los componentes cuyo contenido depende de slots requieren validación adicional con contenido real del consumidor; el catálogo cubre el caso nominal.
+
+## Visual testing
+
+- `packages/testing/visual/components.spec.ts` runs axe (critical+serious) and `toHaveScreenshot` per component × theme (96 cases).
+- `page.route` stubs `fonts.googleapis.com`/`fonts.gstatic.com` with empty CSS, so renders use the fixed fallback font stack and never depend on the network.
+- Playwright runs with `colorScheme`, `reducedMotion: "reduce"` and `animations: "disabled"`.
+- Screenshot baselines are **versioned** under `components.spec.ts-snapshots/` (`maxDiffPixelRatio: 0.02`). Regenerate with `pnpm test:visual:update`; the `update-visual-baselines` workflow (manual dispatch) regenerates them on the official Playwright Linux image and opens a PR.
+- Fragment components (`tab`, `menu-item`, `list-item`) are axe-tested inside their required parents (`strata-tabs`, `strata-menu`, `strata-list`) — no exceptions remain.

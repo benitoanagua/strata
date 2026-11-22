@@ -1,17 +1,27 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { catalog } from "../../../apps/catalog/src/lib/componentRegistry.ts";
+import { stubRemoteFonts } from "./font-stub";
 
 const THEMES = ["light", "dark"] as const;
 
-// Fragment components are always composed inside a parent container
-// (tabs > tab, menu > menu-item, list > list-item). The catalog previews
-// them standalone, so axe reports missing required parents. The composite
-// parents are covered by their own tests.
-const AXE_RULE_EXCEPTIONS: Record<string, readonly string[]> = {
-  tab: ["aria-required-parent"],
-  "menu-item": ["aria-required-parent"],
-  "list-item": ["aria-required-parent"],
+// Fragment components are exercised inside their required parent so axe
+// sees a valid ARIA tree instead of a standalone excerpt.
+const PARENT_FIXTURES: Record<string, string> = {
+  tab: `<strata-tabs>
+    <strata-tab slot="tabs">Overview</strata-tab>
+    <strata-tab slot="tabs">Details</strata-tab>
+    <strata-tab-panel slot="panels">Overview panel.</strata-tab-panel>
+    <strata-tab-panel slot="panels">Details panel.</strata-tab-panel>
+  </strata-tabs>`,
+  "menu-item": `<strata-menu>
+    <strata-menu-item label="Profile"></strata-menu-item>
+    <strata-menu-item label="Settings"></strata-menu-item>
+  </strata-menu>`,
+  "list-item": `<strata-list>
+    <strata-list-item title="First item" description="Supporting text."></strata-list-item>
+    <strata-list-item title="Second item" description="Supporting text."></strata-list-item>
+  </strata-list>`,
 };
 
 async function openComponent(page: Page, name: string, theme: string) {
@@ -32,16 +42,32 @@ test.describe("STRATA component axe coverage", () => {
       test(`${entry.id} has no serious or critical violations (${theme})`, async ({
         page,
       }) => {
-        await openComponent(page, entry.name, theme);
+        await stubRemoteFonts(page);
+        await page.goto("/");
+        await page.getByLabel("Canvas surface").selectOption(theme);
+
+        const fixture = PARENT_FIXTURES[entry.id];
+        if (fixture) {
+          await page.locator(".preview-stage").evaluate((el, html) => {
+            el.innerHTML = html;
+          }, fixture);
+          await page.waitForTimeout(200);
+        } else {
+          await page
+            .getByRole("navigation", { name: "Component navigation" })
+            .getByRole("button", { name: `◇ ${entry.name}`, exact: true })
+            .click();
+          const preview = page.locator(".preview-stage > *").last();
+          await expect(preview).toBeAttached();
+          await page.waitForTimeout(150);
+        }
+
         const results = await new AxeBuilder({ page })
           .include(".preview-stage")
           .analyze();
-        const exceptions = AXE_RULE_EXCEPTIONS[entry.id] ?? [];
         const violations = results.violations.filter(
           (violation) =>
-            (violation.impact === "critical" ||
-              violation.impact === "serious") &&
-            !exceptions.includes(violation.id),
+            violation.impact === "critical" || violation.impact === "serious",
         );
         expect(
           violations.map(
@@ -61,10 +87,11 @@ test.describe("STRATA component screenshots", () => {
       test(`${entry.id} preview is visually stable (${theme})`, async ({
         page,
       }) => {
+        await stubRemoteFonts(page);
         await openComponent(page, entry.name, theme);
         await expect(page.locator(".preview-stage")).toHaveScreenshot(
           `${entry.id}-${theme}.png`,
-          { animations: "disabled", maxDiffPixelRatio: 0.02 },
+          { animations: "disabled" },
         );
       });
     }

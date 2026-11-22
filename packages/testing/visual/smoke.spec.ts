@@ -1,4 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { stubRemoteFonts } from "./font-stub";
+
+test.beforeEach(async ({ page }) => {
+  await stubRemoteFonts(page);
+});
 
 test("Svelte component catalog loads", async ({ page }) => {
   await page.goto("/");

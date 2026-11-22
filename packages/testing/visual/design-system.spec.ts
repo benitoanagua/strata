@@ -1,4 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { stubRemoteFonts } from "./font-stub";
+
+test.beforeEach(async ({ page }) => {
+  await stubRemoteFonts(page);
+});
 
 test.describe("STRATA component contracts in the catalog", () => {
   test("uses the canonical canvas and a Lit button", async ({ page }) => {

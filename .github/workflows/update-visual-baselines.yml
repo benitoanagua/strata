@@ -1,0 +1,50 @@
+name: Update visual baselines
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  baselines:
+    name: Regenerate Playwright baselines
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Build workspace packages
+        run: pnpm build
+      - name: Regenerate baselines
+        working-directory: packages/testing
+        run: pnpm exec playwright test visual --update-snapshots
+      - name: Open pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- 'packages/testing/visual/*.png' 'packages/testing/visual/**/*-snapshots/**'; then
+            echo "No baseline changes."
+            exit 0
+          fi
+          BRANCH="chore/visual-baselines-${GITHUB_RUN_ID}"
+          git checkout -b "$BRANCH"
+          git add 'packages/testing/visual/'
+          git commit -m "test(visual): regenerate Playwright baselines"
+          git push -u origin "$BRANCH"
+          gh pr create \
+            --title "test(visual): regenerate Playwright baselines" \
+            --body "Automated baseline regeneration from workflow run ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}. Review the screenshot diffs before merging." \
+            --base main
