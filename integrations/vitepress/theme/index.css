@@ -1,0 +1,34 @@
+/* STRATA for VitePress: tokens + prose, then minimal chrome overrides.
+   Usage in .vitepress/theme/index.ts:
+     import './index.css';
+   And in config: theme: require.resolve('./theme') or copy theme/. */
+@import "./strata-tokens.css";
+@import "./strata-prose.css";
+
+/* VitePress chrome: sans for nav/sidebar, serif stays on .VPDoc prose. */
+.vp-doc,
+.vp-doc div,
+.vp-doc p,
+.vp-doc li {
+  font-family: var(--strata-font-serif);
+}
+
+.vp-nav,
+.vp-sidebar,
+.vp-local-nav,
+.vp-doc-footer,
+.vp-button,
+.vp-form-field {
+  font-family: var(--strata-font-sans);
+}
+
+.vp-doc a {
+  color: var(--strata-color-accent-link, var(--strata-color-ink));
+}
+
+code,
+kbd,
+samp,
+.vp-doc code {
+  font-family: var(--strata-font-mono);
+}

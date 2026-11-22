@@ -20,7 +20,7 @@ apps/catalog
 
 - `apps/` — executables or deployables. Only `apps/catalog` (the internal Svelte playground) lives here.
 - `packages/` — what gets published to npm: `@strata/tokens`, `@strata/core`, `@strata/components`, `@strata/prose`.
-- `integrations/` — platform adapters that consume `packages/*` and translate STRATA into a foreign system's conventions. Currently `@strata/integration-mediawiki`.
+- `integrations/` — platform adapters that consume `packages/*` and translate STRATA into a foreign system's conventions. Currently `@strata/integration-mediawiki` and `@strata/integration-vitepress`; see `integrations/README.md` for the contract.
 - `tooling/` — lint rules, token validation and shared configuration.
 
 ## Packages
@@ -30,6 +30,7 @@ apps/catalog
 - `@strata/components`: publishable Lit Web Components and their public TypeScript contracts.
 - `@strata/prose`: platform-agnostic reading layer (serif body, editorial measure, filetes) exported as `prose.css`. Any site can consume it on top of `@strata/tokens`.
 - `@strata/integration-mediawiki` (private): MediaWiki 1.39+ skin; keeps only `.mw-*` chrome and delegates article styling to `@strata/prose`.
+- `@strata/integration-vitepress` (private): minimal VitePress theme consuming tokens + prose — proof the reading layer is platform-agnostic.
 - `@strata/testing`: component contract, accessibility and visual tests.
 - `@strata/catalog` (private, `apps/catalog`): internal Svelte playground that consumes the component package.
 

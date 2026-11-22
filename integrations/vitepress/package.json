@@ -1,0 +1,12 @@
+{
+  "name": "@strata/integration-vitepress",
+  "version": "0.1.0",
+  "description": "STRATA theme layer for VitePress — proves @strata/prose is platform-agnostic",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/sync.mjs",
+    "typecheck": "node -e \"console.log('no types')\""
+  }
+}
