@@ -2,11 +2,18 @@
 
 ## Current architecture
 
-- pnpm + Turborepo monorepo.
+- pnpm + Turborepo monorepo organized as `apps/` (executables),
+  `packages/` (published), `integrations/` (platform adapters) and
+  `tooling/` (lint and validators). See `docs/ARCHITECTURE.md`.
 - `@strata/tokens` is the source of design tokens and generated CSS.
 - `@strata/core` contains shared contracts and theme utilities.
 - `@strata/components` contains publishable Lit Web Components and declaration files.
-- `catalog` is the internal Svelte playground.
+- `@strata/prose` is the platform-agnostic reading layer (`prose.css`,
+  `.strata-prose`) consumed by integrations and any site.
+- `apps/catalog` (`@strata/catalog`, private) is the internal Svelte playground.
+- `integrations/mediawiki` (`@strata/integration-mediawiki`, private) is the
+  MediaWiki 1.39+ Mustache skin; `integrations/vitepress` proves the prose
+  layer is platform-agnostic.
 - `@strata/testing` contains unit, contract, browser and accessibility tests.
 
 ## Component catalog
@@ -17,12 +24,12 @@ The canvas mounts the registered custom element and assigns properties directly 
 
 ## STRATA visual laws
 
-- Monochrome establishes structure; the spectrum was replaced by a grayscale contract, three desaturated status colors and an optional disabled-by-default accent.
-- Source Serif 4 is the reading family, Source Sans 3 the UI family, and Source Code Pro is reserved for tags, data and numeric alignment. Fonts are loaded from Google Fonts; no font files or `@fontsource` packages live in the repository.
-- Component geometry follows the Scale Law.
+- Monochrome establishes structure; the spectrum was replaced by a grayscale contract, three desaturated status colors (never the only signal — always paired with icon, weight, underline or text) and an optional disabled-by-default accent. A `strict-monochrome` token flag converts statuses to grayscale while preserving WCAG AA contrast.
+- Source Serif 4 is the reading family, Source Sans 3 the UI family, and Source Code Pro is reserved for tags, data and numeric alignment. Fonts are loaded from Google Fonts/CDN; no font files or `@fontsource` packages live in the repository.
+- Component geometry follows the Scale Law: radii 0–2 px, borders/filetes 0–1 px, no elevation.
 - The catalog imports the published token stylesheet and component stylesheet, and uses the existing semantic CSS variables.
 - Carbon via `iconify-icon` remains the only permitted icon collection.
 
 ## Validation
 
-The repository has CI tasks for audit, lint, typecheck, unit/contract tests, build, browser checks and accessibility. The full local validation has not been executed in this environment because outbound access to the package registry is unavailable; the CI run is the verification gate.
+`pnpm check` runs audit, format check, lint, typecheck, unit/contract tests, build and the catalog build. Browser tests (`pnpm test:visual`, `pnpm test:a11y`) run Playwright against `apps/catalog`; Google Fonts requests are stubbed in tests so rendering does not depend on the network.

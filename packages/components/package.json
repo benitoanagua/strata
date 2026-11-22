@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "type": "module",
   "description": "STRATA Design System Web Components",
+  "license": "MIT",
   "main": "./dist/strata-components.es.js",
   "module": "./dist/strata-components.es.js",
   "types": "./dist/index.d.ts",
