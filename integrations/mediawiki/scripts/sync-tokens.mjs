@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 /**
- * Copies the built STRATA token stylesheets into resources/ so the skin is
+ * Copies the built STRATA stylesheets into resources/ so the skin is
  * self-contained for MediaWiki's ResourceLoader.
  *
- *   resources/strata-fonts.css  <- @strata/tokens dist/fonts.css (Google Fonts @import)
- *   resources/strata-tokens.css <- @strata/tokens dist/styles.css  (CSS custom properties)
+ *   resources/strata-tokens.css <- @strata/tokens dist/styles.css
+ *   resources/strata-prose.css  <- @strata/prose prose.css
  *
- * Requires `pnpm --filter @strata/tokens build` to have run (turbo handles
- * this via the workspace dependency).
+ * Generated files are gitignored; `pnpm build` regenerates them.
+ * Requires `pnpm --filter @strata/tokens build` (turbo handles this via
+ * the workspace dependency).
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -16,13 +17,10 @@ import { fileURLToPath } from "node:url";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const pkgRoot = path.resolve(here, "..");
 const tokensDist = path.resolve(pkgRoot, "../../packages/tokens/dist");
-const outDir = path.join(pkgRoot, "resources");
 const proseCss = path.resolve(pkgRoot, "../../packages/prose/prose.css");
+const outDir = path.join(pkgRoot, "resources");
 
-for (const [src, dest] of [
-  ["fonts.css", "strata-fonts.css"],
-  ["styles.css", "strata-tokens.css"],
-]) {
+for (const [src, dest] of [["styles.css", "strata-tokens.css"]]) {
   const from = path.join(tokensDist, src);
   if (!fs.existsSync(from)) {
     console.error(

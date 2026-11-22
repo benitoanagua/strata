@@ -1,2 +1,2 @@
-resources/strata-fonts.css
-resources/strata-tokens.css
+resources/strata-*.css
+dist/

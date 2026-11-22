@@ -34,7 +34,8 @@
             "tagline",
             "navigation-heading"
           ],
-          "styles": ["skins.strata.styles"]
+          "styles": ["skins.strata.styles"],
+          "scripts": ["skins.strata.fonts"]
         }
       ]
     }
@@ -55,11 +56,15 @@
         "toc": true
       },
       "styles": [
-        "resources/strata-fonts.css",
         "resources/strata-tokens.css",
         "resources/strata-prose.css",
         "resources/skin.css"
       ]
+    },
+    "skins.strata.fonts": {
+      "class": "MediaWiki\\ResourceLoader\\SkinModule",
+      "targets": ["desktop", "mobile"],
+      "scripts": ["resources/strata-fonts.js"]
     }
   },
   "ResourceFileModulePaths": {

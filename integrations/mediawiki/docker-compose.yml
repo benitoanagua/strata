@@ -1,0 +1,82 @@
+# Smoke-test environment for the Strata MediaWiki skin.
+#
+# Usage:
+#   pnpm --filter @strata/integration-mediawiki build   # produces dist/Strata
+#   docker compose -f integrations/mediawiki/docker-compose.yml up -d db
+#   docker compose -f integrations/mediawiki/docker-compose.yml run --rm install
+#   docker compose -f integrations/mediawiki/docker-compose.yml up -d
+#   node integrations/mediawiki/scripts/smoke.mjs
+#
+# Requires the official `mediawiki` image; 1.43 is the current LTS
+# (1.43.11). See https://hub.docker.com/_/mediawiki
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MYSQL_DATABASE: mediawiki
+      MYSQL_USER: mediawiki
+      MYSQL_PASSWORD: mediawiki
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mediawiki:
+    image: mediawiki:1.43
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    volumes:
+      - mediawiki-data:/var/www/html
+      # Mounts the built skin as skins/Strata.
+      - ./dist/Strata:/var/www/html/skins/Strata:ro
+      # Seeded LocalSettings.php (copied into place by the `install` service).
+      - ./mw/LocalSettings.php:/var/www/html/LocalSettings.php:ro
+    environment:
+      MW_DB_TYPE: mysql
+      MW_DB_SERVER: db
+      MW_DB_NAME: mediawiki
+      MW_DB_USER: mediawiki
+      MW_DB_PASSWORD: mediawiki
+
+  # One-shot installer: runs maintenance/install.php against the db.
+  # Opt-in via profile so `up -d` does not rerun it.
+  install:
+    profiles: ["install"]
+    image: mediawiki:1.43
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - mediawiki-data:/var/www/html
+      - ./dist/Strata:/var/www/html/skins/Strata:ro
+    working_dir: /var/www/html
+    entrypoint: ["php", "maintenance/install.php"]
+    # Wiki name and admin user are positional args; --dbuser/--dbpass are the
+    # runtime wiki user, --installdbuser/--installdbpass the DDL user.
+    command:
+      - --dbtype=mysql
+      - --dbname=mediawiki
+      - --dbuser=mediawiki
+      - --dbpass=mediawiki
+      - --dbserver=db
+      - --dbprefix=
+      - --installdbuser=mediawiki
+      - --installdbpass=mediawiki
+      - --scriptpath=
+      - --server=http://localhost:8080
+      - --language=en
+      - --pass=adminadmin
+      - Strata Smoke
+      - Admin
+
+volumes:
+  db-data:
+  mediawiki-data:
