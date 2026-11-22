@@ -1,7 +1,6 @@
 ---
 "@strata/tokens": minor
 "@strata/components": minor
-"@strata/testing": patch
 ---
 
 Status colors are never the sole signal, plus an opt-in strict-monochrome mode.

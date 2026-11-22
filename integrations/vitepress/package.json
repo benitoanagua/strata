@@ -8,5 +8,9 @@
   "scripts": {
     "build": "node scripts/sync.mjs",
     "typecheck": "node -e \"console.log('no types')\""
+  },
+  "dependencies": {
+    "@strata/prose": "workspace:*",
+    "@strata/tokens": "workspace:*"
   }
 }

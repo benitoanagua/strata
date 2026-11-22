@@ -4,3 +4,4 @@ node_modules/
 pnpm-lock.yaml
 integrations/mediawiki/resources/strata-*.css
 
+integrations/*/theme/strata-*.css
