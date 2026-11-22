@@ -62,5 +62,5 @@ La gestión del scroll corporal de Modal preserva y restaura el `overflow` previ
 - `packages/testing/visual/components.spec.ts` runs axe (critical+serious) and `toHaveScreenshot` per component × theme (96 cases).
 - `page.route` stubs `fonts.googleapis.com`/`fonts.gstatic.com` with empty CSS, so renders use the fixed fallback font stack and never depend on the network.
 - Playwright runs with `colorScheme`, `reducedMotion: "reduce"` and `animations: "disabled"`.
-- Screenshot baselines are **versioned** under `components.spec.ts-snapshots/` (`maxDiffPixelRatio: 0.02`). Regenerate with `pnpm test:visual:update`; the `update-visual-baselines` workflow (manual dispatch) regenerates them on the official Playwright Linux image and opens a PR.
+- Screenshot baselines live under `components.spec.ts-snapshots/` as **local artifacts — images are never tracked in git** (`.gitignore` covers `*-snapshots/`). With no committed baselines Playwright generates them on first run (`missing` mode) and still exercises render + axe; pixel-diff only compares on machines that already have local baselines (`maxDiffPixelRatio: 0.02`). Regenerate locally with `pnpm test:visual:update`.
 - Fragment components (`tab`, `menu-item`, `list-item`) are axe-tested inside their required parents (`strata-tabs`, `strata-menu`, `strata-list`) — no exceptions remain.

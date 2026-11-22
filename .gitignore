@@ -47,3 +47,6 @@ coverage
 # misc transient logs
 *.log
 *.pid
+
+# Playwright screenshot baselines are local artifacts — never tracked
+*-snapshots/
