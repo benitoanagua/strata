@@ -183,6 +183,7 @@
   interface DemoCell {
     key: string;
     label: string;
+    group: string;
     options: StrataMountOptions;
   }
 
@@ -215,9 +216,14 @@
         cells.push({
           key: `variant-${control.name}-${option}`,
           label: `${control.label}: ${option}`,
+          group: control.label,
           options: {
             tagName: entry.tagName,
-            props: { ...base, [control.name]: option },
+            props: {
+              ...base,
+              ...control.demoProps,
+              [control.name]: option,
+            },
             slotHtml: entry.slotHtml,
             slotContent: entry.slotContent,
           },
@@ -226,6 +232,21 @@
     }
     return cells;
   });
+
+  // Variant cells arrive grouped by control already; chunk them so the
+  // section can label each property (Variant, Size, Color…) separately
+  // instead of presenting one flat grid of mixed combinations.
+  const variantGroups = $derived.by<{ label: string; cells: DemoCell[] }[]>(
+    () => {
+      const groups: { label: string; cells: DemoCell[] }[] = [];
+      for (const cell of variantDemos) {
+        const last = groups[groups.length - 1];
+        if (last && last.label === cell.group) last.cells.push(cell);
+        else groups.push({ label: cell.group, cells: [cell] });
+      }
+      return groups;
+    },
+  );
 
   const stateDemos = $derived.by<DemoCell[]>(() => {
     const entry = selectedEntry;
@@ -236,6 +257,7 @@
       .map((control) => ({
         key: `state-${control.name}`,
         label: control.label,
+        group: "States",
         options: {
           tagName: entry.tagName,
           props: { ...base, [control.name]: true },
@@ -374,14 +396,17 @@
               <span class="section-mark">◫</span><h2 id="variants-title">Variants</h2>
               <span class="section-subtitle">{variantDemos.length} combinations</span>
             </div>
-            <div class="demo-grid">
-              {#each variantDemos as cell (cell.key)}
-                <figure class="demo-cell">
-                  <div class="demo-stage" use:mountStrata={cell.options}></div>
-                  <figcaption><code>{cell.label}</code></figcaption>
-                </figure>
-              {/each}
-            </div>
+            {#each variantGroups as group}
+              <h3 class="demo-group-title">{group.label}</h3>
+              <div class="demo-grid">
+                {#each group.cells as cell (cell.key)}
+                  <figure class="demo-cell">
+                    <div class="demo-stage" use:mountStrata={cell.options}></div>
+                    <figcaption><code>{cell.label}</code></figcaption>
+                  </figure>
+                {/each}
+              </div>
+            {/each}
           </section>
         {/if}
 

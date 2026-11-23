@@ -116,6 +116,7 @@ export function deriveControls(entry: CatalogEntry): PropInfo[] {
       type,
       defaultValue,
       options: override?.options,
+      demoProps: override?.demoProps,
       attribute,
       propertyType: litType || undefined,
     });

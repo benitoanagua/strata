@@ -66,6 +66,15 @@ describe("catalog registry", () => {
     expect(typeof min?.defaultValue).toBe("number");
   });
 
+  it("preserves demoProps overrides through deriveControls", () => {
+    const button = entryById("button")!;
+    const color = button.controls.find((c) => c.name === "color")!;
+    // Semantic colors are demoed filled so their solid treatment shows.
+    expect(color.demoProps).toEqual({ variant: "filled" });
+    const derived = deriveControls(button).find((c) => c.name === "color")!;
+    expect(derived.demoProps).toEqual({ variant: "filled" });
+  });
+
   it("resolves entryById for every catalog id", () => {
     for (const entry of catalog) {
       expect(entryById(entry.id)).toBe(entry);

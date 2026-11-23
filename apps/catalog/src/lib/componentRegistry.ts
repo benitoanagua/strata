@@ -8,6 +8,13 @@ export interface PropControl {
   type: ControlType;
   defaultValue: ControlValue;
   options?: readonly string[];
+  /**
+   * Extra props merged into this control's variant demos. Use when the
+   * meaningful way to show an option requires a non-default sibling prop —
+   * e.g. semantic colors are demoed as `filled` so their solid treatment
+   * is visible instead of a faint outlined tint.
+   */
+  demoProps?: Record<string, ControlValue>;
 }
 
 export interface EventDoc {
@@ -80,7 +87,15 @@ const select = (
   label: string,
   defaultValue: string,
   options: readonly string[],
-): PropControl => ({ name, label, type: "select", defaultValue, options });
+  demoProps?: Record<string, ControlValue>,
+): PropControl => ({
+  name,
+  label,
+  type: "select",
+  defaultValue,
+  options,
+  demoProps,
+});
 const list = (name: string, label: string, defaultValue = ""): PropControl => ({
   name,
   label,
@@ -112,6 +127,7 @@ export const catalog: readonly CatalogEntry[] = [
     maturity: "stable",
     controls: [
       text("label", "Label", "Continue"),
+      text("ariaLabel", "Aria label"),
       select("variant", "Variant", "outlined", [
         "filled",
         "outlined",
@@ -120,13 +136,15 @@ export const catalog: readonly CatalogEntry[] = [
         "tonal",
       ]),
       select("size", "Size", "medium", ["small", "medium", "large"]),
-      select("color", "Color", "primary", [
+      select(
+        "color",
+        "Color",
         "primary",
-        "secondary",
-        "error",
-        "success",
-        "warning",
-      ]),
+        ["primary", "secondary", "error", "success", "warning"],
+        // Semantic colors only read as solid actions when filled; the
+        // outlined default would reduce them to a tinted label.
+        { variant: "filled" },
+      ),
       text("href", "Href"),
       select("type", "Type", "button", ["button", "submit", "reset"]),
       text("icon", "Icon", ""),
@@ -135,7 +153,7 @@ export const catalog: readonly CatalogEntry[] = [
       bool("loading", "Loading"),
       bool("fullWidth", "Full width"),
     ],
-    a11y: "Renders a native <button> (or <a role=button> when href is set) with an accessible name from label.",
+    a11y: "Renders a native <button> (type=button by default, so it never submits a form accidentally) or an <a role=button> when href is set. The visible label names the control; set aria-label for icon-only usage — for dedicated icon buttons see strata-icon-button.",
   },
   {
     id: "icon-button",

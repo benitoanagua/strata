@@ -1,4 +1,4 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { LitElement, html, nothing, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import baseCSS from "../../component-base.css?inline";
 import componentCSS from "./Button.css?inline";
@@ -15,6 +15,11 @@ export class StrataButton extends LitElement {
   static styles = [unsafeCSS(baseCSS), unsafeCSS(componentCSS)];
 
   @property({ type: String }) label = "";
+  /**
+   * Accessible name override (`aria-label`). Required when `label` is empty
+   * (icon-only usage); when both are set it wins over the visible label.
+   */
+  @property({ type: String, attribute: "aria-label" }) ariaLabel = "";
   @property({ type: String }) variant: ButtonVariant = "outlined";
   @property({ type: String }) size: ButtonSize = "medium";
   @property({ type: String }) color: ButtonColor = "primary";
@@ -42,6 +47,8 @@ export class StrataButton extends LitElement {
 
   private createRippleEffect(event: MouseEvent) {
     if (this.loading || this.disabled) return;
+    // Keyboard-triggered clicks report detail 0 — no pointer position.
+    if (event.detail === 0) return;
 
     const button = this.renderRoot.querySelector(
       ".strata-button",
@@ -110,7 +117,7 @@ export class StrataButton extends LitElement {
   private renderContent() {
     if (this.loading) {
       return html`
-        <span class="strata-button__loading">
+        <span class="strata-button__loading" aria-hidden="true">
           <span class="strata-button__spinner"></span>
         </span>
         <span class="strata-button__label strata-button__label--hidden"
@@ -135,7 +142,8 @@ export class StrataButton extends LitElement {
           class="${classes}"
           href="${this.href}"
           role="button"
-          aria-label="${this.label}"
+          aria-label=${this.ariaLabel || nothing}
+          aria-busy=${this.loading ? "true" : nothing}
           @click="${this.handleClick}"
         >
           <span class="strata-button__ripple"></span>
@@ -149,7 +157,8 @@ export class StrataButton extends LitElement {
         class="${classes}"
         ?disabled="${this.disabled || this.loading}"
         type="${this.type}"
-        aria-label="${this.label}"
+        aria-label=${this.ariaLabel || nothing}
+        aria-busy=${this.loading ? "true" : nothing}
         @click="${this.handleClick}"
       >
         <span class="strata-button__ripple"></span>

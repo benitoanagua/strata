@@ -33,19 +33,19 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 ## Actions
 
-| Entry                        | Tag                   | Class               | Props                                                                                                                               | Reflected            | Events | Slots     | Maturity |
-| ---------------------------- | --------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------ | --------- | -------- |
-| Button (`button`)            | `strata-button`       | `StrataButton`      | `label`<br>`variant`<br>`size`<br>`color`<br>`disabled`<br>`loading`<br>`href`<br>`type`<br>`icon`<br>`trailingIcon`<br>`fullWidth` | —                    | —      | —         | stable   |
-| IconButton (`icon-button`)   | `strata-icon-button`  | `StrataIconButton`  | `size`<br>`disabled`<br>`label`<br>`icon`                                                                                           | —                    | —      | —         | stable   |
-| ButtonGroup (`button-group`) | `strata-button-group` | `StrataButtonGroup` | `size`<br>`tone`<br>`orientation`                                                                                                   | `size`               | —      | `default` | beta     |
-| Stepper (`stepper`)          | `strata-stepper`      | `StrataStepper`     | `size`<br>`tone`<br>`value`<br>`disabled`<br>`min`<br>`max`                                                                         | `size`<br>`disabled` | —      | —         | beta     |
+| Entry                        | Tag                   | Class               | Props                                                                                                                                              | Reflected            | Events | Slots     | Maturity |
+| ---------------------------- | --------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------ | --------- | -------- |
+| Button (`button`)            | `strata-button`       | `StrataButton`      | `label`<br>`ariaLabel`<br>`variant`<br>`size`<br>`color`<br>`disabled`<br>`loading`<br>`href`<br>`type`<br>`icon`<br>`trailingIcon`<br>`fullWidth` | —                    | —      | —         | stable   |
+| IconButton (`icon-button`)   | `strata-icon-button`  | `StrataIconButton`  | `size`<br>`disabled`<br>`label`<br>`icon`                                                                                                          | —                    | —      | —         | stable   |
+| ButtonGroup (`button-group`) | `strata-button-group` | `StrataButtonGroup` | `size`<br>`tone`<br>`orientation`                                                                                                                  | `size`               | —      | `default` | beta     |
+| Stepper (`stepper`)          | `strata-stepper`      | `StrataStepper`     | `size`<br>`tone`<br>`value`<br>`disabled`<br>`min`<br>`max`                                                                                        | `size`<br>`disabled` | —      | —         | beta     |
 
 ### Button — `strata-button`
 
 - **Purpose:** A clear action with semantic variants and states.
 - **Implementation:** `StrataButton` in `packages/components/src/elements/Button`
-- **Properties (11):** `label` (String), `variant` (String), `size` (String), `color` (String), `disabled` (Boolean), `loading` (Boolean), `href` (String), `type` (String), `icon` (String), `trailingIcon` (Boolean), `fullWidth` (Boolean)
-- **Accessibility:** Renders a native <button> (or <a role=button> when href is set) with an accessible name from label.
+- **Properties (12):** `label` (String), `ariaLabel` (String, `aria-label` attribute), `variant` (String), `size` (String), `color` (String), `disabled` (Boolean), `loading` (Boolean), `href` (String), `type` (String), `icon` (String), `trailingIcon` (Boolean), `fullWidth` (Boolean)
+- **Accessibility:** Renders a native <button> (or <a role=button> when href is set); the visible label names it, `ariaLabel` covers icon-only usage.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.

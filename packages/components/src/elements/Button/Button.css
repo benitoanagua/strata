@@ -1,4 +1,12 @@
 .strata-button {
+  /* Color axis: each --color-* class redefines the fill/ink triplet.
+     --btn-fill/--btn-on-fill drive the solid treatment, --btn-accent is the
+     semantic ink for text-like variants, --btn-line the outlined filete. */
+  --btn-fill: var(--strata-color-action-primary);
+  --btn-on-fill: var(--strata-color-surface-page);
+  --btn-accent: var(--strata-color-action-primary);
+  --btn-line: var(--strata-color-border-subtle);
+
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -8,22 +16,120 @@
   gap: 8px;
   border: 0;
   border-radius: var(--strata-radius-medium);
-  background: var(--strata-color-text-primary);
-  color: var(--strata-color-surface-page);
+  /* Filled is the fallback look: unknown variant values stay legible. */
+  background: var(--btn-fill);
+  color: var(--btn-on-fill);
   font: var(--strata-type-label-large) var(--strata-font-sans);
   cursor: pointer;
   text-decoration: none;
   transition:
     background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
     transform 0.18s ease;
 }
 
-.strata-button:hover {
-  background: color-mix(
+.strata-button--color-primary {
+  --btn-fill: var(--strata-color-action-primary);
+  --btn-on-fill: var(--strata-color-surface-page);
+  --btn-accent: var(--strata-color-action-primary);
+  --btn-line: var(--strata-color-border-subtle);
+}
+
+.strata-button--color-secondary {
+  /* Secondary is the soft solid: the selected surface with primary ink,
+     clearly lighter than the primary fill in both themes. */
+  --btn-fill: var(--strata-color-surface-selected);
+  --btn-on-fill: var(--strata-color-text-primary);
+  --btn-accent: var(--strata-color-text-secondary);
+  --btn-line: var(--strata-color-border-subtle);
+}
+
+.strata-button--color-error {
+  --btn-fill: var(--strata-color-status-error);
+  --btn-on-fill: var(--strata-color-surface-page);
+  --btn-accent: var(--strata-color-status-error);
+  --btn-line: color-mix(
     in srgb,
-    var(--strata-color-text-primary) 85%,
-    var(--strata-color-surface-page)
+    var(--strata-color-status-error) 55%,
+    transparent
   );
+}
+
+.strata-button--color-success {
+  --btn-fill: var(--strata-color-status-success);
+  --btn-on-fill: var(--strata-color-surface-page);
+  --btn-accent: var(--strata-color-status-success);
+  --btn-line: color-mix(
+    in srgb,
+    var(--strata-color-status-success) 55%,
+    transparent
+  );
+}
+
+.strata-button--color-warning {
+  --btn-fill: var(--strata-color-status-warning);
+  --btn-on-fill: var(--strata-color-surface-page);
+  --btn-accent: var(--strata-color-status-warning);
+  --btn-line: color-mix(
+    in srgb,
+    var(--strata-color-status-warning) 55%,
+    transparent
+  );
+}
+
+.strata-button--variant-filled {
+  background: var(--btn-fill);
+  color: var(--btn-on-fill);
+}
+
+.strata-button--variant-filled:hover {
+  background: color-mix(in srgb, var(--btn-fill) 85%, var(--btn-on-fill));
+}
+
+.strata-button--variant-outlined {
+  background: transparent;
+  color: var(--btn-accent);
+  border: var(--strata-border-medium) solid var(--btn-line);
+}
+
+.strata-button--variant-outlined:hover {
+  background: color-mix(in srgb, var(--btn-accent) 10%, transparent);
+}
+
+.strata-button--variant-text {
+  background: transparent;
+  color: var(--btn-accent);
+  border: 0;
+}
+
+.strata-button--variant-text:hover {
+  background: color-mix(in srgb, var(--btn-accent) 12%, transparent);
+}
+
+/* Elevated is the raised surface: one surface step up plus the hairline
+   filete that STRATA uses instead of shadows. The semantic color shows
+   through the content ink. */
+.strata-button--variant-elevated {
+  background: var(--strata-color-surface-raised);
+  color: var(--btn-accent);
+  border: var(--strata-border-medium) solid var(--strata-color-border-subtle);
+}
+
+.strata-button--variant-elevated:hover {
+  background: var(--strata-color-surface-hover);
+}
+
+/* Tonal is the chromatic container: a saturated-enough tint of the semantic
+   ink so it reads as an intentional surface, not a disabled wash. */
+.strata-button--variant-tonal {
+  background: color-mix(in srgb, var(--btn-accent) 18%, transparent);
+  color: var(--btn-accent);
+  border: 0;
+}
+
+.strata-button--variant-tonal:hover {
+  background: color-mix(in srgb, var(--btn-accent) 28%, transparent);
 }
 
 .strata-button:active {
@@ -33,38 +139,6 @@
 .strata-button:focus-visible {
   outline: 2px solid var(--strata-color-focus-ring);
   outline-offset: 2px;
-}
-
-.strata-button--variant-outlined {
-  background: transparent;
-  color: var(--strata-color-text-primary);
-  border: var(--strata-border-medium) solid var(--strata-color-border-subtle);
-}
-
-.strata-button--variant-outlined:hover {
-  background: var(--strata-color-surface-hover);
-}
-
-.strata-button--variant-text {
-  background: transparent;
-  color: var(--strata-color-text-primary);
-  border: 0;
-}
-
-.strata-button--variant-text:hover {
-  background: var(--strata-color-surface-hover);
-}
-
-.strata-button--variant-elevated {
-  background: var(--strata-color-surface-raised);
-  color: var(--strata-color-text-primary);
-  border: 0;
-}
-
-.strata-button--variant-tonal {
-  background: var(--strata-color-surface-selected);
-  color: var(--strata-color-text-primary);
-  border: 0;
 }
 
 .strata-button--size-small {
@@ -130,6 +204,7 @@
 
 .strata-button__icon {
   display: inline-flex;
+  flex: 0 0 auto;
 }
 
 .strata-button__loading {
@@ -137,6 +212,11 @@
   inset: 0;
   display: grid;
   place-items: center;
+}
+
+.strata-button__label--hidden {
+  /* Keeps layout width and the accessible name while loading. */
+  opacity: 0;
 }
 
 .strata-button__spinner {
