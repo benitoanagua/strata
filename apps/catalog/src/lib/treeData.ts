@@ -1,5 +1,6 @@
 import type { StrataTreeNode } from "@strata/components";
 import { catalog, categories, type CatalogEntry } from "./componentRegistry";
+import { deriveControls, variantControls } from "./props";
 import { scenarios } from "./scenarios";
 
 export const SCENARIOS_NODE_ID = "root:scenarios";
@@ -26,11 +27,25 @@ function matches(entry: CatalogEntry, q: string): boolean {
   );
 }
 
+/**
+ * Number of variants a component exposes in the catalog: every option of
+ * every select control becomes one demo cell, so the sidebar count matches
+ * the "Variants" section on the component page. Entries without select
+ * controls get no meta.
+ */
+function variantCount(entry: CatalogEntry): number {
+  return variantControls(deriveControls(entry)).reduce(
+    (sum, control) => sum + (control.options?.length ?? 0),
+    0,
+  );
+}
+
 function entryNode(entry: CatalogEntry): StrataTreeNode {
+  const variants = variantCount(entry);
   return {
     id: `entry:${entry.id}`,
     label: entry.name,
-    meta: entry.tagName.replace("strata-", ""),
+    ...(variants > 0 ? { meta: String(variants) } : {}),
     href: `#/${entry.id}`,
   };
 }

@@ -289,6 +289,19 @@ export class StrataTree extends LitElement {
     this.emitSelection(node, next.has(node.id));
   }
 
+  /**
+   * Row activation (pointer click or Enter/Space). Nodes with children
+   * toggle their expansion — the caret and the rest of the row share this
+   * path, and the caret stops propagation so each gesture toggles once.
+   * Selection still runs for every node, including parents.
+   */
+  private activateRow(node: StrataTreeNode) {
+    if (node.children?.length) {
+      this.setNodeExpanded(node.id, !this.expandedIds.has(node.id));
+    }
+    this.activate(node);
+  }
+
   /** Expand or collapse a node programmatically. Emits `strata-toggle`. */
   setNodeExpanded(id: string, expanded: boolean) {
     const node = this.nodeMap.get(id);
@@ -393,7 +406,7 @@ export class StrataTree extends LitElement {
         break;
       case "Enter":
       case " ":
-        this.activate(node);
+        this.activateRow(node);
         break;
       default:
         handled = false;
@@ -433,7 +446,7 @@ export class StrataTree extends LitElement {
           aria-disabled=${node.disabled ? "true" : nothing}
           tabindex=${isFocused ? 0 : -1}
         >
-          <div class="strata-tree__row" @click=${() => this.activate(node)}>
+          <div class="strata-tree__row" @click=${() => this.activateRow(node)}>
             <span
               class="strata-tree__caret"
               aria-hidden="true"

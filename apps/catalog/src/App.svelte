@@ -2,7 +2,7 @@
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
   import Snippet from "./lib/Snippet.svelte";
-  import { deriveControls, type PropInfo } from "./lib/props";
+  import { deriveControls, variantControls, type PropInfo } from "./lib/props";
   import {
     catalog,
     defaultsFor,
@@ -210,9 +210,8 @@
     if (!entry || OVERLAY_TAGS.has(entry.tagName)) return [];
     const base = demoBaseProps();
     const cells: DemoCell[] = [];
-    for (const control of controls) {
-      if (control.type !== "select" || !control.options?.length) continue;
-      for (const option of control.options) {
+    for (const control of variantControls(controls)) {
+      for (const option of control.options ?? []) {
         cells.push({
           key: `variant-${control.name}-${option}`,
           label: `${control.label}: ${option}`,

@@ -122,3 +122,12 @@ export function deriveControls(entry: CatalogEntry): PropInfo[] {
   }
   return result;
 }
+
+/**
+ * Select controls that generate variant demos: every option of every select
+ * is one explorable variant. Shared by the Variants section and the sidebar
+ * tree so both report the same numbers.
+ */
+export function variantControls(controls: PropInfo[]): PropInfo[] {
+  return controls.filter((c) => c.type === "select" && !!c.options?.length);
+}

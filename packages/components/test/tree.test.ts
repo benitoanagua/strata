@@ -95,6 +95,85 @@ describe("strata-tree", () => {
     el.remove();
   });
 
+  it("toggles a parent exactly once when clicking its row or label", async () => {
+    const el = await mount();
+    const toggles: { id: string; expanded: boolean }[] = [];
+    el.addEventListener("strata-toggle", (e) =>
+      toggles.push((e as CustomEvent).detail),
+    );
+    const rowFor = (id: string) =>
+      el.shadowRoot?.querySelector(
+        `[data-node-id="${id}"] .strata-tree__row`,
+      ) as HTMLElement;
+    const ids = () => items(el).map((i) => i.getAttribute("data-node-id"));
+
+    // Clicking the row body (padding area) expands the category once.
+    rowFor("cat-a").click();
+    await el.updateComplete;
+    expect(ids()).toContain("a-1");
+    expect(toggles).toEqual([{ id: "cat-a", expanded: true }]);
+
+    // Clicking the label text collapses it — again exactly one toggle.
+    (
+      rowFor("cat-a").querySelector(".strata-tree__label") as HTMLElement
+    ).click();
+    await el.updateComplete;
+    expect(ids()).not.toContain("a-1");
+    expect(toggles).toEqual([
+      { id: "cat-a", expanded: true },
+      { id: "cat-a", expanded: false },
+    ]);
+
+    // The caret still works and never double-toggles through the row.
+    (
+      el.shadowRoot?.querySelector(
+        '[data-node-id="cat-a"] .strata-tree__caret',
+      ) as HTMLElement
+    ).click();
+    await el.updateComplete;
+    expect(toggles).toHaveLength(3);
+    expect(toggles[2]).toEqual({ id: "cat-a", expanded: true });
+    el.remove();
+  });
+
+  it("does not toggle expansion when clicking a leaf row", async () => {
+    const el = await mount();
+    const toggles: unknown[] = [];
+    el.addEventListener("strata-toggle", (e) =>
+      toggles.push((e as CustomEvent).detail),
+    );
+    const row = el.shadowRoot?.querySelector(
+      '[data-node-id="b-1"] .strata-tree__row',
+    ) as HTMLElement;
+    row.click();
+    await el.updateComplete;
+    expect(toggles).toHaveLength(0);
+    el.remove();
+  });
+
+  it("toggles a parent with Enter and Space like a pointer click", async () => {
+    const el = await mount();
+    const toggles: { id: string; expanded: boolean }[] = [];
+    el.addEventListener("strata-toggle", (e) =>
+      toggles.push((e as CustomEvent).detail),
+    );
+    const tree = el.shadowRoot?.querySelector('[role="tree"]') as HTMLElement;
+    const press = async (key: string) => {
+      tree.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+      await el.updateComplete;
+      await new Promise((r) => setTimeout(r, 0));
+    };
+    const ids = () => items(el).map((i) => i.getAttribute("data-node-id"));
+    // Focus starts on cat-a (first visible node).
+    await press("Enter");
+    expect(ids()).toContain("a-1");
+    expect(toggles).toEqual([{ id: "cat-a", expanded: true }]);
+    await press(" ");
+    expect(ids()).not.toContain("a-1");
+    expect(toggles).toHaveLength(2);
+    el.remove();
+  });
+
   it("selects nodes and emits strata-select with the node", async () => {
     const el = await mount();
     const selects: unknown[] = [];
