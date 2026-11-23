@@ -1,5 +1,72 @@
 # @strata/components
 
+## 3.1.0
+
+### Minor Changes
+
+- afa46e6: Accessibility and interaction fixes found by the component audit.
+
+  - `strata-comment`: the role badge attribute is now `role-label` (the `role` attribute is the global ARIA role and produced invalid values such as `role="Autor"`). The `role` property is unchanged; set `el.role` or use `role-label` in markup.
+  - `strata-filter-bar`: the chip group moved from `<ul role="group">` to a wrapping `role="group"` container so `<li>` children keep valid list semantics (axe `listitem`).
+  - `strata-ticker`: the scrollable list is now keyboard-focusable (`tabindex="0"`, axe `scrollable-region-focusable`).
+  - `strata-data-table`: replaced the unusable slotted `<thead>/<tbody>` API with `columns`/`rows` props (JSON or pipe-delimited).
+  - `strata-file-upload`: emits `strata-change`, lists selected files and supports drag & drop.
+  - Overlays (`dialog`, `modal`, `drawer`, `bottom-sheet`, `popover`): Escape handling, focus management and accessible-name fallbacks.
+  - `strata-text-field`: label association and error semantics; `strata-breadcrumb`, `strata-menu`, `strata-pagination`, `strata-tooltip`, `strata-tab`, `strata-menu-item`, `strata-accordion-item` interaction fixes.
+
+- 1e9f452: Component coverage, accessibility and CI hardening.
+
+  - New parametrized unit test mounts all 48 catalog components and asserts registration, render and accessible names for interactive content.
+  - New Playwright spec runs axe per component and theme (light/dark), failing on `critical` and `serious` violations; fragment exceptions (`tab`, `menu-item`, `list-item`) are documented in the spec.
+  - New `toHaveScreenshot` checks per component and theme. Baselines are generated locally under `packages/testing/visual/components.spec.ts-snapshots/` and are gitignored — no images are tracked in the repository.
+  - `strata-tab` no longer emits `aria-controls` (IDREFs cannot cross Shadow DOM boundaries); `strata-progress` exposes an accessible name via a new `label` property.
+  - `ThemeToggle`, `Carousel`, `Card`, `Progress`, `Skeleton` and `Divider` tolerate missing `localStorage`/`matchMedia`/`ResizeObserver` and zero-intrinsic-width hosts no longer collapse inside flex containers.
+  - CI installs with `--frozen-lockfile`.
+  - `docs/AUDIT.md` consolidates the three overlapping audit documents; placeholder `docs/components` and `docs/patterns` removed; `@strata/core` gains README and LICENSE.
+
+- 49a4d73: Add 16 editorial components for news and wiki sites (meta, tag-list, section-header, author-box, share, comment, comment-thread, article-header, entry, quote, ticker, filter-bar, index-list, ranked-list, gallery, page-layout), taxonomy hue tokens (`tagHue`, `data-tag-hues="mono"` opt-out), a `hue`/`href` API on `strata-tag`, and editorial prose styles (cite, drop cap, mark, zebra tables).
+
+  Also adds nine article-navigation components for wiki pages: toc (scroll-spy, list/rail), reading-time, reading-progress, back-to-top, cite, references, hatnote, article-nav, heading-anchors.
+
+- 5bed575: Reading layer: typography tokens, serif content text and the `strata-prose` wrapper.
+
+  - `tokens.json → typography` now emits `--strata-type-<name>` font shorthand fragments and `-tracking` vars; the 48/36/30 px display scale is removed (LaTeX-style modest titles) and a `reading-*` scale (14/21 body, ~1.5 leading) is added.
+  - All literal `font:`/`font-family` declarations in components now compose the three role families (`serif` reading, `sans` chrome, `mono` data) — enforced by a new `fonts.test.ts` contract.
+  - Content components (Card title/excerpt, Alert, Accordion panel, Modal body, DataTable text cells) render reading text in serif; chrome stays sans.
+  - New `strata-prose` element adds the `.strata-prose` class so `@strata/prose/prose.css` styles slotted long-form content; the catalog gains a prose demo page (article, table, quote, code, footnotes).
+  - `prose.css` now uses `reading-body` tokens, a 70 `ch` measure, and system colors (`CanvasText`/`GrayText`) for print instead of raw hex.
+
+- 81b47a8: Status colors are never the sole signal, plus an opt-in strict-monochrome mode.
+
+  - `strata-badge` status tones now render a distinct Carbon icon; `strata-text-field` gains `error`/`errorMessage` with `aria-invalid`, `aria-describedby`, a `role="alert"` message and an icon.
+  - New `status.test.ts` proves Alert, Badge and error fields carry non-chromatic cues.
+  - `tokens.json` adds `strictMonochrome` (default `false`) and `monochromeStatus`: when enabled, `build-css.mjs` emits grayscale status colors that still pass WCAG AA 4.5:1 (verified by `strict-monochrome.test.ts`).
+  - Docs: `COLOR.md` and `DESIGN-LAWS.md` state the never-color-alone contract.
+
+### Patch Changes
+
+- 2460c33: Physical-form law enforcement and dead elevation cleanup.
+
+  - Squared the pill/circle radii outside the allowlist: switch track, carousel nav buttons and counter, overlay category chip, theme toggle, modal close button and scrollbar thumb now use `--strata-radius-*` (0–2 px). Kept circular only where geometry requires it — switch thumb, carousel dots, spinners/ripple, avatars — via an explicit allowlist in `design-rules.mjs`.
+  - Removed all dead `--strata-elevation-*`/`--strata-component-elevation` references (Button, Card, Dialog, Surface, StrataBase); `box-shadow` is now lint-forbidden except `none`.
+
+- 1ca6e99: Release metadata alignment (no runtime changes):
+
+  - `.changeset/config.json` now groups the four publishable packages (`@strata/tokens`, `@strata/core`, `@strata/components`, `@strata/prose`) as `fixed` so they version together, and sets `privatePackages.version: false` so private workspace packages are never bumped by Changesets.
+  - `publishConfig.access: "public"` added to all publishable packages; `files`, `exports`, `types` and `sideEffects` audited (`pnpm pack` tarballs verified clean).
+  - Root `CHANGELOG.md` is now an index pointing to per-package changelogs; policy documented in `docs/RELEASING.md`.
+  - `@strata/integration-mediawiki` build emits `dist/Strata/` with `skin.json` version injected from `package.json` (source `skin.json` aligned to 1.1.0, real repo URL and author).
+
+- 6a942ce: Repository hygiene: root MIT LICENSE, `license` fields on all manifests, `pnpm.onlyBuiltDependencies` for esbuild, and refreshed README / IMPLEMENTATION-REPORT / ARCHITECTURE docs for the apps/packages/integrations/tooling layout.
+- Updated dependencies [1e9f452]
+- Updated dependencies [49a4d73]
+- Updated dependencies [5bed575]
+- Updated dependencies [1ca6e99]
+- Updated dependencies [6a942ce]
+- Updated dependencies [81b47a8]
+  - @strata/core@3.1.0
+  - @strata/tokens@3.1.0
+
 ## 3.0.0
 
 ### Major Changes

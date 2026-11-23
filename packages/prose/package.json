@@ -1,7 +1,7 @@
 {
   "name": "@strata/prose",
-  "version": "0.1.0",
-  "description": "STRATA reading layer \u2014 platform-agnostic editorial prose styles on STRATA tokens",
+  "version": "3.1.0",
+  "description": "STRATA reading layer — platform-agnostic editorial prose styles on STRATA tokens",
   "license": "MIT",
   "type": "module",
   "files": [
