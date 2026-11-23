@@ -1,51 +1,59 @@
-import { LitElement, html, css, nothing } from "lit";
+import { html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { emitValueEvent } from "../../events.js";
+import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 
 @customElement("strata-text-field")
-export class StrataTextField extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
-    .strata-text-field {
-      display: grid;
-      gap: 6px;
-    }
-    label {
-      font: var(--strata-type-label-medium) var(--strata-font-sans);
-    }
-    input {
-      width: 100%;
-      min-height: 40px;
-      padding: 9px 12px;
-      border: var(--strata-border-small) solid var(--strata-color-border-subtle);
-      border-radius: var(--strata-radius-small);
-      background: var(--strata-color-surface-page);
-      color: var(--strata-color-text-primary);
-      font: var(--strata-type-body-medium) var(--strata-font-sans);
-    }
-    input:focus {
-      border-color: var(--strata-color-focus-ring);
-      outline: 2px solid
-        color-mix(in srgb, var(--strata-color-focus-ring) 25%, transparent);
-      outline-offset: 1px;
-    }
-    input[aria-invalid="true"] {
-      border-color: var(--strata-color-status-error);
-    }
-    .strata-text-field__error {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin: 0;
-      font: var(--strata-type-label-medium) var(--strata-font-sans);
-      color: var(--strata-color-status-error);
-    }
-    .strata-text-field__error iconify-icon {
-      font-size: 1em;
-    }
-  `;
+export class StrataTextField extends StrataElement {
+  static styles = [
+    strataComponentStyles,
+    css`
+      .strata-text-field {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+      }
+      label {
+        font: var(--strata-type-label-medium) var(--strata-font-sans);
+      }
+      input {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 9px 12px;
+        border: var(--strata-border-small) solid
+          var(--strata-color-border-subtle);
+        border-radius: var(--strata-radius-small);
+        background: var(--strata-color-surface-page);
+        color: var(--strata-color-text-primary);
+        font: var(--strata-type-body-medium) var(--strata-font-sans);
+      }
+      input:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      input:focus {
+        border-color: var(--strata-color-focus-ring);
+        outline: 2px solid
+          color-mix(in srgb, var(--strata-color-focus-ring) 25%, transparent);
+        outline-offset: 1px;
+      }
+      input[aria-invalid="true"] {
+        border-color: var(--strata-color-status-error);
+      }
+      .strata-text-field__error {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+        font: var(--strata-type-label-medium) var(--strata-font-sans);
+        color: var(--strata-color-status-error);
+      }
+      .strata-text-field__error iconify-icon {
+        font-size: 1em;
+      }
+    `,
+  ];
 
   @property() label = "";
   @property() placeholder = "";

@@ -21,6 +21,7 @@ export class StrataDialog extends LitElement {
       padding: 20px;
     }
     .strata-dialog__content {
+      box-sizing: border-box;
       width: min(100%, 560px);
       max-height: 90vh;
       overflow: auto;

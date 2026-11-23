@@ -1,6 +1,7 @@
-import { LitElement, html, css } from "lit";
+import { html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { emitValueEvent } from "../../events.js";
+import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 
 export interface StrataSelectOption {
   value: string;
@@ -21,26 +22,34 @@ const jsonConverter = {
 };
 
 @customElement("strata-select")
-export class StrataSelect extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
-    label {
-      display: grid;
-      gap: 6px;
-      font: var(--strata-type-label-medium) var(--strata-font-sans);
-    }
-    select {
-      min-height: 40px;
-      padding: 9px 12px;
-      border: var(--strata-border-small) solid var(--strata-color-border-subtle);
-      border-radius: var(--strata-radius-small);
-      background: var(--strata-color-surface-page);
-      color: var(--strata-color-text-primary);
-      font: var(--strata-type-body-medium) var(--strata-font-sans);
-    }
-  `;
+export class StrataSelect extends StrataElement {
+  static styles = [
+    strataComponentStyles,
+    css`
+      label {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+        font: var(--strata-type-label-medium) var(--strata-font-sans);
+      }
+      select {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 9px 12px;
+        border: var(--strata-border-small) solid
+          var(--strata-color-border-subtle);
+        border-radius: var(--strata-radius-small);
+        background: var(--strata-color-surface-page);
+        color: var(--strata-color-text-primary);
+        font: var(--strata-type-body-medium) var(--strata-font-sans);
+      }
+      select:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+    `,
+  ];
   @property() label = "";
   @property() value = "";
   @property({ type: Boolean, reflect: true }) disabled = false;

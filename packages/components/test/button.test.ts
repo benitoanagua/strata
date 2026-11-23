@@ -119,6 +119,17 @@ describe("strata-button states", () => {
     expect(inner(el).className).toContain("strata-button--full-width");
     el.remove();
   });
+
+  it("reflects full-width to the host so the host itself can stretch", async () => {
+    // The host element — not the inner <button> — participates in the
+    // parent's layout, so fullWidth must be observable on the host.
+    const el = await mount({ label: "Save", "full-width": "" });
+    expect(el.hasAttribute("full-width")).toBe(true);
+    el.remove();
+    const plain = await mount({ label: "Save" });
+    expect(plain.hasAttribute("full-width")).toBe(false);
+    plain.remove();
+  });
 });
 
 describe("strata-button icons and naming", () => {

@@ -29,7 +29,8 @@ export class StrataButton extends LitElement {
   @property({ type: String }) type: ButtonType = "button";
   @property({ type: String }) icon: StrataIconName | "" = "";
   @property({ type: Boolean, attribute: "trailing-icon" }) trailingIcon = false;
-  @property({ type: Boolean, attribute: "full-width" }) fullWidth = false;
+  @property({ type: Boolean, attribute: "full-width", reflect: true })
+  fullWidth = false;
 
   protected createRenderRoot() {
     return this;

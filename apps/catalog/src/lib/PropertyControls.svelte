@@ -23,7 +23,8 @@
       <p class="eyebrow">CONFIGURATION</p>
       <h2 id="controls-heading">Properties</h2>
     </div>
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <strata-button
       label="Reset"
       variant="text"

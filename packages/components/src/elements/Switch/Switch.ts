@@ -9,6 +9,7 @@ export class StrataSwitch extends LitElement {
       display: inline-block;
     }
     button {
+      box-sizing: border-box;
       width: 40px;
       height: 24px;
       padding: 2px;

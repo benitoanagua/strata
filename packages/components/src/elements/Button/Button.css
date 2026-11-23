@@ -1,3 +1,24 @@
+/* This component renders into light DOM (createRenderRoot returns the host),
+   so :host is unavailable — the tag selector scopes host styles instead. */
+strata-button {
+  display: inline-block;
+  min-width: 0;
+}
+
+/* fullWidth stretches the host, not just the inner control: the host is
+   what participates in the parent's layout. */
+strata-button[full-width] {
+  display: block;
+  width: 100%;
+}
+
+/* Light-DOM component: the global border-box reset cannot be assumed, so
+   padding and borders must not inflate the declared control height. */
+.strata-button,
+.strata-button * {
+  box-sizing: border-box;
+}
+
 .strata-button {
   /* Color axis: each --color-* class redefines the fill/ink triplet.
      --btn-fill/--btn-on-fill drive the solid treatment, --btn-accent is the

@@ -376,9 +376,16 @@ h1 {
 }
 .control-field {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 3px;
+  min-width: 0;
   padding: 9px 0;
   border-top: 1px solid var(--strata-color-border-subtle);
+}
+/* Grid/flex items default to min-width:auto, which lets intrinsic control
+   widths push the panel — every direct child must be allowed to shrink. */
+.control-field > * {
+  min-width: 0;
 }
 .control-field strata-checkbox,
 .control-field strata-number-field,
@@ -468,23 +475,31 @@ h1 {
 }
 .demo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  /* min(180px, 100%) keeps a single column usable inside narrow containers
+     instead of forcing a 180px track that overflows the page. */
+  grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
   gap: 14px;
   margin-top: 14px;
 }
 .demo-cell {
   margin: 0;
+  min-width: 0;
   border: 1px solid var(--strata-color-border-subtle);
   border-radius: var(--strata-radius-small);
   overflow: hidden;
 }
 .demo-stage {
   min-height: 84px;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 14px 10px;
   background: var(--strata-color-surface-page);
+}
+/* Demoed components size to the stage, never beyond it. */
+.demo-stage > * {
+  max-width: 100%;
 }
 .demo-cell figcaption {
   padding: 7px 10px;

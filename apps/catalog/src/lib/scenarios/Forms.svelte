@@ -104,7 +104,8 @@
 
   <div class="form-actions">
     <strata-button type="submit" label="Enviar" variant="filled" disabled={!name}></strata-button>
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <strata-button
       label="Restablecer"
       variant="outlined"

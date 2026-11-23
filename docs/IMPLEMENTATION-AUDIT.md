@@ -46,6 +46,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Implementation:** `StrataButton` in `packages/components/src/elements/Button`
 - **Properties (12):** `label` (String), `ariaLabel` (String, `aria-label` attribute), `variant` (String: `filled`/`outlined`/`text`/`elevated`/`tonal`), `size` (String: `small`/`medium`/`large`), `color` (String: `primary`/`error`/`success`/`warning`; `secondary` **deprecated** — use `variant="tonal"` for soft neutral emphasis, removal planned for next major), `disabled` (Boolean), `loading` (Boolean), `href` (String), `type` (String: `button`/`submit`/`reset`), `icon` (String, `carbon:*`), `trailingIcon` (Boolean — repositions `icon`, never creates one), `fullWidth` (Boolean)
 - **Variant roles:** `filled` = solid high-emphasis (semantic fills via `--btn-fill`/`--btn-on-fill`); `outlined` = filete + transparent; `text` = chromeless; `elevated` = neutral raised surface + `border-subtle` filete (legacy name — STRATA has no shadows); `tonal` = semantic ink tint ~18%/28% hover.
+- **Sizing:** light-DOM component with its own `box-sizing` reset; `fullWidth` reflects to the host (`strata-button[full-width]`) so the host — not just the inner control — fills the container, per `COMPONENT-SIZING-CONTRACT.md`.
 - **Accessibility:** Renders a native <button> (or <a role=button> when href is set); the visible label names it, `ariaLabel` covers icon-only usage; `aria-busy` while loading; ripple suppressed on keyboard activation.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
@@ -110,6 +111,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Purpose:** A labelled single-line text input with error state.
 - **Implementation:** `StrataTextField` in `packages/components/src/elements/TextField`
 - **Properties (6):** `label` (String), `placeholder` (String), `value` (String), `disabled` (Boolean, reflected), `error` (Boolean, reflected), `errorMessage` (String)
+- **Sizing:** extends `StrataElement` (shared `box-sizing`/host base); control box is the shared 44px single-line field height per `COMPONENT-SIZING-CONTRACT.md`; `minmax(0,1fr)` grid + `min-width:0` keep it inside narrow containers.
 - **Events:** `strata-input` — Fired on every value change while interacting.; `strata-change` — Fired when the value is committed.
 - **Accessibility:** Label is associated via for/id; errors use aria-invalid, aria-describedby and role=alert.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
@@ -162,6 +164,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Properties (4):** `label` (String), `value` (String), `disabled` (Boolean, reflected), `options` (Array of strings or `{ value, label }`, JSON via attribute)
 - **Events:** `strata-input` — Fired on every value change while interacting.; `strata-change` — Fired when the value is committed.
 - **Notes:** Options are rendered as real `<option>` children of the inner `<select>`. Slotted `<option>` elements never registered as options inside shadow DOM, so the `options` prop (or JSON `options` attribute) is the supported API.
+- **Sizing:** extends `StrataElement`; control box is the shared 44px single-line field height per `COMPONENT-SIZING-CONTRACT.md`; `select` is `width:100%` + `min-width:0` inside a `minmax(0,1fr)` grid so it cannot overflow its container.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
@@ -214,6 +217,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Properties (3):** `checked` (Boolean, reflected), `disabled` (Boolean, reflected), `label` (String)
 - **Events:** `strata-input` — Fired on every value change while interacting.; `strata-change` — Fired when the value is committed.
 - **Accessibility:** role=switch with aria-checked; Space/Enter toggles.
+- **Sizing:** track is `box-sizing: border-box` 40×24px including padding (was rendering 44×28px before the fix).
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
@@ -505,6 +509,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Slots:** `default`
 - **Keyboard:** Escape, Tab, @keydown
 - **Accessibility:** role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.
+- **Sizing:** content panel is `box-sizing: border-box` so `width: min(100%, 560px)` includes padding/border and cannot overflow narrow viewports.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.

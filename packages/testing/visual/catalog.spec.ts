@@ -324,3 +324,63 @@ test("viewer settings control theme, surface and viewport", async ({
   expect(stored.surface).toBe("grid");
   expect(stored.viewport).toBe("mobile");
 });
+
+test("properties panel controls never overflow their field", async ({
+  page,
+}) => {
+  await page.goto("/#/button");
+  const overflowCount = await page.locator(".controls-panel").evaluate((el) => {
+    const panel = el.getBoundingClientRect();
+    return [...el.querySelectorAll("*")].filter((child) => {
+      const r = child.getBoundingClientRect();
+      return (
+        r.width > 0 && (r.right > panel.right + 1 || r.left < panel.left - 1)
+      );
+    }).length;
+  });
+  expect(overflowCount).toBe(0);
+});
+
+test("fullWidth button demo fills its stage", async ({ page }) => {
+  await page.goto("/#/button");
+  const dims = await page
+    .locator(".demo-cell", { hasText: "Full width" })
+    .first()
+    .evaluate((cell) => {
+      const stage = cell.querySelector(".demo-stage")!.getBoundingClientRect();
+      const host = cell.querySelector("strata-button")!.getBoundingClientRect();
+      const inner = cell
+        .querySelector("strata-button button, strata-button a")!
+        .getBoundingClientRect();
+      return {
+        stageContent: stage.width - 20,
+        host: host.width,
+        inner: inner.width,
+      };
+    });
+  // Host and inner control both stretch to the stage's content width.
+  expect(dims.host).toBeGreaterThan(dims.stageContent * 0.9);
+  expect(dims.inner).toBeGreaterThan(dims.stageContent * 0.9);
+});
+
+test("single-line form controls share one control height", async ({ page }) => {
+  const measure = async (hash: string, selector: string) => {
+    await page.goto(hash);
+    return page
+      .locator(selector)
+      .first()
+      .evaluate((host) => {
+        const inner = host.shadowRoot?.querySelector(
+          "input, select, .strata-field",
+        );
+        return inner ? inner.getBoundingClientRect().height : 0;
+      });
+  };
+  const textField = await measure("/#/text-field", "strata-text-field");
+  const select = await measure("/#/select", "strata-select");
+  const searchField = await measure("/#/search-field", "strata-search-field");
+  // All single-line field controls render the same 44px control box.
+  for (const h of [textField, select, searchField]) {
+    expect(Math.round(h)).toBe(44);
+  }
+});

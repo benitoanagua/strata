@@ -4,6 +4,7 @@ import { property } from "lit/decorators.js";
 export const strataComponentStyles = css`
   :host {
     display: block;
+    min-width: 0;
     font-family: var(--strata-font-sans);
     color: var(--strata-color-text-primary);
   }
@@ -146,6 +147,9 @@ export const strataComponentStyles = css`
     border: 1px solid var(--strata-color-border-subtle);
     border-radius: var(--strata-radius-small);
     background: var(--strata-color-surface-default);
+  }
+  :host([disabled]) .strata-field {
+    opacity: 0.45;
   }
   .strata-field input {
     border: 0;
