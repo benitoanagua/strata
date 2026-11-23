@@ -66,11 +66,13 @@ const bool = (
   name: string,
   label: string,
   defaultValue = false,
+  demoProps?: Record<string, ControlValue>,
 ): PropControl => ({
   name,
   label,
   type: "boolean",
   defaultValue,
+  demoProps,
 });
 const num = (
   name: string,
@@ -140,7 +142,9 @@ export const catalog: readonly CatalogEntry[] = [
         "color",
         "Color",
         "primary",
-        ["primary", "secondary", "error", "success", "warning"],
+        // `secondary` is deprecated (see ButtonColor): soft neutral emphasis
+        // is expressed with variant="tonal", not a second neutral color.
+        ["primary", "error", "success", "warning"],
         // Semantic colors only read as solid actions when filled; the
         // outlined default would reduce them to a tinted label.
         { variant: "filled" },
@@ -148,7 +152,11 @@ export const catalog: readonly CatalogEntry[] = [
       text("href", "Href"),
       select("type", "Type", "button", ["button", "submit", "reset"]),
       text("icon", "Icon", ""),
-      bool("trailingIcon", "Trailing icon"),
+      // trailingIcon only repositions `icon`; the demo must provide one or
+      // the state card renders a button with no icon at all.
+      bool("trailingIcon", "Trailing icon", false, {
+        icon: "carbon:arrow-right",
+      }),
       bool("disabled", "Disabled"),
       bool("loading", "Loading"),
       bool("fullWidth", "Full width"),

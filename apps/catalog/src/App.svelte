@@ -260,7 +260,7 @@
         group: "States",
         options: {
           tagName: entry.tagName,
-          props: { ...base, [control.name]: true },
+          props: { ...base, ...control.demoProps, [control.name]: true },
           slotHtml: entry.slotHtml,
           slotContent: entry.slotContent,
         },

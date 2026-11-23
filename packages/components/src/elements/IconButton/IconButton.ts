@@ -23,8 +23,12 @@ export class StrataIconButton extends LitElement {
       background: var(--strata-color-surface-subtle);
     }
     button:focus-visible {
-      outline: 2px solid currentColor;
+      outline: 2px solid var(--strata-color-focus-ring);
       outline-offset: 2px;
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
     :host([size="small"]) button {
       width: 40px;

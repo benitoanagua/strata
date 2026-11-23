@@ -14,9 +14,13 @@ Every public component must define:
 
 ## Mandatory structural rule
 
-`micro → small → medium → large → hero` must be monotonic for radius, border capacity and elevation.
+`micro → small → medium → large → hero` must be monotonic for radius and border capacity. Elevation is abolished (`--strata-elevation-*` always resolves to `none`); separation comes from hairlines, whitespace and tonal surfaces — never `box-shadow`.
 
 A component may choose `border: 0` for a particular variant, but it may not use a structural treatment heavier than its declared size.
+
+## UX semantics
+
+Variant, color, size and type are independent axes — see `COMPONENT-UX-CONTRACT.md` for the authoritative rules on variant roles, semantic color, interaction states, icons and catalog demos.
 
 ## Navigation
 

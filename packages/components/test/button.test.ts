@@ -45,6 +45,14 @@ describe("strata-button API surface", () => {
     }
   });
 
+  it("keeps rendering the deprecated secondary color for compatibility", async () => {
+    // `secondary` is deprecated in favor of variant="tonal" but must keep
+    // working until the next major version.
+    const el = await mount({ label: "Go", color: "secondary" });
+    expect(inner(el).className).toContain("strata-button--color-secondary");
+    el.remove();
+  });
+
   it("renders a native button with type=button by default", async () => {
     const el = await mount({ label: "Save" });
     const btn = inner(el) as HTMLButtonElement;
@@ -131,6 +139,28 @@ describe("strata-button icons and naming", () => {
     const icon = el.querySelector("iconify-icon");
     expect(icon?.className).toContain("strata-button__icon--trailing");
     el.remove();
+  });
+
+  it("places the icon before the label by default and after it when trailing", async () => {
+    const leading = await mount({ label: "Add", icon: "carbon:add" });
+    const lIcon = leading.querySelector("iconify-icon")!;
+    const lLabel = leading.querySelector(".strata-button__label")!;
+    expect(
+      lIcon.compareDocumentPosition(lLabel) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    leading.remove();
+
+    const trailing = await mount({
+      label: "Next",
+      icon: "carbon:arrow-right",
+      "trailing-icon": "",
+    });
+    const tIcon = trailing.querySelector("iconify-icon")!;
+    const tLabel = trailing.querySelector(".strata-button__label")!;
+    expect(
+      tIcon.compareDocumentPosition(tLabel) & Node.DOCUMENT_POSITION_PRECEDING,
+    ).toBeTruthy();
+    trailing.remove();
   });
 
   it("ignores non-carbon icon names", async () => {

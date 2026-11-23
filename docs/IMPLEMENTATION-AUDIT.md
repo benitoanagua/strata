@@ -42,10 +42,11 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 ### Button — `strata-button`
 
-- **Purpose:** A clear action with semantic variants and states.
+- **Purpose:** A clear action with semantic variants and states. Variant/color/size/type are independent axes per `COMPONENT-UX-CONTRACT.md`.
 - **Implementation:** `StrataButton` in `packages/components/src/elements/Button`
-- **Properties (12):** `label` (String), `ariaLabel` (String, `aria-label` attribute), `variant` (String), `size` (String), `color` (String), `disabled` (Boolean), `loading` (Boolean), `href` (String), `type` (String), `icon` (String), `trailingIcon` (Boolean), `fullWidth` (Boolean)
-- **Accessibility:** Renders a native <button> (or <a role=button> when href is set); the visible label names it, `ariaLabel` covers icon-only usage.
+- **Properties (12):** `label` (String), `ariaLabel` (String, `aria-label` attribute), `variant` (String: `filled`/`outlined`/`text`/`elevated`/`tonal`), `size` (String: `small`/`medium`/`large`), `color` (String: `primary`/`error`/`success`/`warning`; `secondary` **deprecated** — use `variant="tonal"` for soft neutral emphasis, removal planned for next major), `disabled` (Boolean), `loading` (Boolean), `href` (String), `type` (String: `button`/`submit`/`reset`), `icon` (String, `carbon:*`), `trailingIcon` (Boolean — repositions `icon`, never creates one), `fullWidth` (Boolean)
+- **Variant roles:** `filled` = solid high-emphasis (semantic fills via `--btn-fill`/`--btn-on-fill`); `outlined` = filete + transparent; `text` = chromeless; `elevated` = neutral raised surface + `border-subtle` filete (legacy name — STRATA has no shadows); `tonal` = semantic ink tint ~18%/28% hover.
+- **Accessibility:** Renders a native <button> (or <a role=button> when href is set); the visible label names it, `ariaLabel` covers icon-only usage; `aria-busy` while loading; ripple suppressed on keyboard activation.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
@@ -57,7 +58,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Purpose:** A compact action identified by a Carbon icon.
 - **Implementation:** `StrataIconButton` in `packages/components/src/elements/IconButton`
 - **Properties (4):** `size` (String), `disabled` (Boolean), `label` (String), `icon` (String)
-- **Accessibility:** Icon is decorative; the button is named by label via aria-label.
+- **Accessibility:** Icon is decorative; the button is named by `label` via `aria-label` (fallback "Action"); `:disabled` dims to 0.45 and blocks interaction; focus ring uses `--strata-color-focus-ring`.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.

@@ -75,6 +75,25 @@ describe("catalog registry", () => {
     expect(derived.demoProps).toEqual({ variant: "filled" });
   });
 
+  it("gives reposition-only icon props a real demo icon", () => {
+    const button = entryById("button")!;
+    const trailing = button.controls.find((c) => c.name === "trailingIcon")!;
+    // trailingIcon only moves `icon`; without a carbon icon the state demo
+    // would render a button with no icon at all.
+    expect(trailing.demoProps?.icon).toMatch(/^carbon:/);
+    const derived = deriveControls(button).find(
+      (c) => c.name === "trailingIcon",
+    )!;
+    expect(derived.demoProps?.icon).toBe(trailing.demoProps?.icon);
+  });
+
+  it("does not offer the deprecated secondary color as a demo option", () => {
+    const button = entryById("button")!;
+    const color = button.controls.find((c) => c.name === "color")!;
+    expect(color.options).not.toContain("secondary");
+    expect(color.options).toEqual(["primary", "error", "success", "warning"]);
+  });
+
   it("resolves entryById for every catalog id", () => {
     for (const entry of catalog) {
       expect(entryById(entry.id)).toBe(entry);

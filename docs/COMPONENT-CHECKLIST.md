@@ -8,8 +8,9 @@ Before a component is considered stable:
 - [ ] Border is optional and justified by structure.
 - [ ] Selected navigation uses color/typography, never a decorative border.
 - [ ] Uses Source Sans 3 for UI chrome, Source Serif 4 for reading text, and Source Code Pro only for tags and numeric/data contexts. Does not bundle font files.
-- [ ] Uses Carbon icons only (`carbon:*`) through `iconify-icon`.
-- [ ] Defines supported interaction states.
+- [ ] Uses Carbon icons only (`carbon:*`) through `iconify-icon`; icon-only controls have an accessible name.
+- [ ] Defines supported interaction states per `COMPONENT-UX-CONTRACT.md`; disabled never mimics an active neutral variant.
+- [ ] Semantic color is used where its absence would reduce clarity; color is never the sole signal.
 - [ ] Has keyboard/focus semantics where interactive.
 - [ ] Has an accessible name where required.
 - [ ] Supports reduced motion.

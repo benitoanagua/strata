@@ -5,9 +5,9 @@ STRATA is a contemporary editorial design system for mobile-first interfaces. It
 ## Core laws
 
 - **Monochrome establishes structure.**
-- **Color is an exception, never a system.** (One scoped exception: taxonomy hues tell tags and categories apart; see `docs/DESIGN-LAWS.md` §4.) STRATA is grayscale-first (the ink ramp of the editorial CVs); a single accent is optional and disabled by default, and only three desaturated status colors exist, always paired with a non-color cue.
+- **Color is an exception, never a system — but it is obligatory when its absence reduces clarity.** (One scoped exception: taxonomy hues tell tags and categories apart; see `docs/DESIGN-LAWS.md` §4.) STRATA is grayscale-first (the ink ramp of the editorial CVs); a single accent is optional and disabled by default, and only three desaturated status colors exist, always paired with a non-color cue. Semantic color must be used for destructive, success and warning actions — including solid surfaces when emphasis warrants it; component-level rules live in `docs/COMPONENT-UX-CONTRACT.md`.
 - **Typography leads hierarchy.** Source Serif 4 is the reading (body) family, Source Sans 3 is the interface family (dashboards, menus), and Source Code Pro is reserved for tags, data and numeric alignment. Fonts load from Google Fonts, never from the repository (`@strata/tokens/fonts.css`).
-- **Physical scale determines structural weight.** `micro → small → medium → large → hero` controls radius, border and elevation monotonically.
+- **Physical scale determines structural weight.** `micro → small → medium → large → hero` controls radius and border monotonically; elevation is abolished — separation comes from hairlines, whitespace and tonal surfaces.
 - **Semantic importance never overrides physical scale.**
 - **Carbon Icons via Iconify is the only icon collection.** Use `iconify-icon` with `carbon:*` names.
 
@@ -44,4 +44,4 @@ The Svelte catalog is a private development tool under `apps/catalog`. It render
 - `docs/IMPLEMENTATION-AUDIT.md` — per-component audit matrix (76 entries).
 - `docs/COMPONENT-COVERAGE.md` — test coverage per component.
 - `docs/COMPONENT-STATUS.md` — maturity counts and promotion rules.
-- `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/COMPONENT-CONTRACT.md`.
+- `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/COMPONENT-CONTRACT.md`, `docs/COMPONENT-UX-CONTRACT.md`, `docs/DESIGN-LAWS.md`.
