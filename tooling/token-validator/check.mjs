@@ -73,6 +73,11 @@ for (const theme of ["light", "dark"]) {
     }
   if (contrast(s.focusRing, s.surfacePage) < 3)
     throw new Error(`Contrast contract: ${theme}.focusRing below 3:1`);
+  for (const [key, value] of Object.entries(t.syntax?.[theme] ?? {}))
+    if (contrast(value, s.surfaceSubtle) < 4.5)
+      throw new Error(
+        `Contrast contract: ${theme}.syntax.${key} on surfaceSubtle is below 4.5:1`,
+      );
 }
 
 if (t.accent?.enabled) {

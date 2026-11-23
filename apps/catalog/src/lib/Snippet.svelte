@@ -1,6 +1,9 @@
 <script lang="ts">
   import type { ControlValue } from "./componentRegistry";
   import type { PropInfo } from "./props";
+  import { buildSnippet } from "./snippet";
+  import { highlightSnippet } from "./highlight";
+  import { copyText } from "./clipboard";
 
   let { tagName, controls, values, slotHtml, slotContent }: {
     tagName: string;
@@ -13,46 +16,14 @@
   let copied = $state(false);
   let copyTimer: ReturnType<typeof setTimeout> | undefined;
 
-  function toKebab(name: string) {
-    return name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-  }
-
-  const snippet = $derived.by(() => {
-    const attrs: string[] = [];
-    for (const control of controls) {
-      const value = values[control.name];
-      if (value === undefined || value === null) continue;
-      if (control.type === "boolean") {
-        if (value) attrs.push(control.attribute ?? toKebab(control.name));
-      } else if (typeof value === "string" && value !== "") {
-        attrs.push(
-          `${control.attribute ?? toKebab(control.name)}="${value.replace(/"/g, "&quot;")}"`,
-        );
-      } else if (typeof value === "number") {
-        attrs.push(
-          `${control.attribute ?? toKebab(control.name)}="${value}"`,
-        );
-      }
-    }
-    const attrText = attrs.length ? " " + attrs.join(" ") : "";
-    const inner = (slotHtml ?? slotContent ?? "").trim();
-    const html = inner
-      ? `<${tagName}${attrText}>\n  ${inner}\n</${tagName}>`
-      : `<${tagName}${attrText}></${tagName}>`;
-    return `import "@strata/components";\n\n${html}\n`;
-  });
+  const snippet = $derived(
+    buildSnippet({ tagName, controls, values, slotHtml, slotContent }),
+  );
+  const highlighted = $derived(highlightSnippet(snippet));
 
   async function copy() {
-    try {
-      await navigator.clipboard.writeText(snippet);
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = snippet;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      ta.remove();
-    }
+    const ok = await copyText(snippet);
+    if (!ok) return;
     copied = true;
     clearTimeout(copyTimer);
     copyTimer = setTimeout(() => (copied = false), 1600);
@@ -62,9 +33,22 @@
 <div class="snippet-block">
   <div class="snippet-head">
     <span class="eyebrow">USAGE</span>
-    <button class="text-action" type="button" onclick={copy}>
-      {copied ? "Copied" : "Copy"}
-    </button>
+    <span class="snippet-meta">
+      <span class="snippet-lang">HTML</span>
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
+      <strata-button
+        size="small"
+        variant="text"
+        icon={copied ? "carbon:checkmark" : "carbon:copy"}
+        label={copied ? "Copied" : "Copy"}
+        aria-label={copied ? "Snippet copied to clipboard" : "Copy snippet to clipboard"}
+        onclick={copy}
+      ></strata-button>
+    </span>
   </div>
-  <pre><code>{snippet}</code></pre>
+  <pre><code>{@html highlighted}</code></pre>
+  <span class="sr-only" role="status" aria-live="polite">
+    {copied ? "Snippet copied to clipboard." : ""}
+  </span>
 </div>

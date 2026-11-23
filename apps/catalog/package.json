@@ -13,17 +13,19 @@
   },
   "dependencies": {
     "@strata/components": "workspace:*",
+    "@strata/prose": "workspace:*",
     "@strata/tokens": "workspace:*",
-    "svelte": "^5.20.0",
-    "@strata/prose": "workspace:*"
+    "prismjs": "1.30.0",
+    "svelte": "^5.20.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@types/prismjs": "^1.26.6",
+    "jsdom": "^26.0.0",
     "svelte-check": "^4.1.0",
     "typescript": "^5.7.0",
     "vite": "^6.0.0",
-    "vitest": "^4.1.12",
-    "jsdom": "^26.0.0"
+    "vitest": "^4.1.12"
   },
   "license": "MIT"
 }

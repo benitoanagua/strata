@@ -45,9 +45,14 @@ const themeVars = (theme) => {
   const semantic = { ...tokens.semantic[theme] };
   if (tokens.strictMonochrome)
     Object.assign(semantic, tokens.monochromeStatus?.[theme] ?? {});
-  return Object.entries(semantic)
-    .map(([key, value]) => `--strata-color-${kebab(key)}: ${value};`)
+  const syntax = Object.entries(tokens.syntax?.[theme] ?? {})
+    .map(([key, value]) => `--strata-color-syntax-${kebab(key)}: ${value};`)
     .join("");
+  return (
+    Object.entries(semantic)
+      .map(([key, value]) => `--strata-color-${kebab(key)}: ${value};`)
+      .join("") + syntax
+  );
 };
 
 const accentVars = (theme) =>
