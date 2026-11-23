@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
-  import Snippet from "./lib/Snippet.svelte";
+  import CodeExample from "./lib/CodeExample.svelte";
   import { deriveControls, variantControls, type PropInfo } from "./lib/props";
   import {
     catalog,
@@ -495,7 +495,7 @@
 
           <strata-tab-panel slot="panels">
             <section class="examples-panel" aria-label="Usage examples">
-              <Snippet tagName={entry.tagName} {controls} {values} slotHtml={entry.slotHtml} slotContent={entry.slotContent} />
+              <CodeExample tagName={entry.tagName} {controls} {values} slotHtml={entry.slotHtml} slotContent={entry.slotContent} theme={effectiveTheme} />
               <div class="usage-panel">
                 <p class="eyebrow">COMPOSITION</p>
                 <p>

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { buildSnippet } from "../src/lib/snippet";
+import {
+  buildExamples,
+  buildJsSnippet,
+  buildSnippet,
+  INSTALL_SNIPPET,
+} from "../src/lib/snippet";
 import { highlightSnippet } from "../src/lib/highlight";
 import { copyText } from "../src/lib/clipboard";
 import type { PropInfo } from "../src/lib/props";
@@ -117,34 +122,110 @@ describe("buildSnippet", () => {
   });
 });
 
-describe("highlightSnippet", () => {
-  it("wraps tokens in inert spans and escapes the source", () => {
-    const html = highlightSnippet(
-      '<strata-button label="Save"></strata-button>',
+describe("buildJsSnippet", () => {
+  const input = {
+    tagName: "strata-button",
+    controls: [
+      control("label", "text"),
+      control("variant", "select"),
+      control("disabled", "boolean"),
+    ],
+    values: { label: "Save", variant: "outlined", disabled: true },
+  };
+
+  it("creates the element, sets attributes and appends it", () => {
+    const code = buildJsSnippet(input);
+    expect(code).toContain('import "@strata/components";');
+    expect(code).toContain(
+      'const button = document.createElement("strata-button");',
     );
-    expect(html).toContain('class="token tag"');
-    expect(html).toContain('class="token attr-name"');
-    expect(html).toContain("&lt;");
-    // The raw tag must not appear unescaped — nothing executable renders.
-    expect(html).not.toContain("<strata-button");
+    expect(code).toContain('button.setAttribute("label", "Save");');
+    expect(code).toContain('button.setAttribute("variant", "outlined");');
+    expect(code).toContain('button.setAttribute("disabled", "");');
+    expect(code).toContain("document.body.append(button);");
   });
 
-  it("does not alter the source it highlights", () => {
-    const code = buildSnippet({
+  it("camelCases dashed tag names into a valid identifier", () => {
+    const code = buildJsSnippet({
+      ...input,
+      tagName: "strata-text-field",
+      controls: [],
+      values: {},
+    });
+    expect(code).toContain(
+      'const textField = document.createElement("strata-text-field");',
+    );
+  });
+
+  it("escapes quotes, backslashes and template placeholders in strings", () => {
+    const code = buildJsSnippet({
+      tagName: "strata-button",
+      controls: [control("label", "text")],
+      values: { label: 'a"b\\c `${x}`' },
+    });
+    expect(code).toContain('button.setAttribute("label", "a\\"b\\\\c');
+    expect(code).not.toContain('a"b');
+  });
+
+  it("renders slotted content as an escaped innerHTML template", () => {
+    const code = buildJsSnippet({
+      ...input,
+      slotHtml:
+        '<strata-button label="One"></strata-button>' +
+        '<strata-button label="Two"></strata-button>',
+    });
+    expect(code).toContain("button.innerHTML = `");
+    expect(code).toContain("<strata-button");
+  });
+});
+
+describe("buildExamples", () => {
+  it("returns HTML, JavaScript and Install tabs for every component", () => {
+    const examples = buildExamples({
       tagName: "strata-button",
       controls: [control("label", "text")],
       values: { label: "Save" },
     });
-    const html = highlightSnippet(code);
-    // Strip spans/entities back to text and compare with the source.
-    const text = html
-      .replace(/<[^>]+>/g, "")
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&");
+    expect(examples.map((e) => e.id)).toEqual(["html", "js", "install"]);
+    expect(examples.map((e) => e.lang)).toEqual(["html", "javascript", "bash"]);
+    expect(examples[0].code).toContain("<strata-button");
+    expect(examples[1].code).toContain("document.createElement");
+    expect(examples[2].code).toBe(INSTALL_SNIPPET);
+  });
+});
+
+describe("highlightSnippet", () => {
+  it("returns per-line tokens whose contents reproduce the source", async () => {
+    const code =
+      'import "@strata/components";\n\n<strata-button label="Save"></strata-button>';
+    const result = await highlightSnippet(code, "html", "light");
+    const text = result.lines
+      .map((line) => line.map((t) => t.content).join(""))
+      .join("\n");
     expect(text).toBe(code);
+    expect(result.fg).toMatch(/^#/);
+    expect(result.bg).toMatch(/^#/);
+  });
+
+  it("produces multiple distinct token colors (chromatic theme)", async () => {
+    const code = '<strata-button label="Save" disabled></strata-button>';
+    const result = await highlightSnippet(code, "html", "light");
+    const colors = new Set(
+      result.lines
+        .flat()
+        .map((t) => t.color)
+        .filter(Boolean),
+    );
+    expect(colors.size).toBeGreaterThanOrEqual(3);
+  });
+
+  it("switches colors between light and dark themes", async () => {
+    const code = '<strata-button label="Save"></strata-button>';
+    const light = await highlightSnippet(code, "html", "light");
+    const dark = await highlightSnippet(code, "html", "dark");
+    const lightColors = new Set(light.lines.flat().map((t) => t.color));
+    const darkColors = new Set(dark.lines.flat().map((t) => t.color));
+    expect(darkColors).not.toEqual(lightColors);
   });
 });
 

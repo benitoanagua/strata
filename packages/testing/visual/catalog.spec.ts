@@ -239,6 +239,12 @@ test("reset restores declared defaults", async ({ page }) => {
   );
 });
 
+const snippetCode = (page: Page) =>
+  page
+    .locator(".code-scroll .line-text")
+    .allTextContents()
+    .then((lines) => lines.join("\n"));
+
 test("snippet tab shows copyable markup for the selected component", async ({
   page,
   context,
@@ -246,13 +252,68 @@ test("snippet tab shows copyable markup for the selected component", async ({
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/#/tag");
   await page.getByRole("tab", { name: "Examples" }).click();
-  const code = await page.locator(".snippet-block pre").textContent();
+  const code = await snippetCode(page);
   expect(code).toContain('import "@strata/components"');
   expect(code).toContain("<strata-tag");
-  await page.locator(".snippet-head button").click();
-  await expect(page.locator(".snippet-head button")).toContainText("Copied");
+  await page.locator(".code-tools strata-button").click();
+  await expect(page.locator(".code-tools strata-button")).toContainText(
+    "Copied",
+  );
   const clipboard = await page.evaluate(() => navigator.clipboard.readText());
-  expect(clipboard).toBe(code);
+  expect(clipboard?.trimEnd()).toBe(code.trimEnd());
+});
+
+test("snippet tabs switch language and copy the active source", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/#/button");
+  await page.getByRole("tab", { name: "Examples" }).click();
+  const tabs = page.locator(".code-tabs");
+  await expect(tabs.getByRole("tab")).toHaveText([
+    "HTML",
+    "JavaScript",
+    "Install",
+  ]);
+
+  await tabs.getByRole("tab", { name: "JavaScript" }).click();
+  const js = await snippetCode(page);
+  expect(js).toContain('import "@strata/components"');
+  expect(js).toContain('document.createElement("strata-button")');
+  expect(js).toContain("document.body.append(button)");
+
+  await page.locator(".code-tools strata-button").click();
+  const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+  expect(clipboard?.trimEnd()).toBe(js.trimEnd());
+
+  await tabs.getByRole("tab", { name: "Install" }).click();
+  await expect(page.locator(".code-scroll")).toContainText(
+    "pnpm add @strata/components",
+  );
+  await page.locator(".code-tools strata-button").click();
+  const install = await page.evaluate(() => navigator.clipboard.readText());
+  expect(install?.trim()).toBe("pnpm add @strata/components");
+});
+
+test("snippet line numbers toggle and long snippets expand", async ({
+  page,
+}) => {
+  await page.goto("/#/prose");
+  await page.getByRole("tab", { name: "Examples" }).click();
+  await expect(page.locator(".line-no").first()).toBeVisible();
+  await page.getByRole("button", { name: "Hide line numbers" }).click();
+  await expect(page.locator(".line-no")).toHaveCount(0);
+
+  const expand = page.getByRole("button", { name: "Expand code" });
+  await expect(expand).toBeVisible();
+  const before = await page.locator(".code-scroll .code-line").count();
+  await expand.click();
+  await expect(
+    page.getByRole("button", { name: "Collapse code" }),
+  ).toBeVisible();
+  const after = await page.locator(".code-scroll .code-line").count();
+  expect(after).toBeGreaterThan(before);
 });
 
 test("API and accessibility tabs render documentation", async ({ page }) => {

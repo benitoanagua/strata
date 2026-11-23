@@ -98,3 +98,77 @@ export function buildSnippet(input: SnippetInput): string {
     : `${open}</${tagName}>`;
   return `import "@strata/components";\n\n${body}\n`;
 }
+
+function jsString(value: string) {
+  return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+}
+
+function elementVarName(tagName: string) {
+  const base = tagName.replace(/^strata-/, "");
+  return base.replace(/-([a-z0-9])/g, (_, c: string) => c.toUpperCase());
+}
+
+/**
+ * Framework-free DOM usage: import the package once, create the element,
+ * set the same attributes shown in the HTML tab, append it. Real code a
+ * vanilla-JS consumer can paste — not a framework conversion.
+ */
+export function buildJsSnippet(input: SnippetInput): string {
+  const { tagName, controls, values, slotHtml, slotContent } = input;
+  const attrs = collectAttrs(controls, values);
+  const varName = elementVarName(tagName);
+  const lines = [
+    'import "@strata/components";',
+    "",
+    `const ${varName} = document.createElement("${tagName}");`,
+  ];
+  for (const attr of attrs) {
+    lines.push(
+      attr.value === undefined
+        ? `${varName}.setAttribute(${jsString(attr.name)}, "");`
+        : `${varName}.setAttribute(${jsString(attr.name)}, ${jsString(attr.value)});`,
+    );
+  }
+  const inner = (slotHtml ?? slotContent ?? "").trim();
+  if (inner) {
+    const escaped = inner
+      .replace(/\\/g, "\\\\")
+      .replace(/`/g, "\\`")
+      .replace(/\$\{/g, "\\${");
+    lines.push(`${varName}.innerHTML = \`${escaped}\`;`);
+  }
+  lines.push("", `document.body.append(${varName});`, "");
+  return lines.join("\n");
+}
+
+export const INSTALL_SNIPPET = "pnpm add @strata/components\n";
+
+export interface SnippetExample {
+  id: string;
+  label: string;
+  lang: "html" | "javascript" | "bash";
+  code: string;
+}
+
+/**
+ * The tab set every component page offers: markup usage, vanilla JS
+ * usage and the real install command. No framework conversions — STRATA
+ * ships Web Components, so HTML and DOM APIs are the honest examples.
+ */
+export function buildExamples(input: SnippetInput): SnippetExample[] {
+  return [
+    { id: "html", label: "HTML", lang: "html", code: buildSnippet(input) },
+    {
+      id: "js",
+      label: "JavaScript",
+      lang: "javascript",
+      code: buildJsSnippet(input),
+    },
+    {
+      id: "install",
+      label: "Install",
+      lang: "bash",
+      code: INSTALL_SNIPPET,
+    },
+  ];
+}

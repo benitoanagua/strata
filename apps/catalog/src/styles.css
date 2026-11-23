@@ -558,74 +558,116 @@ h1 {
 .a11y-panel ul {
   padding-left: 18px;
 }
-.snippet-block {
+.code-block {
   border: 1px solid var(--strata-color-border-subtle);
   border-radius: var(--strata-radius-medium);
   overflow: hidden;
   min-width: 0;
-}
-.snippet-head {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--strata-color-border-subtle);
+  flex-direction: column;
 }
-.snippet-head .eyebrow {
-  margin: 0;
-}
-.snippet-meta {
-  display: inline-flex;
+.code-head {
+  display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0;
+  padding: 8px 10px 8px 14px;
+  border-bottom: 1px solid var(--strata-color-border-subtle);
+  flex-wrap: wrap;
 }
-.snippet-lang {
-  font: 10px var(--strata-font-mono);
-  letter-spacing: 0.06em;
+.code-head .eyebrow {
+  margin: 0;
+}
+.code-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.code-tab {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 4px 10px;
+  border-radius: var(--strata-radius-small);
+  font: 600 10px/1 var(--strata-font-sans);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--strata-color-text-secondary);
+  cursor: pointer;
 }
-.snippet-block pre {
-  margin: 0;
-  padding: 14px 16px;
-  overflow-x: auto;
-  font: 12px/1.65 var(--strata-font-mono);
+.code-tab:hover {
   color: var(--strata-color-text-primary);
   background: var(--strata-color-surface-subtle);
 }
-.snippet-block pre code {
-  font: inherit;
+.code-tab:focus-visible {
+  outline: 2px solid var(--strata-color-focus-ring);
+  outline-offset: 2px;
+}
+.code-tab.active {
+  color: var(--strata-color-text-primary);
+  background: var(--strata-color-surface-selected);
+}
+.code-tools {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.code-scroll {
+  overflow: auto;
+  padding: 12px 0;
+  font: 12px/1.65 var(--strata-font-mono);
+  color: var(--code-fg, var(--strata-color-text-primary));
+  background: var(--code-bg, var(--strata-color-surface-subtle));
+}
+.code-scroll.clamped {
+  max-height: 240px;
+  overflow: hidden;
+  position: relative;
+}
+.code-scroll.clamped::after {
+  content: "";
+  position: sticky;
+  bottom: 0;
+  display: block;
+  height: 28px;
+  margin-top: -28px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--code-bg, var(--strata-color-surface-subtle))
+  );
+}
+.code-line {
+  display: flex;
+  align-items: baseline;
+  min-width: max-content;
+}
+.code-scroll.wrap .code-line {
+  align-items: flex-start;
+  min-width: 0;
+}
+.line-no {
+  flex: 0 0 auto;
+  min-width: 3ch;
+  padding: 0 14px 0 16px;
+  text-align: right;
+  user-select: none;
+  color: var(--strata-color-text-secondary);
+  opacity: 0.65;
+}
+.code-scroll.no-lines .line-text {
+  padding-left: 16px;
+}
+.line-text {
+  white-space: pre;
   color: inherit;
-  background: none;
-  padding: 0;
 }
-/* Syntax theme: ink-ramp shades from --strata-color-syntax-* tokens.
-   Distinction comes from shade + weight + style, never hue. */
-.snippet-block .token.tag,
-.snippet-block .token.tag .token.punctuation {
-  color: var(--strata-color-syntax-keyword);
+.code-scroll.wrap .line-text {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
-.snippet-block .token.attr-name,
-.snippet-block .token.attr-value .token.punctuation {
-  color: var(--strata-color-syntax-attr);
-}
-.snippet-block .token.attr-value,
-.snippet-block .token.string {
-  color: var(--strata-color-syntax-string);
-}
-.snippet-block .token.comment,
-.snippet-block .token.prolog,
-.snippet-block .token.doctype,
-.snippet-block .token.cdata {
-  color: var(--strata-color-syntax-comment);
+.tok-italic {
   font-style: italic;
-}
-.snippet-block .token.boolean,
-.snippet-block .token.number,
-.snippet-block .token.unit {
-  color: var(--strata-color-syntax-attr);
 }
 .sr-only {
   position: absolute;

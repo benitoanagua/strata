@@ -78,6 +78,11 @@ for (const theme of ["light", "dark"]) {
       throw new Error(
         `Contrast contract: ${theme}.syntax.${key} on surfaceSubtle is below 4.5:1`,
       );
+  for (const [key, value] of Object.entries(t.syntaxDocs?.[theme] ?? {}))
+    if (contrast(value, s.surfaceSubtle) < 4.5)
+      throw new Error(
+        `Contrast contract: ${theme}.syntaxDocs.${key} on surfaceSubtle is below 4.5:1`,
+      );
 }
 
 if (t.accent?.enabled) {

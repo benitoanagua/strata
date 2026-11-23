@@ -15,12 +15,11 @@
     "@strata/components": "workspace:*",
     "@strata/prose": "workspace:*",
     "@strata/tokens": "workspace:*",
-    "prismjs": "1.30.0",
+    "shiki": "4.6.0",
     "svelte": "^5.20.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
-    "@types/prismjs": "^1.26.6",
     "jsdom": "^26.0.0",
     "svelte-check": "^4.1.0",
     "typescript": "^5.7.0",
