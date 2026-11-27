@@ -33,16 +33,19 @@ export class StrataIconButton extends LitElement {
       opacity: 0.45;
       cursor: not-allowed;
     }
+    iconify-icon { font-size: 20px; }
     :host([size="small"]) button {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--strata-radius-small);
     }
+    :host([size="small"]) iconify-icon { font-size: 16px; }
     :host([size="large"]) button {
-      width: 56px;
-      height: 56px;
+      width: 60px;
+      height: 60px;
       border-radius: var(--strata-radius-medium);
     }
+    :host([size="large"]) iconify-icon { font-size: 26px; }
   `;
   @property({ type: String }) size: "small" | "medium" | "large" = "medium";
   @property({ type: Boolean }) disabled = false;
