@@ -18,6 +18,10 @@ export class StrataSwitch extends LitElement {
       background: var(--strata-color-gray-300);
       cursor: pointer;
     }
+    button:focus-visible {
+      outline: 2px solid var(--strata-color-focus-ring);
+      outline-offset: 3px;
+    }
     button:disabled {
       cursor: not-allowed;
       opacity: 0.6;
@@ -26,7 +30,7 @@ export class StrataSwitch extends LitElement {
       display: block;
       width: 20px;
       height: 20px;
-      border-radius: 50%;
+      border-radius: var(--strata-radius-small);
       background: var(--strata-color-white);
       transition: transform 0.18s ease;
     }
