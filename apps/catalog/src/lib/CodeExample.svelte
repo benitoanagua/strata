@@ -131,22 +131,26 @@
     <div class="code-tools">
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
-      <strata-icon-button
-        size="small"
-        icon="carbon:list-numbered"
-        label={showLines ? "Hide line numbers" : "Show line numbers"}
-        pressed={showLines}
-        onclick={() => (showLines = !showLines)}
-      ></strata-icon-button>
+      <strata-tooltip text={showLines ? "Hide line numbers" : "Show line numbers"}>
+        <strata-icon-button
+          size="small"
+          icon="carbon:list-numbered"
+          label={showLines ? "Hide line numbers" : "Show line numbers"}
+          pressed={showLines}
+          onclick={() => (showLines = !showLines)}
+        ></strata-icon-button>
+      </strata-tooltip>
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
-      <strata-icon-button
-        size="small"
-        icon="carbon:text-wrap"
-        label={wrap ? "Disable line wrap" : "Wrap lines"}
-        pressed={wrap}
-        onclick={() => (wrap = !wrap)}
-      ></strata-icon-button>
+      <strata-tooltip text={wrap ? "Disable line wrapping" : "Wrap long lines"}>
+        <strata-icon-button
+          size="small"
+          icon="carbon:text-wrap"
+          label={wrap ? "Disable line wrap" : "Wrap lines"}
+          pressed={wrap}
+          onclick={() => (wrap = !wrap)}
+        ></strata-icon-button>
+      </strata-tooltip>
       {#if collapsible}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
