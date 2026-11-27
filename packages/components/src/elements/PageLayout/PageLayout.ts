@@ -27,6 +27,11 @@ export class StrataPageLayout extends StrataElement {
         display: none;
       }
       @media (min-width: 900px) {
+        .layout[data-start][data-end] {
+          grid-template-columns: minmax(180px, var(--strata-layout-start, 220px)) minmax(0, 1fr) minmax(200px, var(--strata-layout-end, 280px));
+        }
+      }
+      @media (min-width: 1200px) {
         .layout {
           grid-template-columns:
             var(--_start, 0) minmax(0, 1fr)

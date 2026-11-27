@@ -739,12 +739,12 @@ export const catalog: readonly CatalogEntry[] = [
       ]),
       bool("closeOnOverlay", "Close on overlay"),
       bool("closeOnEscape", "Close on escape"),
-      bool("showClose", "Show close"),
+      bool("showClose", "Show close", true),
       bool("preventScroll", "Prevent scroll"),
     ],
     slotHtml:
       "<p>Modal body content.</p>" +
-      '<button slot="footer" type="button">Action</button>',
+      ' <strata-button slot="footer" variant="filled" label="Action"></strata-button>',
     slots: [
       { name: "header", description: "Replaces the generated title header." },
       { name: "default", description: "Body content." },
@@ -965,7 +965,7 @@ export const catalog: readonly CatalogEntry[] = [
     description: "Cycles through a set of slides with arrows, dots and swipe.",
     maturity: "beta",
     controls: [
-      num("desktop", "Desktop slides", 3),
+      num("desktop", "Desktop slides", 1),
       num("mobile", "Mobile slides", 1),
       select("gap", "Gap", "medium", [
         "none",
@@ -976,13 +976,14 @@ export const catalog: readonly CatalogEntry[] = [
       ]),
       num("interval", "Interval (ms)", 5000),
       bool("autoPlay", "Auto play"),
-      bool("showArrows", "Show arrows"),
-      bool("showDots", "Show dots"),
+      bool("showArrows", "Show arrows", true),
+      bool("showDots", "Show dots", true),
     ],
     slotHtml:
-      "<strata-carousel-item>Slide one</strata-carousel-item>" +
-      "<strata-carousel-item>Slide two</strata-carousel-item>" +
-      "<strata-carousel-item>Slide three</strata-carousel-item>",
+      '<strata-carousel-item><article style="padding:20px;border:1px solid var(--strata-color-border-subtle);min-height:150px"><small>01 / FEATURE</small><h3>Editorial story</h3><p>Lead content with a clear title and summary.</p></article></strata-carousel-item>' +
+      '<strata-carousel-item><article style="padding:20px;border:1px solid var(--strata-color-border-subtle);min-height:150px"><small>02 / IMAGE</small><div style="height:70px;background:var(--strata-color-surface-selected);margin:12px 0"></div><h3>Visual feature</h3></article></strata-carousel-item>' +
+      '<strata-carousel-item><article style="padding:20px;border:1px solid var(--strata-color-border-subtle);min-height:150px"><small>03 / BRIEF</small><h3>Short briefing</h3><p>Three distinct blocks make navigation visible.</p></article></strata-carousel-item>' +
+      '<strata-carousel-item><article style="padding:20px;border:1px solid var(--strata-color-border-subtle);min-height:150px"><small>04 / NOTES</small><h3>Field notes</h3><p>A final slide to demonstrate the next control.</p></article></strata-carousel-item>',
     slots: [{ name: "default", description: "strata-carousel-item children." }],
     events: [
       { name: "carousel-change", description: "Fired when the slide changes." },
@@ -1019,9 +1020,10 @@ export const catalog: readonly CatalogEntry[] = [
     description: "Represents a user with initials or an image.",
     maturity: "stable",
     controls: [
-      text("label", "Label", "AB"),
-      text("alt", "Alt", "User avatar"),
-      text("src", "Src"),
+      select("variant", "Variant", "initials", ["initials", "photo"]),
+      text("label", "Label", "Ada Lovelace"),
+      text("alt", "Alt", "Portrait of Ada Lovelace"),
+      text("src", "Photo URL", "https://i.pravatar.cc/96?img=12"),
     ],
     a11y: "role=img with aria-label, or presentation when unnamed.",
   },
@@ -1464,7 +1466,7 @@ export const catalog: readonly CatalogEntry[] = [
     maturity: "beta",
     controls: [
       text("target", "Target selector", ""),
-      select("placement", "Placement", "fixed", ["fixed", "inline"]),
+      select("placement", "Placement", "inline", ["inline", "fixed"]),
       text("label", "Label", "Reading progress"),
     ],
     a11y: "role=progressbar with aria-valuenow updated on scroll.",
@@ -1569,7 +1571,7 @@ export const catalog: readonly CatalogEntry[] = [
       text("label", "Anchor label", "Link to this section"),
     ],
     notes:
-      "Progressive enhancement: appends a.strata-anchor links to headings in the target subtree. Pair with @strata/prose for styling.",
+      "This enhancer intentionally renders no standalone UI. In the preview, look for the # permalink next to each target heading; it appends anchors to the selected article rather than drawing a separate component.",
   },
   {
     id: "tree",

@@ -24,7 +24,7 @@ export class StrataModal extends LitElement {
   @property({ type: Boolean, attribute: "close-on-escape" })
   closeOnEscape = true;
   /** The close affordance is opt-in; Escape and backdrop closing remain enabled. */
-  @property({ type: Boolean, attribute: "show-close" }) showClose = false;
+  @property({ type: Boolean, attribute: "show-close" }) showClose = true;
   @property({ type: Boolean, attribute: "prevent-scroll" })
   preventScroll = true;
 

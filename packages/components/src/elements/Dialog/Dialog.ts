@@ -31,6 +31,33 @@ export class StrataDialog extends LitElement {
       border: var(--strata-border-large) solid var(--strata-color-border-strong);
       border-radius: var(--strata-radius-large);
     }
+    .strata-dialog__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: -24px -24px 20px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--strata-color-border-subtle);
+    }
+    .strata-dialog__title {
+      margin: 0;
+      font: var(--strata-type-title-large) var(--strata-font-serif);
+    }
+    .strata-dialog__close {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--strata-color-border-subtle);
+      border-radius: var(--strata-radius-small);
+      background: transparent;
+      color: var(--strata-color-text-primary);
+      cursor: pointer;
+    }
+    .strata-dialog__close:hover {
+      background: var(--strata-color-surface-hover);
+    }
     .strata-dialog__content:focus-visible {
       outline: 2px solid var(--strata-color-focus-ring);
       outline-offset: 3px;
@@ -125,8 +152,7 @@ export class StrataDialog extends LitElement {
         tabindex="-1"
         @keydown=${this.handleKeydown}
       >
-        ${this.title ? html`<h2 id=${this.labelledBy}>${this.title}</h2>` : ""}<slot
-        ></slot>
+        ${html`<header class="strata-dialog__header">${this.title ? html`<h2 class="strata-dialog__title" id=${this.labelledBy}>${this.title}</h2>` : html`<span class="strata-dialog__title">Dialog</span>`}<button class="strata-dialog__close" type="button" aria-label="Close dialog" @click=${() => (this.open = false)}><iconify-icon icon="carbon:close" aria-hidden="true"></iconify-icon></button></header>`}<slot></slot>
       </section>
     </div>`;
   }
