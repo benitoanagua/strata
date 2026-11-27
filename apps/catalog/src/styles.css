@@ -125,6 +125,9 @@ select:focus-visible {
   min-width: 0;
 }
 .topbar {
+  position: relative;
+  z-index: 20;
+  overflow: visible;
   height: 60px;
   display: flex;
   align-items: center;
@@ -153,6 +156,9 @@ select:focus-visible {
   color: var(--strata-color-border-subtle);
 }
 .topbar-meta {
+  position: relative;
+  z-index: 21;
+  overflow: visible;
   color: var(--strata-color-text-secondary);
   font-size: 10px;
 }
@@ -475,11 +481,15 @@ h1 {
 }
 .demo-grid {
   display: grid;
-  /* min(180px, 100%) keeps a single column usable inside narrow containers
-     instead of forcing a 180px track that overflows the page. */
-  grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-top: 14px;
+}
+@media (max-width: 900px) {
+  .demo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .demo-grid { grid-template-columns: minmax(0, 1fr); }
 }
 .demo-cell {
   margin: 0;
@@ -923,4 +933,46 @@ h1 {
   transition-duration: 0.01ms !important;
   animation-duration: 0.01ms !important;
   scroll-behavior: auto !important;
+}
+
+
+/* Code example toolbar help */
+.code-help-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.code-help-trigger {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--strata-color-border-subtle);
+  border-radius: 50%;
+  background: var(--strata-color-surface-page);
+  color: var(--strata-color-text-secondary);
+  font: 600 12px var(--strata-font-sans);
+  cursor: help;
+}
+.code-help-trigger:hover,
+.code-help-trigger[aria-expanded="true"] {
+  color: var(--strata-color-text-primary);
+  background: var(--strata-color-surface-hover);
+}
+.code-help-trigger:focus-visible {
+  outline: 2px solid var(--strata-color-focus-ring);
+  outline-offset: 2px;
+}
+.code-help-popover {
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  top: calc(100% + 8px);
+  width: min(260px, 80vw);
+  padding: 10px 12px;
+  border: 1px solid var(--strata-color-border-subtle);
+  border-radius: var(--strata-radius-small);
+  background: var(--strata-color-surface-raised);
+  color: var(--strata-color-text-primary);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  font: 12px/1.45 var(--strata-font-sans);
 }
