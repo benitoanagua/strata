@@ -4,12 +4,16 @@
 }
 
 .strata-logo--default {
-  height: 2rem;
-  fill: var(--strata-color-action-primary);
+  min-height: 2rem;
+  color: var(--strata-color-text-primary);
 }
 
-.strata-logo svg {
-  display: block;
-  width: auto;
-  height: 100%;
+.strata-logo__wordmark {
+  display: inline-block;
+  color: inherit;
+  font-family: var(--strata-font-sans);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1;
 }

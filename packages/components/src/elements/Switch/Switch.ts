@@ -19,7 +19,10 @@ export class StrataSwitch extends LitElement {
       cursor: pointer;
     }
     button:hover:not(:disabled) {
-      background: var(--strata-color-text-secondary);
+      background: var(--strata-color-text-primary);
+    }
+    button:hover:not(:disabled) .strata-switch__thumb {
+      background: var(--strata-color-surface-page);
     }
     button:focus-visible {
       outline: 2px solid var(--strata-color-focus-ring);

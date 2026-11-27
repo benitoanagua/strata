@@ -111,7 +111,7 @@ export class StrataGrille extends LitElement implements GrilleProps {
 
       let hasRightBorder = false;
       let hasBottomBorder = false;
-      const borderColor = "var(--color-outlineVariant)";
+      const borderColor = "var(--strata-color-border-subtle)";
 
       // Línea derecha (igual que en Vue)
       if (

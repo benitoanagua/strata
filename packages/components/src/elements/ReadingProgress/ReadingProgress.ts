@@ -15,8 +15,8 @@ export class StrataReadingProgress extends StrataElement {
         z-index: 50;
       }
       .track {
-        height: 2px;
-        background: var(--strata-color-border-subtle);
+        height: 4px;
+        background: var(--strata-color-border-strong, var(--strata-color-border-subtle));
       }
       .bar {
         height: 100%;
