@@ -69,8 +69,12 @@ export class StrataToc extends StrataElement {
         max-height: calc(100vh - 2 * var(--strata-toc-top, 16px));
         overflow-y: auto;
       }
+      :host {
+        display: block;
+        width: min(100%, 280px);
+      }
       nav {
-        font: var(--strata-type-body-small) var(--strata-font-sans);
+        font: var(--strata-type-body-medium) var(--strata-font-sans);
       }
       .title {
         margin: 0 0 8px;
@@ -92,7 +96,7 @@ export class StrataToc extends StrataElement {
         padding-left: 14px;
       }
       li {
-        margin: 0;
+        margin: 0 0 2px;
       }
       .row {
         display: flex;
@@ -102,7 +106,7 @@ export class StrataToc extends StrataElement {
         flex: 1;
         display: flex;
         gap: 8px;
-        padding: 4px 6px;
+        padding: 8px 10px;
         border-radius: var(--strata-radius-small);
         color: var(--strata-color-text-secondary);
         text-decoration: none;

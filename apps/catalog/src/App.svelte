@@ -151,12 +151,51 @@
       const value = values[control.name];
       if (value !== undefined) props[control.name] = value;
     }
+
+    const articleEnhancers = new Set(["toc", "reading-progress", "heading-anchors"]);
+    const needsArticleFixture = articleEnhancers.has(entry.id);
+    if (needsArticleFixture) props.target = "#strata-catalog-article";
+
     if (previewHandle && mountedTag === entry.tagName) {
       previewHandle.update(props);
       return;
     }
     previewHandle?.destroy();
     previewHandle = undefined;
+    host.replaceChildren();
+    host.style.cssText = needsArticleFixture
+      ? "display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:24px;width:100%;"
+      : "";
+
+    let article: HTMLElement | undefined;
+    if (needsArticleFixture) {
+      article = document.createElement("article");
+      article.id = "strata-catalog-article";
+      article.className = "strata-catalog-article";
+      article.innerHTML = `
+        <p style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary);margin:0 0 12px">ARTICLE PREVIEW / 01</p>
+        <h2 id="catalog-introduction">Introduction</h2>
+        <p>STRATA is an editorial design system for clear, composed reading experiences. This sample article gives navigation enhancers real content to work with.</p>
+        <h2 id="catalog-history">History</h2>
+        <p>Readable interfaces depend on hierarchy, spacing and meaningful navigation. Section anchors make each heading directly linkable.</p>
+        <h3 id="catalog-origins">Origins</h3>
+        <p>Small details support the reader without competing with the text.</p>
+        <h2 id="catalog-geography">Geography</h2>
+        <p>A stable article measure and visible section structure help demonstrate the table of contents and reading progress.</p>
+      `;
+      article.style.cssText = "box-sizing:border-box;flex:1 1 420px;min-width:0;max-width:720px;padding:24px;border:1px solid var(--strata-color-border-subtle);background:var(--strata-color-surface-page);color:var(--strata-color-text-primary);";
+      article.querySelectorAll("h2").forEach((heading) => {
+        (heading as HTMLElement).style.cssText = "margin:18px 0 8px;font:var(--strata-type-headline-small) var(--strata-font-serif);";
+      });
+      article.querySelectorAll("h3").forEach((heading) => {
+        (heading as HTMLElement).style.cssText = "margin:14px 0 6px;font:var(--strata-type-title-large) var(--strata-font-serif);";
+      });
+      article.querySelectorAll("p:not(:first-child)").forEach((paragraph) => {
+        (paragraph as HTMLElement).style.cssText = "margin:0 0 14px;line-height:1.6;max-width:65ch;";
+      });
+      host.appendChild(article);
+    }
+
     mountedTag = entry.tagName;
     void mountStrataElement(host, {
       tagName: entry.tagName,
@@ -169,6 +208,11 @@
         return;
       }
       previewHandle = handle;
+      if (article) {
+        handle.element.style.flex = entry.id === "reading-progress" ? "0 0 100%" : "0 0 220px";
+        if (entry.id === "heading-anchors") handle.element.style.display = "none";
+        host.insertBefore(handle.element, article);
+      }
     });
   });
 
