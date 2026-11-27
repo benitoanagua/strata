@@ -1,5 +1,36 @@
 # @strata/core
 
+## 3.1.0
+
+### Minor Changes
+
+- 1e9f452: Component coverage, accessibility and CI hardening.
+
+  - New parametrized unit test mounts all 48 catalog components and asserts registration, render and accessible names for interactive content.
+  - New Playwright spec runs axe per component and theme (light/dark), failing on `critical` and `serious` violations; fragment exceptions (`tab`, `menu-item`, `list-item`) are documented in the spec.
+  - New `toHaveScreenshot` checks per component and theme. Baselines are generated locally under `packages/testing/visual/components.spec.ts-snapshots/` and are gitignored — no images are tracked in the repository.
+  - `strata-tab` no longer emits `aria-controls` (IDREFs cannot cross Shadow DOM boundaries); `strata-progress` exposes an accessible name via a new `label` property.
+  - `ThemeToggle`, `Carousel`, `Card`, `Progress`, `Skeleton` and `Divider` tolerate missing `localStorage`/`matchMedia`/`ResizeObserver` and zero-intrinsic-width hosts no longer collapse inside flex containers.
+  - CI installs with `--frozen-lockfile`.
+  - `docs/AUDIT.md` consolidates the three overlapping audit documents; placeholder `docs/components` and `docs/patterns` removed; `@strata/core` gains README and LICENSE.
+
+### Patch Changes
+
+- 1ca6e99: Release metadata alignment (no runtime changes):
+
+  - `.changeset/config.json` now groups the four publishable packages (`@strata/tokens`, `@strata/core`, `@strata/components`, `@strata/prose`) as `fixed` so they version together, and sets `privatePackages.version: false` so private workspace packages are never bumped by Changesets.
+  - `publishConfig.access: "public"` added to all publishable packages; `files`, `exports`, `types` and `sideEffects` audited (`pnpm pack` tarballs verified clean).
+  - Root `CHANGELOG.md` is now an index pointing to per-package changelogs; policy documented in `docs/RELEASING.md`.
+  - `@strata/integration-mediawiki` build emits `dist/Strata/` with `skin.json` version injected from `package.json` (source `skin.json` aligned to 1.1.0, real repo URL and author).
+
+- 6a942ce: Repository hygiene: root MIT LICENSE, `license` fields on all manifests, `pnpm.onlyBuiltDependencies` for esbuild, and refreshed README / IMPLEMENTATION-REPORT / ARCHITECTURE docs for the apps/packages/integrations/tooling layout.
+- Updated dependencies [49a4d73]
+- Updated dependencies [5bed575]
+- Updated dependencies [1ca6e99]
+- Updated dependencies [6a942ce]
+- Updated dependencies [81b47a8]
+  - @strata/tokens@3.1.0
+
 ## 3.0.0
 
 ### Major Changes
