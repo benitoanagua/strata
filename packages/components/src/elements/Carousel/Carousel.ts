@@ -161,7 +161,7 @@ export class StrataCarousel extends LitElement implements CarouselProps {
 
     const scrollPosition = index * (this.itemWidth + this.gapValue);
 
-    if (smooth) {
+    if (smooth && typeof this.containerElement.scrollTo === "function") {
       this.containerElement.scrollTo({
         left: scrollPosition,
         behavior: "smooth",

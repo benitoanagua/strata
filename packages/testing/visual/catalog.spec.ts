@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
   await stubRemoteFonts(page);
 });
 
-const LIBRARY_ENTRIES = 76;
+const LIBRARY_ENTRIES = 77;
 const SCENARIOS = 5;
 
 /**

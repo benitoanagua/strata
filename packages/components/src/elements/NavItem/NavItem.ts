@@ -36,6 +36,10 @@ export class StrataNavItem extends LitElement {
   `;
   @property({ type: Boolean, reflect: true }) selected = false;
   @property() label = "";
+  /** Delegates focus to the inner button (used by strata-nav arrow-key nav). */
+  focus() {
+    this.renderRoot.querySelector<HTMLElement>("button")?.focus();
+  }
   render() {
     return html`<button
       class="strata-nav-item"

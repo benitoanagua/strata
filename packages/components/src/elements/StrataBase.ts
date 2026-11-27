@@ -122,6 +122,11 @@ export const strataComponentStyles = css`
   .strata-menu button:hover {
     background: var(--strata-color-surface-subtle);
   }
+  .strata-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
   label {
     display: flex;
     align-items: center;

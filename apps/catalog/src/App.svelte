@@ -182,6 +182,14 @@
         <p>Small details support the reader without competing with the text.</p>
         <h2 id="catalog-geography">Geography</h2>
         <p>A stable article measure and visible section structure help demonstrate the table of contents and reading progress.</p>
+        <h2 id="catalog-culture">Culture</h2>
+        <p>Editorial systems earn trust by staying out of the way. Every rule, rule line and navigation cue exists to orient the reader, never to decorate the page.</p>
+        <p>When the structure is honest, the interface disappears and only the argument remains.</p>
+        <h3 id="catalog-typography">Typography</h3>
+        <p>A single serif voice carries the prose; headings step down in scale rather than shouting in size or color.</p>
+        <h2 id="catalog-future">Future</h2>
+        <p>This fixture intentionally runs long enough for the page to scroll, so scroll-spy tables of contents and reading progress indicators have a real range to report.</p>
+        <p>Scroll down and watch the progress bar advance; the contents rail highlights the section you are reading.</p>
       `;
       article.style.cssText = "box-sizing:border-box;flex:1 1 420px;min-width:0;max-width:720px;padding:24px;border:1px solid var(--strata-color-border-subtle);background:var(--strata-color-surface-page);color:var(--strata-color-text-primary);";
       article.querySelectorAll("h2").forEach((heading) => {

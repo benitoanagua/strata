@@ -276,7 +276,7 @@ describe("strata-snackbar", () => {
 });
 
 describe("strata-modal close affordance", () => {
-  it("has no close button by default and shows one with show-close", async () => {
+  it("shows a labelled close button by default and hides it with show-close=false", async () => {
     const el = (await mount("strata-modal")) as HTMLElement & {
       open: boolean;
       showClose: boolean;
@@ -285,14 +285,14 @@ describe("strata-modal close affordance", () => {
     el.open = true;
     await el.updateComplete;
     await flush();
-    expect(el.shadowRoot?.querySelector(".strata-modal__close")).toBeNull();
-    el.showClose = true;
-    await el.updateComplete;
     const close = el.shadowRoot?.querySelector<HTMLButtonElement>(
       ".strata-modal__close",
     );
     expect(close).toBeTruthy();
     expect(close?.getAttribute("aria-label")).toBe("Close modal");
+    el.showClose = false;
+    await el.updateComplete;
+    expect(el.shadowRoot?.querySelector(".strata-modal__close")).toBeNull();
     el.remove();
   });
 });
@@ -378,6 +378,280 @@ describe("semantic tone scale", () => {
     await el.updateComplete;
     const icon = el.shadowRoot?.querySelector("iconify-icon");
     expect(icon?.getAttribute("icon")).toBe("carbon:information");
+    el.remove();
+  });
+});
+
+describe("strata-nav", () => {
+  it("renders a nav landmark and arrow-key navigation between items", async () => {
+    const nav = (await mount("strata-nav")) as HTMLElement & {
+      label: string;
+      updateComplete: Promise<unknown>;
+    };
+    nav.label = "Primary";
+    nav.innerHTML =
+      '<strata-nav-item label="Home"></strata-nav-item>' +
+      '<strata-nav-item label="Docs"></strata-nav-item>' +
+      '<strata-nav-item label="Blog"></strata-nav-item>';
+    await nav.updateComplete;
+    const landmark = nav.shadowRoot?.querySelector("nav");
+    expect(landmark?.getAttribute("aria-label")).toBe("Primary");
+    const items = nav.querySelectorAll("strata-nav-item");
+    expect(items).toHaveLength(3);
+    (items[0] as HTMLElement).focus();
+    const focusedItem = () =>
+      [items[0], items[1], items[2]].find(
+        (item) =>
+          document.activeElement === item ||
+          item.shadowRoot?.activeElement != null,
+      );
+    expect(focusedItem()).toBe(items[0]);
+    landmark!.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }),
+    );
+    await flush();
+    expect(focusedItem()).toBe(items[1]);
+    landmark!.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "End", bubbles: true }),
+    );
+    await flush();
+    expect(focusedItem()).toBe(items[2]);
+    nav.remove();
+  });
+});
+
+describe("strata-dialog", () => {
+  it("renders header with close button, traps Escape and locks scroll", async () => {
+    const el = document.createElement("strata-dialog") as HTMLElement & {
+      open: boolean;
+      title: string;
+      updateComplete: Promise<unknown>;
+    };
+    el.title = "Confirm";
+    el.open = true;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    await flush();
+    const close = el.shadowRoot?.querySelector<HTMLButtonElement>(
+      ".strata-dialog__close",
+    );
+    expect(close?.getAttribute("aria-label")).toBe("Close dialog");
+    expect(document.body.style.overflow).toBe("hidden");
+    const content = el.shadowRoot?.querySelector<HTMLElement>(
+      ".strata-dialog__content",
+    );
+    content?.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+    );
+    await el.updateComplete;
+    expect(el.open).toBe(false);
+    await flush();
+    expect(document.body.style.overflow).not.toBe("hidden");
+    el.remove();
+  });
+});
+
+describe("strata-carousel", () => {
+  it("renders labelled arrows and dots and navigates slides", async () => {
+    const el = document.createElement("strata-carousel") as HTMLElement & {
+      desktop: number;
+      updateComplete: Promise<unknown>;
+    };
+    el.desktop = 1;
+    el.innerHTML =
+      "<strata-carousel-item>One</strata-carousel-item>" +
+      "<strata-carousel-item>Two</strata-carousel-item>" +
+      "<strata-carousel-item>Three</strata-carousel-item>";
+    document.body.appendChild(el);
+    await el.updateComplete;
+    await flush();
+    await flush();
+    el.shadowRoot
+      ?.querySelector("slot")
+      ?.dispatchEvent(new Event("slotchange", { bubbles: true }));
+    await flush();
+    await flush();
+    const arrows = el.shadowRoot?.querySelectorAll(".strata-carousel__arrow");
+    expect(arrows?.length).toBe(2);
+    expect(arrows?.[0].getAttribute("aria-label")).toMatch(/Previous item/);
+    const dots = el.shadowRoot?.querySelectorAll(".strata-carousel__dot");
+    expect(dots?.length).toBeGreaterThan(0);
+    const changes: number[] = [];
+    el.addEventListener("carousel-change", (e) =>
+      changes.push((e as CustomEvent).detail.currentIndex),
+    );
+    (arrows![1] as HTMLButtonElement).click();
+    await flush();
+    expect(changes.length).toBeGreaterThan(0);
+    el.remove();
+  });
+});
+
+describe("strata-grille", () => {
+  it("draws internal row/column divider borders on non-edge items", async () => {
+    const el = document.createElement("strata-grille") as HTMLElement & {
+      desktop: number;
+      gap: string;
+      updateComplete: Promise<unknown>;
+    };
+    el.desktop = 2;
+    el.gap = "medium";
+    el.innerHTML =
+      "<strata-grille-item>1</strata-grille-item>" +
+      "<strata-grille-item>2</strata-grille-item>" +
+      "<strata-grille-item>3</strata-grille-item>" +
+      "<strata-grille-item>4</strata-grille-item>";
+    document.body.appendChild(el);
+    await el.updateComplete;
+    await flush();
+    await flush();
+    const items = [...el.querySelectorAll("strata-grille-item")];
+    // desktop=2, 4 items → 2x2: items 0,1 get right borders where applicable,
+    // items 0,1 get bottom borders (row 1 of 2), item 2 gets right border.
+    expect(items[0].style.borderRight).toContain("solid");
+    expect(items[0].style.borderBottom).toContain("solid");
+    expect(items[2].style.borderRight).toContain("solid");
+    expect(items[3].style.borderRight).toBe("");
+    expect(items[3].style.borderBottom).toBe("");
+    el.remove();
+  });
+});
+
+describe("strata-avatar", () => {
+  it("renders photo image in photo variant and initials otherwise", async () => {
+    const el = (await mount("strata-avatar")) as HTMLElement & {
+      variant: string;
+      label: string;
+      src: string;
+      updateComplete: Promise<unknown>;
+    };
+    el.label = "Ada Lovelace";
+    await el.updateComplete;
+    expect(el.shadowRoot?.querySelector("span")?.textContent).toBe("AL");
+    el.variant = "photo";
+    el.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+    await el.updateComplete;
+    expect(el.shadowRoot?.querySelector("img")).toBeTruthy();
+    el.src = "";
+    await el.updateComplete;
+    expect(el.shadowRoot?.querySelector("img")).toBeNull();
+    expect(el.shadowRoot?.querySelector("span")?.textContent).toBe("AL");
+    el.remove();
+  });
+
+  it("falls back to initials when the photo fails to load", async () => {
+    const el = (await mount("strata-avatar")) as HTMLElement & {
+      variant: string;
+      label: string;
+      src: string;
+      updateComplete: Promise<unknown>;
+    };
+    el.variant = "photo";
+    el.label = "Grace Hopper";
+    el.src = "https://invalid.example/missing.png";
+    await el.updateComplete;
+    const img = el.shadowRoot?.querySelector("img")!;
+    img.dispatchEvent(new Event("error"));
+    await el.updateComplete;
+    expect(el.shadowRoot?.querySelector("img")).toBeNull();
+    expect(el.shadowRoot?.querySelector("span")?.textContent).toBe("GH");
+    el.remove();
+  });
+});
+
+describe("strata-logo", () => {
+  it("renders the Strata wordmark", async () => {
+    const el = (await mount("strata-logo")) as HTMLElement;
+    await flush();
+    expect(el.textContent?.trim()).toBe("Strata");
+    el.remove();
+  });
+});
+
+describe("strata-page-layout", () => {
+  it("renders start/main/end regions and hides empty asides", async () => {
+    const el = document.createElement("strata-page-layout") as HTMLElement & {
+      updateComplete: Promise<unknown>;
+    };
+    el.innerHTML =
+      '<div slot="aside-start">TOC</div>' +
+      "<p>Article body</p>" +
+      '<div slot="aside-end">Related</div>';
+    document.body.appendChild(el);
+    await el.updateComplete;
+    await flush();
+    expect(el.shadowRoot?.querySelector(".start")).toBeTruthy();
+    expect(el.shadowRoot?.querySelector(".main")).toBeTruthy();
+    expect(el.shadowRoot?.querySelector(".end")).toBeTruthy();
+    const layout = el.shadowRoot?.querySelector(".layout");
+    await flush();
+    expect(layout?.hasAttribute("data-start")).toBe(true);
+    expect(layout?.hasAttribute("data-end")).toBe(true);
+    el.remove();
+  });
+});
+
+describe("strata-toc", () => {
+  it("builds links from a target's headings including nested levels", async () => {
+    const article = document.createElement("article");
+    article.innerHTML =
+      '<h2 id="s1">Section One</h2><p>x</p>' +
+      '<h3 id="s1a">Subsection</h3><p>y</p>' +
+      '<h2 id="s2">Section Two</h2><p>z</p>';
+    document.body.appendChild(article);
+    const el = (await mount("strata-toc")) as HTMLElement & {
+      target: string;
+      numbered: boolean;
+      updateComplete: Promise<unknown>;
+    };
+    el.target = "#toc-fixture";
+    article.id = "toc-fixture";
+    el.numbered = true;
+    await el.updateComplete;
+    await flush();
+    await flush();
+    const links = el.shadowRoot?.querySelectorAll("a");
+    expect(links?.length).toBe(3);
+    expect(links?.[0].getAttribute("href")).toBe("#s1");
+    expect(el.shadowRoot?.textContent).toContain("Section One");
+    article.remove();
+    el.remove();
+  });
+});
+
+describe("strata-reading-progress", () => {
+  it("renders an accessible progressbar", async () => {
+    const el = (await mount("strata-reading-progress")) as HTMLElement;
+    await flush();
+    const bar = el.shadowRoot?.querySelector("[role=progressbar]");
+    expect(bar).toBeTruthy();
+    expect(bar?.getAttribute("aria-valuemin")).toBe("0");
+    expect(bar?.getAttribute("aria-valuemax")).toBe("100");
+    expect(bar?.getAttribute("aria-valuenow")).not.toBeNull();
+    el.remove();
+  });
+});
+
+describe("strata-heading-anchors", () => {
+  it("appends permalink anchors and ids to target headings", async () => {
+    const article = document.createElement("article");
+    article.id = "anchors-fixture";
+    article.innerHTML = "<h2>First Section</h2><h2>Second Section</h2>";
+    document.body.appendChild(article);
+    const el = (await mount("strata-heading-anchors")) as HTMLElement & {
+      target: string;
+      updateComplete: Promise<unknown>;
+    };
+    el.target = "#anchors-fixture";
+    await el.updateComplete;
+    await flush();
+    await flush();
+    const anchors = article.querySelectorAll("a.strata-anchor");
+    expect(anchors.length).toBe(2);
+    const headings = article.querySelectorAll("h2");
+    expect(headings[0].id).toBeTruthy();
+    expect(anchors[0].getAttribute("href")).toBe(`#${headings[0].id}`);
+    article.remove();
     el.remove();
   });
 });

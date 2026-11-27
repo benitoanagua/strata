@@ -105,6 +105,11 @@ const list = (name: string, label: string, defaultValue = ""): PropControl => ({
   defaultValue,
 });
 
+// Self-contained demo portrait (grayscale silhouette) so the Avatar photo
+// variant never depends on an external image service.
+const AVATAR_PHOTO =
+  "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2096%2096%22%3E%3Crect%20width%3D%2296%22%20height%3D%2296%22%20fill%3D%22%23DBDBDB%22/%3E%3Ccircle%20cx%3D%2248%22%20cy%3D%2235%22%20r%3D%2217%22%20fill%3D%22%238F8F8F%22/%3E%3Cpath%20d%3D%22M14%2092c2-22%2016-32%2034-32s32%2010%2034%2032z%22%20fill%3D%22%238F8F8F%22/%3E%3C/svg%3E";
+
 const VALUE_EVENTS: readonly EventDoc[] = [
   {
     name: "strata-input",
@@ -401,6 +406,24 @@ export const catalog: readonly CatalogEntry[] = [
 
   // ── Navigation ─────────────────────────────────────────────────────────
   {
+    id: "nav",
+    name: "Nav",
+    category: "Navigation",
+    tagName: "strata-nav",
+    description:
+      "Navigation landmark grouping strata-nav-item entries with arrow-key support.",
+    maturity: "beta",
+    controls: [text("label", "Label", "Main")],
+    slotHtml:
+      '<strata-nav-item label="Home" selected></strata-nav-item>' +
+      '<strata-nav-item label="Docs"></strata-nav-item>' +
+      '<strata-nav-item label="Components"></strata-nav-item>',
+    slots: [{ name: "default", description: "strata-nav-item children." }],
+    a11y: "Renders a <nav> landmark named by label; ArrowUp/ArrowDown/Home/End move focus between items.",
+    notes:
+      "MenuItem belongs to strata-menu and Tab to strata-tabs; NavItem belongs here. It also works standalone when a single entry is needed.",
+  },
+  {
     id: "nav-item",
     name: "NavItem",
     category: "Navigation",
@@ -409,6 +432,8 @@ export const catalog: readonly CatalogEntry[] = [
     maturity: "stable",
     controls: [text("label", "Label", "Home"), bool("selected", "Selected")],
     a11y: "Selection is exposed via aria-current=page, not color alone.",
+    notes:
+      "Group entries inside strata-nav for landmark semantics and arrow-key navigation; standalone use is supported.",
   },
   {
     id: "tabs",
@@ -692,7 +717,7 @@ export const catalog: readonly CatalogEntry[] = [
     events: [],
     a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
     notes:
-      "Dialog is the lightweight content+actions surface. Use strata-modal when you need the configurable blocking overlay (size, position, animation, scroll lock, opt-in close button).",
+      "Dialog is the lightweight content+actions surface with a built-in header and close button. Use strata-modal for the configurable blocking overlay (size, position, animation, scroll lock, optional close button).",
   },
   {
     id: "modal",
@@ -1006,10 +1031,10 @@ export const catalog: readonly CatalogEntry[] = [
       select("gap", "Gap", "medium", ["small", "medium", "large"]),
     ],
     slotHtml:
-      "<strata-grille-item>Tile one</strata-grille-item>" +
-      "<strata-grille-item>Tile two</strata-grille-item>" +
-      "<strata-grille-item>Tile three</strata-grille-item>" +
-      "<strata-grille-item>Tile four</strata-grille-item>",
+      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">01</small><p style="margin:4px 0 0">Alpha tile</p></div></strata-grille-item>' +
+      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">02</small><p style="margin:4px 0 0">Beta tile</p></div></strata-grille-item>' +
+      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">03</small><p style="margin:4px 0 0">Gamma tile</p></div></strata-grille-item>' +
+      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">04</small><p style="margin:4px 0 0">Delta tile</p></div></strata-grille-item>',
     slots: [{ name: "default", description: "strata-grille-item children." }],
   },
   {
@@ -1023,7 +1048,7 @@ export const catalog: readonly CatalogEntry[] = [
       select("variant", "Variant", "initials", ["initials", "photo"]),
       text("label", "Label", "Ada Lovelace"),
       text("alt", "Alt", "Portrait of Ada Lovelace"),
-      text("src", "Photo URL", "https://i.pravatar.cc/96?img=12"),
+      text("src", "Photo URL", AVATAR_PHOTO),
     ],
     a11y: "role=img with aria-label, or presentation when unnamed.",
   },

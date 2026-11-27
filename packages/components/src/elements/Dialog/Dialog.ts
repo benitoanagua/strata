@@ -58,6 +58,13 @@ export class StrataDialog extends LitElement {
     .strata-dialog__close:hover {
       background: var(--strata-color-surface-hover);
     }
+    .strata-dialog__close:focus-visible {
+      outline: 2px solid var(--strata-color-focus-ring);
+      outline-offset: 2px;
+    }
+    .strata-dialog__close iconify-icon {
+      font-size: 16px;
+    }
     .strata-dialog__content:focus-visible {
       outline: 2px solid var(--strata-color-focus-ring);
       outline-offset: 3px;
@@ -67,6 +74,8 @@ export class StrataDialog extends LitElement {
   @property() title = "";
   @state() private labelledBy = "";
   private previouslyFocused: HTMLElement | null = null;
+  private previousBodyOverflow = "";
+  private bodyScrollLocked = false;
   private static nextId = 0;
 
   protected willUpdate(changed: Map<string, unknown>) {
@@ -81,6 +90,7 @@ export class StrataDialog extends LitElement {
   }
   disconnectedCallback() {
     this.restoreFocus();
+    this.restoreBodyScroll();
     super.disconnectedCallback();
   }
   private openDialog() {
@@ -88,6 +98,11 @@ export class StrataDialog extends LitElement {
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
+    if (!this.bodyScrollLocked) {
+      this.previousBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      this.bodyScrollLocked = true;
+    }
     queueMicrotask(() => {
       const content = this.renderRoot.querySelector<HTMLElement>(
         ".strata-dialog__content",
@@ -100,6 +115,12 @@ export class StrataDialog extends LitElement {
   }
   private closeDialog() {
     this.restoreFocus();
+    this.restoreBodyScroll();
+  }
+  private restoreBodyScroll() {
+    if (!this.bodyScrollLocked) return;
+    document.body.style.overflow = this.previousBodyOverflow;
+    this.bodyScrollLocked = false;
   }
   private restoreFocus() {
     this.previouslyFocused?.focus();
@@ -152,7 +173,16 @@ export class StrataDialog extends LitElement {
         tabindex="-1"
         @keydown=${this.handleKeydown}
       >
-        ${html`<header class="strata-dialog__header">${this.title ? html`<h2 class="strata-dialog__title" id=${this.labelledBy}>${this.title}</h2>` : html`<span class="strata-dialog__title">Dialog</span>`}<button class="strata-dialog__close" type="button" aria-label="Close dialog" @click=${() => (this.open = false)}><iconify-icon icon="carbon:close" aria-hidden="true"></iconify-icon></button></header>`}<slot></slot>
+        ${html`<header class="strata-dialog__header">
+          ${this.title ? html`<h2 class="strata-dialog__title" id=${this.labelledBy}>${this.title}</h2>` : html`<span class="strata-dialog__title">Dialog</span>`}<button
+            class="strata-dialog__close"
+            type="button"
+            aria-label="Close dialog"
+            @click=${() => (this.open = false)}
+          >
+            <iconify-icon icon="carbon:close" aria-hidden="true"></iconify-icon>
+          </button>
+        </header>`}<slot></slot>
       </section>
     </div>`;
   }

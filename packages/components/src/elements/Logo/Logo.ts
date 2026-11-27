@@ -23,6 +23,11 @@ export class StrataLogo extends LitElement {
   }
 
   render() {
-    return html`<span class="strata-logo__wordmark" role="img" aria-label="Strata">${STRATA_WORDMARK}</span>`;
+    return html`<span
+      class="strata-logo__wordmark"
+      role="img"
+      aria-label="Strata"
+      >${STRATA_WORDMARK}</span
+    >`;
   }
 }

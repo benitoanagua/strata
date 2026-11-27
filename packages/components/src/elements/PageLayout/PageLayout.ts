@@ -21,6 +21,8 @@ export class StrataPageLayout extends StrataElement {
       .main {
         order: -1;
         min-width: 0;
+        max-width: var(--strata-editorial-measure, 65ch);
+        margin-inline: auto;
       }
       .start:not([data-filled]),
       .end:not([data-filled]) {
@@ -28,7 +30,9 @@ export class StrataPageLayout extends StrataElement {
       }
       @media (min-width: 900px) {
         .layout[data-start][data-end] {
-          grid-template-columns: minmax(180px, var(--strata-layout-start, 220px)) minmax(0, 1fr) minmax(200px, var(--strata-layout-end, 280px));
+          grid-template-columns:
+            minmax(180px, var(--strata-layout-start, 220px))
+            minmax(0, 1fr) minmax(200px, var(--strata-layout-end, 280px));
         }
       }
       @media (min-width: 1200px) {

@@ -49,7 +49,8 @@ export class StrataHeadingAnchors extends StrataElement {
       a.href = `#${h.id}`;
       a.textContent = "#";
       a.setAttribute("aria-label", `${this.label}: ${h.text}`);
-      a.style.cssText = "display:inline-flex;margin-inline-start:0.45em;color:var(--strata-color-text-secondary);font:var(--strata-type-label-medium) var(--strata-font-mono);text-decoration:none;vertical-align:middle;";
+      a.style.cssText =
+        "display:inline-flex;margin-inline-start:0.45em;color:var(--strata-color-text-secondary);font:var(--strata-type-label-medium) var(--strata-font-mono);text-decoration:none;vertical-align:middle;";
       h.el.append(a);
       this.made.push(a);
     }

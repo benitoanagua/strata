@@ -21,6 +21,7 @@ export const STRATA_COMPONENT_CATALOG = [
   "select",
   "checkbox",
   "switch",
+  "nav",
   "nav-item",
   "dialog",
   "data-table",

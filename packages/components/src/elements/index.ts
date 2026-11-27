@@ -27,6 +27,7 @@ export { StrataTextField } from "./TextField/TextField.js";
 export { StrataSelect } from "./Select/Select.js";
 export { StrataCheckbox } from "./Checkbox/Checkbox.js";
 export { StrataSwitch } from "./Switch/Switch.js";
+export { StrataNav } from "./Nav/Nav.js";
 export { StrataNavItem } from "./NavItem/NavItem.js";
 export { StrataDialog } from "./Dialog/Dialog.js";
 export { StrataDataTable } from "./DataTable/DataTable.js";
@@ -160,6 +161,7 @@ declare global {
     "strata-select": import("./Select/Select.js").StrataSelect;
     "strata-checkbox": import("./Checkbox/Checkbox.js").StrataCheckbox;
     "strata-switch": import("./Switch/Switch.js").StrataSwitch;
+    "strata-nav": import("./Nav/Nav.js").StrataNav;
     "strata-nav-item": import("./NavItem/NavItem.js").StrataNavItem;
     "strata-dialog": import("./Dialog/Dialog.js").StrataDialog;
     "strata-data-table": import("./DataTable/DataTable.js").StrataDataTable;
