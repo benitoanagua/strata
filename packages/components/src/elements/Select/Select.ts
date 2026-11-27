@@ -6,11 +6,12 @@ import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 export interface StrataSelectOption {
   value: string;
   label?: string;
+  disabled?: boolean;
 }
 
 const jsonConverter = {
-  fromAttribute: (value: string | null): unknown => {
-    if (value === null) return [];
+  fromAttribute(value: string | null): unknown {
+    if (!value) return [];
     try {
       const parsed: unknown = JSON.parse(value);
       return Array.isArray(parsed) ? parsed : [];
@@ -18,8 +19,12 @@ const jsonConverter = {
       return [];
     }
   },
-  toAttribute: (value: unknown): string => JSON.stringify(value ?? []),
+  toAttribute(value: unknown): string {
+    return JSON.stringify(value ?? []);
+  },
 };
+
+type NormalizedOption = { value: string; label: string; disabled?: boolean };
 
 @customElement("strata-select")
 export class StrataSelect extends StrataElement {
@@ -36,7 +41,7 @@ export class StrataSelect extends StrataElement {
         width: 100%;
         min-width: 0;
         min-height: 44px;
-        padding: 9px 12px;
+        padding: 9px 36px 9px 12px;
         border: var(--strata-border-small) solid
           var(--strata-color-border-subtle);
         border-radius: var(--strata-radius-small);
@@ -44,64 +49,103 @@ export class StrataSelect extends StrataElement {
         color: var(--strata-color-text-primary);
         font: var(--strata-type-body-medium) var(--strata-font-sans);
       }
+      select:focus-visible {
+        outline: 2px solid var(--strata-color-focus-ring);
+        outline-offset: 2px;
+      }
       select:disabled {
         opacity: 0.45;
         cursor: not-allowed;
       }
     `,
   ];
+
   @property() label = "";
   @property() value = "";
   @property({ type: Boolean, reflect: true }) disabled = false;
   /**
-   * Select options as strings or `{ value, label }` objects. Rendered as real
-   * `<option>` children of the inner `<select>` — slotted `<option>` elements
-   * do not register as options inside shadow DOM, so this prop (or a JSON
-   * string via the `options` attribute) is the supported API.
+   * Options as strings or { value, label, disabled } objects. Native <option>
+   * children are supported too and are mirrored into the internal select.
    */
   @property({ attribute: "options", converter: jsonConverter })
   options: Array<string | StrataSelectOption> = [];
+
+  private slotOptions: NormalizedOption[] = [];
+  private optionObserver?: MutationObserver;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.syncSlottedOptions();
+    this.optionObserver = new MutationObserver(() => this.syncSlottedOptions());
+    this.optionObserver.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+    });
+  }
+
+  disconnectedCallback() {
+    this.optionObserver?.disconnect();
+    this.optionObserver = undefined;
+    super.disconnectedCallback();
+  }
+
+  private syncSlottedOptions() {
+    this.slotOptions = Array.from(this.querySelectorAll("option")).map((option) => ({
+      value: option.value,
+      label: option.textContent?.trim() || option.value,
+      disabled: option.disabled,
+    }));
+    this.requestUpdate();
+  }
 
   private handleInput(event: Event) {
     if (this.disabled) return;
     this.value = (event.target as HTMLSelectElement).value;
     emitValueEvent(this, "strata-input", this.value);
   }
+
   private handleChange() {
     if (!this.disabled) emitValueEvent(this, "strata-change", this.value);
   }
 
-  private normalizedOptions(): Array<{ value: string; label: string }> {
-    const list: unknown = this.options;
-    const items = Array.isArray(list) ? list : [];
-    return items
-      .map((item): { value: string; label: string } | undefined => {
-        if (typeof item === "string") return { value: item, label: item };
-        if (
-          item &&
-          typeof item === "object" &&
-          typeof (item as StrataSelectOption).value === "string"
-        ) {
-          const opt = item as StrataSelectOption;
-          return { value: opt.value, label: opt.label ?? opt.value };
-        }
-        return undefined;
-      })
-      .filter((o): o is { value: string; label: string } => o !== undefined);
+  private normalizedOptions(): NormalizedOption[] {
+    const items: unknown = this.options;
+    const normalized = (Array.isArray(items) ? items : []).flatMap((item) => {
+      if (typeof item === "string") {
+        return [{ value: item, label: item }];
+      }
+      if (
+        item &&
+        typeof item === "object" &&
+        typeof (item as StrataSelectOption).value === "string"
+      ) {
+        const option = item as StrataSelectOption;
+        return [{
+          value: option.value,
+          label: option.label ?? option.value,
+          disabled: option.disabled,
+        }];
+      }
+      return [];
+    });
+    return normalized.length ? normalized : this.slotOptions;
   }
 
   render() {
-    return html`<label
-      >${this.label}<select
+    return html`<label>
+      ${this.label}
+      <select
         .value=${this.value}
         ?disabled=${this.disabled}
         @input=${this.handleInput}
         @change=${this.handleChange}
       >
         ${this.normalizedOptions().map(
-          (opt) => html`<option value=${opt.value}>${opt.label}</option>`,
+          (option) => html`<option value=${option.value} ?disabled=${option.disabled ?? false}>${option.label}</option>`,
         )}
-      </select></label
-    >`;
+      </select>
+    </label>`;
   }
 }
