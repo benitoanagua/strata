@@ -80,6 +80,7 @@ export class StrataThemeToggle extends LitElement {
         class="strata-theme-toggle"
         @click="${this.toggleTheme}"
         aria-label="${themeLabel}"
+        aria-pressed="${this.currentTheme === "dark"}"
         title="${themeLabel}"
         data-theme="${this.currentTheme}"
       >

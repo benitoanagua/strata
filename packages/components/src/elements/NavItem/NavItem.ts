@@ -10,17 +10,23 @@ export class StrataNavItem extends LitElement {
       display: flex;
       align-items: center;
       gap: 8px;
+      width: 100%;
       padding: 8px 10px;
       border: 0;
       border-radius: var(--strata-radius-small);
       background: transparent;
       color: var(--strata-color-text-secondary);
       font: var(--strata-type-label-large) var(--strata-font-sans);
+      text-align: left;
       cursor: pointer;
     }
     .strata-nav-item:hover {
       background: var(--strata-color-surface-hover);
       color: var(--strata-color-text-primary);
+    }
+    .strata-nav-item:focus-visible {
+      outline: 2px solid var(--strata-color-focus-ring);
+      outline-offset: 2px;
     }
     :host([selected]) .strata-nav-item {
       background: var(--strata-color-surface-selected);

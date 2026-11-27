@@ -37,23 +37,25 @@ test.describe("dark mode", () => {
   test("chrome surfaces flip between light and dark", async ({ page }) => {
     await seedPrefs(page, { theme: "light", surface: "auto" });
     await page.goto("/#/button");
+    await page.locator("strata-tab", { hasText: "Examples" }).click();
     const light = {
       sidebar: await bg(page, ".sidebar"),
       topbar: await bg(page, ".topbar"),
       body: await bg(page, "body"),
       canvas: await bg(page, ".canvas"),
-      snippet: await bg(page, ".snippet-block pre"),
+      snippet: await bg(page, ".examples-panel .code-scroll"),
       controls: await bg(page, ".controls-panel"),
     };
 
     await seedPrefs(page, { theme: "dark", surface: "auto" });
     await page.reload();
+    await page.locator("strata-tab", { hasText: "Examples" }).click();
     const dark = {
       sidebar: await bg(page, ".sidebar"),
       topbar: await bg(page, ".topbar"),
       body: await bg(page, "body"),
       canvas: await bg(page, ".canvas"),
-      snippet: await bg(page, ".snippet-block pre"),
+      snippet: await bg(page, ".examples-panel .code-scroll"),
       controls: await bg(page, ".controls-panel"),
     };
 

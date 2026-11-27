@@ -154,13 +154,15 @@
       {#if collapsible}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <strata-icon-button
-          size="small"
-          icon={expanded ? "carbon:chevron-up" : "carbon:chevron-down"}
-          label={expanded ? "Collapse code" : "Expand code"}
-          expanded={expanded}
-          onclick={() => (expanded = !expanded)}
-        ></strata-icon-button>
+        <strata-tooltip text={expanded ? "Collapse code" : "Expand code"}>
+          <strata-icon-button
+            size="small"
+            icon={expanded ? "carbon:chevron-up" : "carbon:chevron-down"}
+            label={expanded ? "Collapse code" : "Expand code"}
+            expanded={expanded}
+            onclick={() => (expanded = !expanded)}
+          ></strata-icon-button>
+        </strata-tooltip>
       {/if}
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->

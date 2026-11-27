@@ -16,6 +16,7 @@ export class StrataTooltip extends StrataElement {
   render() {
     return html`<span
       class="strata-tooltip"
+      data-open=${String(this.visible)}
       @mouseenter=${this.show}
       @mouseleave=${this.hide}
       @focusin=${this.show}

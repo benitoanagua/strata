@@ -19,10 +19,12 @@ export class StrataSnackbar extends StrataElement {
     if (this.open && this.duration > 0) {
       this.dismissTimer = setTimeout(() => {
         this.open = false;
-        this.dispatchEvent(new CustomEvent("strata-dismiss", {
-          bubbles: true,
-          composed: true,
-        }));
+        this.dispatchEvent(
+          new CustomEvent("strata-dismiss", {
+            bubbles: true,
+            composed: true,
+          }),
+        );
       }, this.duration);
     }
   }
@@ -38,8 +40,12 @@ export class StrataSnackbar extends StrataElement {
   }
 
   render() {
-    return html`<div class="strata-snackbar" ?hidden=${!this.open}
-      role="status" aria-live="polite">
+    return html`<div
+      class="strata-snackbar"
+      ?hidden=${!this.open}
+      role="status"
+      aria-live="polite"
+    >
       <span>${this.message}</span><slot></slot>
     </div>`;
   }

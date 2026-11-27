@@ -26,6 +26,11 @@ const jsonConverter = {
 
 type NormalizedOption = { value: string; label: string; disabled?: boolean };
 
+// Kept as a standalone template (not nested in the select markup) so option
+// labels render without template whitespace inside <option> text.
+const renderOption = ({ value, label, disabled }: NormalizedOption) =>
+  html`<option value=${value} ?disabled=${disabled}>${label}</option>`;
+
 @customElement("strata-select")
 export class StrataSelect extends StrataElement {
   static styles = [
@@ -68,7 +73,7 @@ export class StrataSelect extends StrataElement {
    * children are supported too and are mirrored into the internal select.
    */
   @property({ attribute: "options", converter: jsonConverter })
-  options: Array<string | StrataSelectOption> = [];
+  options: Array<string | StrataSelectOption> | string = [];
 
   private slotOptions: NormalizedOption[] = [];
   private optionObserver?: MutationObserver;
@@ -92,11 +97,13 @@ export class StrataSelect extends StrataElement {
   }
 
   private syncSlottedOptions() {
-    this.slotOptions = Array.from(this.querySelectorAll("option")).map((option) => ({
-      value: option.value,
-      label: option.textContent?.trim() || option.value,
-      disabled: option.disabled,
-    }));
+    this.slotOptions = Array.from(this.querySelectorAll("option")).map(
+      (option) => ({
+        value: option.value,
+        label: option.textContent?.trim() || option.value,
+        disabled: option.disabled,
+      }),
+    );
     this.requestUpdate();
   }
 
@@ -110,9 +117,32 @@ export class StrataSelect extends StrataElement {
     if (!this.disabled) emitValueEvent(this, "strata-change", this.value);
   }
 
+  protected updated() {
+    // `.value` is bound before the option list commits, so re-assert it once
+    // the options exist; otherwise the select falls back to the first option.
+    const select = this.renderRoot.querySelector("select");
+    if (!select) return;
+    if (this.value) {
+      if (select.value !== this.value) select.value = this.value;
+    } else if (select.selectedIndex === -1) {
+      select.selectedIndex = 0;
+    }
+  }
+
   private normalizedOptions(): NormalizedOption[] {
     const items: unknown = this.options;
-    const normalized = (Array.isArray(items) ? items : []).flatMap((item) => {
+    // The catalog exposes `options` as a pipe/newline-delimited list control,
+    // so a plain string is accepted as shorthand for string options.
+    const list =
+      typeof items === "string"
+        ? items
+            .split(/[|\n]/)
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : Array.isArray(items)
+          ? items
+          : [];
+    const normalized = list.flatMap((item) => {
       if (typeof item === "string") {
         return [{ value: item, label: item }];
       }
@@ -122,11 +152,13 @@ export class StrataSelect extends StrataElement {
         typeof (item as StrataSelectOption).value === "string"
       ) {
         const option = item as StrataSelectOption;
-        return [{
-          value: option.value,
-          label: option.label ?? option.value,
-          disabled: option.disabled,
-        }];
+        return [
+          {
+            value: option.value,
+            label: option.label ?? option.value,
+            disabled: option.disabled,
+          },
+        ];
       }
       return [];
     });
@@ -142,9 +174,7 @@ export class StrataSelect extends StrataElement {
         @input=${this.handleInput}
         @change=${this.handleChange}
       >
-        ${this.normalizedOptions().map(
-          (option) => html`<option value=${option.value} ?disabled=${option.disabled ?? false}>${option.label}</option>`,
-        )}
+        ${this.normalizedOptions().map(renderOption)}
       </select>
     </label>`;
   }

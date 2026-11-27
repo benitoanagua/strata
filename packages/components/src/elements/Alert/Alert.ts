@@ -33,15 +33,31 @@ export class StrataAlert extends LitElement {
     }
     .strata-alert--error {
       color: var(--strata-color-status-error);
+      background: color-mix(
+        in srgb,
+        var(--strata-color-status-error) 8%,
+        var(--strata-color-surface-raised)
+      );
     }
     .strata-alert--warning {
       color: var(--strata-color-status-warning);
+      background: color-mix(
+        in srgb,
+        var(--strata-color-status-warning) 9%,
+        var(--strata-color-surface-raised)
+      );
     }
     .strata-alert--success {
       color: var(--strata-color-status-success);
+      background: color-mix(
+        in srgb,
+        var(--strata-color-status-success) 9%,
+        var(--strata-color-surface-raised)
+      );
     }
     .strata-alert--info {
       color: var(--strata-color-text-primary);
+      background: var(--strata-color-surface-subtle);
     }
   `;
   @property({ reflect: true }) tone: "error" | "warning" | "success" | "info" =

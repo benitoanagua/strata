@@ -177,8 +177,7 @@ export const strataComponentStyles = css`
     opacity: 0;
     pointer-events: none;
   }
-  .strata-tooltip:hover [role="tooltip"],
-  .strata-tooltip:focus-within [role="tooltip"] {
+  .strata-tooltip[data-open="true"] [role="tooltip"] {
     opacity: 1;
   }
   .strata-popover {
@@ -211,7 +210,32 @@ export const strataComponentStyles = css`
     margin-bottom: 12px;
   }
   .strata-drawer header button,
-  .strata-bottom-sheet header button,
+  .strata-bottom-sheet header button {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--strata-radius-small);
+    background: transparent;
+    color: var(--strata-color-text-secondary);
+  }
+  .strata-drawer header button:hover,
+  .strata-bottom-sheet header button:hover {
+    background: var(--strata-color-surface-hover);
+    color: var(--strata-color-text-primary);
+  }
+  .strata-drawer header button:focus-visible,
+  .strata-bottom-sheet header button:focus-visible {
+    outline: 2px solid var(--strata-color-focus-ring);
+    outline-offset: 2px;
+  }
+  .strata-drawer header button iconify-icon,
+  .strata-bottom-sheet header button iconify-icon {
+    font-size: 16px;
+  }
   .strata-tag button,
   .strata-stepper button {
     border: 0;

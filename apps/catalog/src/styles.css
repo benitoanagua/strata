@@ -486,19 +486,26 @@ h1 {
   margin-top: 14px;
 }
 @media (max-width: 900px) {
-  .demo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .demo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 640px) {
-  .demo-grid { grid-template-columns: minmax(0, 1fr); }
+  .demo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .demo-cell {
   margin: 0;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--strata-color-border-subtle);
   border-radius: var(--strata-radius-small);
   overflow: hidden;
 }
 .demo-stage {
+  flex: 1;
   min-height: 84px;
   min-width: 0;
   display: flex;
@@ -571,7 +578,8 @@ h1 {
 .code-block {
   border: 1px solid var(--strata-color-border-subtle);
   border-radius: var(--strata-radius-medium);
-  overflow: hidden;
+  /* Visible so toolbar tooltips can extend above the block; inner
+     containers keep their own clipping for scroll/clamp behavior. */
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -628,6 +636,7 @@ h1 {
   font: 12px/1.65 var(--strata-font-mono);
   color: var(--code-fg, var(--strata-color-text-primary));
   background: var(--code-bg, var(--strata-color-surface-subtle));
+  border-radius: 0 0 var(--strata-radius-medium) var(--strata-radius-medium);
 }
 .code-scroll.clamped {
   max-height: 240px;
@@ -886,7 +895,14 @@ h1 {
     height: 48px;
     padding: 0 16px 0 56px;
   }
+  /* Keep viewer settings reachable on small screens; hide the decorative
+     maturity/tag metadata instead of the whole cluster. */
   .topbar-meta {
+    display: flex;
+  }
+  .topbar-meta .maturity,
+  .topbar-meta .topbar-divider,
+  .topbar-meta .mono {
     display: none;
   }
   .page-content {
@@ -934,7 +950,6 @@ h1 {
   animation-duration: 0.01ms !important;
   scroll-behavior: auto !important;
 }
-
 
 /* Code example toolbar help */
 .code-help-wrap {

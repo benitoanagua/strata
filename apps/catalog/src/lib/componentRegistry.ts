@@ -285,11 +285,12 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Forms",
     tagName: "strata-select",
     description:
-      "A labelled select control; options are slotted <option> elements.",
+      "A labelled select control; options come from the `options` property or slotted <option> elements.",
     maturity: "beta",
     controls: [
       text("label", "Label", "Choose an option"),
       text("value", "Value"),
+      list("options", "Options", "alpha|beta|gamma"),
       bool("disabled", "Disabled"),
     ],
     slotHtml:
@@ -297,7 +298,7 @@ export const catalog: readonly CatalogEntry[] = [
     slots: [{ name: "default", description: "<option> elements." }],
     events: VALUE_EVENTS,
     notes:
-      "There is no items prop; compose with native <option> children or a framework adapter.",
+      "`options` accepts an array of strings or { value, label, disabled } objects (JSON attribute or property); pipe/newline text works too. Slotted <option> children are mirrored when `options` is empty.",
   },
   {
     id: "checkbox",
@@ -600,14 +601,24 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Snackbar",
     category: "Feedback",
     tagName: "strata-snackbar",
-    description: "A transient confirmation message.",
+    description:
+      "A transient, non-blocking confirmation message shown after an action.",
     maturity: "beta",
     controls: [
       bool("open", "Open", true),
       text("message", "Message", "Item saved."),
+      num("duration", "Duration (ms)", 3000),
     ],
-    a11y: "role=status announces the message politely.",
-    notes: "No auto-dismiss timer; control open state from the host.",
+    slotContent: "Item saved.",
+    events: [
+      {
+        name: "strata-dismiss",
+        description: "Fired when the auto-dismiss timer closes the snackbar.",
+      },
+    ],
+    a11y: "role=status announces the message politely; it never blocks the page.",
+    notes:
+      "Auto-dismisses after `duration` ms (default 3000); set duration to 0 to keep it open until the host closes it.",
   },
   {
     id: "tooltip",
@@ -664,22 +675,32 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Dialog",
     category: "Surfaces",
     tagName: "strata-dialog",
-    description: "A modal surface for focused interactions.",
+    description:
+      "A dialog surface for focused content and actions; closes via Escape or backdrop.",
     maturity: "beta",
     controls: [
       bool("open", "Open", true),
       text("title", "Title", "Dialog title"),
     ],
-    slotContent: "Dialog body content.",
+    slotHtml:
+      "<p>Are you sure you want to delete this item?</p>" +
+      '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">' +
+      '<strata-button variant="outlined" size="small" label="Cancel"></strata-button>' +
+      '<strata-button size="small" label="Delete"></strata-button>' +
+      "</div>",
+    slots: [{ name: "default", description: "Dialog body and actions." }],
     events: [],
     a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
+    notes:
+      "Dialog is the lightweight content+actions surface. Use strata-modal when you need the configurable blocking overlay (size, position, animation, scroll lock, opt-in close button).",
   },
   {
     id: "modal",
     name: "Modal",
     category: "Surfaces",
     tagName: "strata-modal",
-    description: "An overlay dialog with size, position and animation.",
+    description:
+      "A modal overlay dialog that blocks page interaction, with size, position and animation.",
     maturity: "beta",
     controls: [
       bool("open", "Open", true),
@@ -739,6 +760,8 @@ export const catalog: readonly CatalogEntry[] = [
       { name: "modal-close", description: "Fired after the modal closes." },
     ],
     a11y: "role=dialog aria-modal; scroll lock, focus trap and Escape handling; focus restored on close.",
+    notes:
+      "Modal is the blocking overlay variant of the dialog pattern — it owns the backdrop, scroll lock and transition choreography. For a plain content dialog use strata-dialog.",
   },
   {
     id: "drawer",
@@ -767,27 +790,51 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Popover",
     category: "Surfaces",
     tagName: "strata-popover",
-    description: "A floating panel toggled by the open property.",
+    description:
+      "A floating panel anchored to its trigger; opens by click or hover and closes on outside interaction.",
     maturity: "experimental",
-    controls: [bool("open", "Open", true), text("label", "Label", "Popover")],
+    controls: [
+      bool("open", "Open", true),
+      text("label", "Label", "Popover"),
+      select("trigger", "Trigger", "click", ["click", "hover"]),
+      text("triggerLabel", "Trigger label", "Open popover"),
+      bool("closeOnOutside", "Close on outside"),
+    ],
     slotContent: "Popover content.",
-    a11y: "role=dialog with aria-label; Escape closes. No anchor positioning yet.",
+    slots: [
+      { name: "trigger", description: "Custom trigger element." },
+      { name: "default", description: "Popover panel content." },
+    ],
+    a11y: "role=dialog with aria-label; Escape closes and refocuses the trigger. Positioning is anchored below the trigger; no collision flipping yet.",
     notes:
-      "Experimental: no trigger/anchor API; position it from the host page.",
+      'Set trigger="hover" for hover/focus opening; trigger="click" (default) toggles on click. Clicks inside the panel never close it.',
   },
   {
     id: "overlay",
     name: "Overlay",
     category: "Surfaces",
     tagName: "strata-overlay",
-    description: "Text and metadata layered over media.",
+    description: "Text and metadata layered over a background image.",
     maturity: "beta",
     controls: [
       num("heading", "Heading level", 4),
       text("title", "Title", "Overlay title"),
+      text("url", "Url", "/article"),
+      text(
+        "feature_image",
+        "Feature image",
+        "https://picsum.photos/seed/strata-overlay/1200/900",
+      ),
       text("tag_name", "Tag", "Reportaje"),
       text("author_name", "Author", "Ana Ríos"),
+      text("published_at", "Published", "12 Nov 2026"),
       text("reading_time", "Reading time", "4 min"),
+      bool("show_meta", "Show meta"),
+      select("aspect_ratio", "Aspect ratio", "monitor", [
+        "square",
+        "video",
+        "monitor",
+      ]),
       select("position", "Position", "center", ["top", "center", "bottom"]),
       select("align", "Align", "center", ["start", "center", "end"]),
       select("box", "Box", "background", [

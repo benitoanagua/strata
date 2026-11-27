@@ -23,7 +23,7 @@ const TYPE_MAP: Record<string, ControlType> = {
 };
 
 /** Props that hold structured data (JSON array or pipe-separated list). */
-const LIST_PROPS = new Set(["items", "groups", "columns", "rows"]);
+const LIST_PROPS = new Set(["items", "groups", "columns", "rows", "options"]);
 
 const defaultsCache = new Map<string, Record<string, ControlValue>>();
 

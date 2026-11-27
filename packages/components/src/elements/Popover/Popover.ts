@@ -8,41 +8,56 @@ import { StrataElement, strataComponentStyles } from "../StrataBase.js";
  */
 @customElement("strata-popover")
 export class StrataPopover extends StrataElement {
-  static styles = [strataComponentStyles, css`
-    :host { display: inline-block; }
-    .strata-popover-anchor { position: relative; display: inline-block; }
-    .strata-popover {
-      position: absolute;
-      top: calc(100% + 8px);
-      right: 0;
-      z-index: 80;
-      min-width: 220px;
-      max-width: min(360px, 90vw);
-      border: 1px solid var(--strata-color-border-subtle);
-      box-shadow: 0 8px 24px rgb(0 0 0 / 14%);
-    }
-    .strata-popover[hidden] { display: none; }
-    .strata-popover__trigger {
-      min-height: 36px;
-      padding: 7px 12px;
-      border: 1px solid var(--strata-color-border-subtle);
-      border-radius: var(--strata-radius-small);
-      background: var(--strata-color-surface-page);
-      color: var(--strata-color-text-primary);
-      font: var(--strata-type-label-medium) var(--strata-font-sans);
-    }
-    .strata-popover__trigger:hover { background: var(--strata-color-surface-hover); }
-    .strata-popover__trigger:focus-visible {
-      outline: 2px solid var(--strata-color-focus-ring);
-      outline-offset: 2px;
-    }
-  `];
+  static styles = [
+    strataComponentStyles,
+    css`
+      :host {
+        display: inline-block;
+      }
+      .strata-popover-anchor {
+        position: relative;
+        display: inline-block;
+      }
+      .strata-popover {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        z-index: 80;
+        min-width: 220px;
+        max-width: min(360px, 90vw);
+        border: 1px solid var(--strata-color-border-subtle);
+        border-radius: var(--strata-radius-medium);
+        background: var(--strata-color-surface-raised);
+      }
+      .strata-popover[hidden] {
+        display: none;
+      }
+      .strata-popover__trigger {
+        min-height: 36px;
+        padding: 7px 12px;
+        border: 1px solid var(--strata-color-border-subtle);
+        border-radius: var(--strata-radius-small);
+        background: var(--strata-color-surface-page);
+        color: var(--strata-color-text-primary);
+        font: var(--strata-type-label-medium) var(--strata-font-sans);
+      }
+      .strata-popover__trigger:hover {
+        background: var(--strata-color-surface-hover);
+      }
+      .strata-popover__trigger:focus-visible {
+        outline: 2px solid var(--strata-color-focus-ring);
+        outline-offset: 2px;
+      }
+    `,
+  ];
 
   @property({ type: Boolean, reflect: true }) open = false;
   @property({ type: String }) label = "Popover";
   @property({ type: String }) trigger: "click" | "hover" = "click";
-  @property({ type: String, attribute: "trigger-label" }) triggerLabel = "Open popover";
-  @property({ type: Boolean, attribute: "close-on-outside" }) closeOnOutside = true;
+  @property({ type: String, attribute: "trigger-label" }) triggerLabel =
+    "Open popover";
+  @property({ type: Boolean, attribute: "close-on-outside" }) closeOnOutside =
+    true;
 
   connectedCallback() {
     super.connectedCallback();
@@ -54,7 +69,9 @@ export class StrataPopover extends StrataElement {
     super.disconnectedCallback();
   }
 
-  private toggle = () => { this.open = !this.open; };
+  private toggle = () => {
+    this.open = !this.open;
+  };
 
   private handleOutside = (event: Event) => {
     if (!this.open || !this.closeOnOutside) return;
@@ -64,14 +81,21 @@ export class StrataPopover extends StrataElement {
   private handleKeydown = (event: KeyboardEvent) => {
     if (event.key !== "Escape" || !this.open) return;
     this.open = false;
-    this.renderRoot.querySelector<HTMLElement>(".strata-popover__trigger")?.focus();
+    this.renderRoot
+      .querySelector<HTMLElement>(".strata-popover__trigger")
+      ?.focus();
   };
 
-  private openOnHover = () => { if (this.trigger === "hover") this.open = true; };
-  private closeOnHover = () => { if (this.trigger === "hover") this.open = false; };
+  private openOnHover = () => {
+    if (this.trigger === "hover") this.open = true;
+  };
+  private closeOnHover = () => {
+    if (this.trigger === "hover") this.open = false;
+  };
 
   render() {
-    return html`<div class="strata-popover-anchor"
+    return html`<div
+      class="strata-popover-anchor"
       @keydown=${this.handleKeydown}
       @click=${this.trigger === "click" ? this.toggle : undefined}
       @mouseenter=${this.openOnHover}
@@ -80,13 +104,24 @@ export class StrataPopover extends StrataElement {
       @focusout=${this.closeOnHover}
     >
       <slot name="trigger">
-        <button class="strata-popover__trigger" type="button"
-          aria-haspopup="dialog" aria-expanded=${this.open}>
+        <button
+          class="strata-popover__trigger"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded=${this.open}
+        >
           ${this.triggerLabel}
         </button>
       </slot>
-      <div class="strata-popover" role="dialog" aria-label=${this.label}
-        ?hidden=${!this.open}><slot></slot></div>
+      <div
+        class="strata-popover"
+        role="dialog"
+        aria-label=${this.label}
+        @click=${(event: Event) => event.stopPropagation()}
+        ?hidden=${!this.open}
+      >
+        <slot></slot>
+      </div>
     </div>`;
   }
 }

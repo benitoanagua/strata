@@ -8,6 +8,7 @@ const TONE_ICONS = {
   error: "carbon:error",
   warning: "carbon:warning-alt",
   success: "carbon:checkmark",
+  info: "carbon:information",
 } as const;
 
 @customElement("strata-badge")

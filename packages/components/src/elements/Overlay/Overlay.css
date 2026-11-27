@@ -1,5 +1,6 @@
 .strata-overlay {
   width: 100%;
+  min-height: 160px;
   display: flex;
   overflow: hidden;
   background-size: cover;

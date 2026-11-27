@@ -15,8 +15,11 @@ export class StrataSwitch extends LitElement {
       padding: 2px;
       border: 0;
       border-radius: var(--strata-radius-medium);
-      background: var(--strata-color-gray-300);
+      background: var(--strata-color-border-subtle);
       cursor: pointer;
+    }
+    button:hover:not(:disabled) {
+      background: var(--strata-color-text-secondary);
     }
     button:focus-visible {
       outline: 2px solid var(--strata-color-focus-ring);
@@ -30,14 +33,17 @@ export class StrataSwitch extends LitElement {
       display: block;
       width: 20px;
       height: 20px;
-      border-radius: var(--strata-radius-small);
-      background: var(--strata-color-white);
-      transition: transform 0.18s ease;
+      border-radius: var(--strata-radius-medium);
+      background: var(--strata-color-text-primary);
+      transition:
+        transform 0.18s ease,
+        background-color 0.18s ease;
     }
     button[aria-checked="true"] {
       background: var(--strata-color-action-primary);
     }
     button[aria-checked="true"] .strata-switch__thumb {
+      background: var(--strata-color-surface-page);
       transform: translateX(16px);
     }
     @media (prefers-reduced-motion: reduce) {
