@@ -99,6 +99,20 @@
   );
   let values = $state<Record<string, ControlValue>>({});
 
+  const commonComponents = [
+    "button",
+    "text-field",
+    "select",
+    "checkbox",
+    "card",
+    "badge",
+    "avatar",
+    "popover",
+    "tabs",
+  ]
+    .map((id) => entryById(id))
+    .filter((entry) => entry !== undefined);
+
   const treeNodes = $derived(buildTreeNodes(search));
   const selectedNodeId = $derived(nodeIdForRoute(route));
 
@@ -387,15 +401,6 @@
           <strong>{entry.name}</strong>
         </div>
         <div class="topbar-meta">
-          <button
-            class="playground-trigger"
-            type="button"
-            bind:this={propertyTrigger}
-            aria-expanded={propertyPopoverOpen}
-            aria-controls="playground-properties"
-            aria-haspopup="dialog"
-            onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
-          >Playground</button>
           <strata-viewer-settings
             theme={prefs.theme}
             surface={prefs.surface}
@@ -433,8 +438,17 @@
           <div class="section-toolbar">
             <div class="section-heading">
               <span class="section-mark">▣</span><h2 id="preview-title">Preview</h2>
-              <span class="section-subtitle">Live component · global settings and properties</span>
+              <span class="section-subtitle">Live component · shared viewer settings</span>
             </div>
+            <button
+              class="playground-trigger"
+              type="button"
+              bind:this={propertyTrigger}
+              aria-expanded={propertyPopoverOpen}
+              aria-controls="playground-properties"
+              aria-haspopup="dialog"
+              onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
+            ><span aria-hidden="true">⚙</span> Open Playground <span class="playground-trigger-hint">Live controls</span></button>
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
             <div class="preview-viewport viewport-{prefs.viewport}">
@@ -449,6 +463,14 @@
               <button type="button" class="preset-chip" onclick={() => applyPreset(preset.values)}>{preset.label}</button>
             {/each}
           </div>
+          <nav class="common-components" aria-label="Common components">
+            <span class="common-components-label">Common components</span>
+            <div class="common-components-list">
+              {#each commonComponents as common (common.id)}
+                <a class="common-component-link" href="#/{common.id}" aria-current={selectedEntry?.id === common.id ? "page" : undefined}>{common.name}</a>
+              {/each}
+            </div>
+          </nav>
         </section>
 
         <strata-tabs class="detail-tabs">
