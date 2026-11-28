@@ -1,11 +1,11 @@
 # STRATA — Implementation Audit
 
-Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
+Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
 
 ## Summary
 
-- **76 canonical entries**, all registered as custom elements (`strata-*`).
-- **78 registered elements**: the four extra tags (`strata-accordion-item`, `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) are composition-only children, not catalog entries.
+- **75 canonical entries**, all registered as custom elements (`strata-*`).
+- **79 registered elements**: the four extra tags (`strata-accordion-item`, `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) are composition-only children, not catalog entries.
 - Catalog registry, public exports and `STRATA_COMPONENT_CATALOG` are synchronized (verified by `apps/catalog/test/catalog-registry.test.ts`).
 - Every entry mounts a real element in the catalog canvas; controls are derived from Lit `elementProperties` metadata (`apps/catalog/src/lib/props.ts`).
 
@@ -15,7 +15,6 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `strata-bottom-sheet`            | Duplicate `role="dialog"` attribute                                                                                                 | Removed duplicate; added Escape close, focus-in on open, focus restore, fallback `aria-label`             |
 | `strata-drawer`                  | No focus management; missing accessible name                                                                                        | Focus moves inside on open, restores on close; Escape already handled; fallback `aria-label`              |
-| `strata-dialog`                  | No Escape handling; no fallback name                                                                                                | Escape closes; `aria-label` fallback when no title                                                        |
 | `strata-modal`                   | No accessible name without title                                                                                                    | `aria-label` fallback                                                                                     |
 | `strata-data-table`              | Slotted `<thead>/<tr>` markup is dropped by the HTML parser inside a custom element — the component could never render real content | Replaced slot API with `columns`/`rows` props (JSON or pipe-delimited), renders a native `<table>` itself |
 | `strata-file-upload`             | No `strata-change` event, no selected-file list, drop target without drop handling                                                  | Emits `strata-change` with file names, renders selected files, drag & drop assigns files                  |
@@ -349,8 +348,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 | Entry                 | Tag               | Class            | Props                                                         | Reflected        | Events   | Slots     | Maturity |
 | --------------------- | ----------------- | ---------------- | ------------------------------------------------------------- | ---------------- | -------- | --------- | -------- |
 | Alert (`alert`)       | `strata-alert`    | `StrataAlert`    | `tone`                                                        | `tone`           | —        | `default` | stable   |
-| Badge (`badge`)       | `strata-badge`    | `StrataBadge`    | `tone`                                                        | `tone`           | —        | `default` | stable   |
-| Tag (`tag`)           | `strata-tag`      | `StrataTag`      | `size`<br>`tone`<br>`label`<br>`removable`<br>`hue`<br>`href` | `size`           | `remove` | `default` | beta     |
+| Badge (`badge`)       | `strata-badge`    | `StrataBadge`    | `tone`<br>`label`<br>`hue`<br>`href`<br>`removable` | `tone`           | `remove` | `default` | stable   |
 | Progress (`progress`) | `strata-progress` | `StrataProgress` | `value`<br>`label`                                            | —                | —        | —         | stable   |
 | Skeleton (`skeleton`) | `strata-skeleton` | `StrataSkeleton` | `width`                                                       | —                | —        | —         | stable   |
 | Spinner (`spinner`)   | `strata-spinner`  | `StrataSpinner`  | `size`<br>`tone`<br>`label`                                   | `size`           | —        | —         | stable   |
@@ -372,9 +370,9 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 ### Badge — `strata-badge`
 
-- **Purpose:** A compact label for status and classification.
+- **Purpose:** A compact label for status or category, supporting semantic tones, taxonomy hues, links and removal.
 - **Implementation:** `StrataBadge` in `packages/components/src/elements/Badge`
-- **Properties (1):** `tone` (any, reflected)
+- **Properties (5):** `tone` (String, reflected), `label` (String), `hue` (String), `href` (String), `removable` (Boolean)
 - **Slots:** `default`
 - **Accessibility:** Status tones render a distinct Carbon icon alongside the text.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
@@ -382,20 +380,6 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
 - **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
 - **Maturity:** stable
-
-### Tag — `strata-tag`
-
-- **Purpose:** A removable label for categorising content.
-- **Implementation:** `StrataTag` in `packages/components/src/elements/Tag`
-- **Properties (6):** `size` (String, reflected), `tone` (String), `label` (String), `removable` (Boolean), `hue` (String), `href` (String)
-- **Events:** `remove` — Fired when the remove button is clicked.
-- **Slots:** `default`
-- **Accessibility:** Taxonomy hues always pair the color with the text label.
-- **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
-- **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
-- **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
-- **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
-- **Maturity:** beta
 
 ### Progress — `strata-progress`
 
@@ -467,8 +451,7 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 | ---------------------------------- | ------------------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- | ------------ |
 | Surface (`surface`)                | `strata-surface`         | `StrataSurface`        | `size`<br>`outlined`                                                                                                                                                                                                                                                             | `outlined`                                               | —                                                     | `default`                         | stable       |
 | Card (`card`)                      | `strata-card`            | `StrataCard`           | `title`<br>`url`<br>`excerpt`<br>`feature_image`<br>`tag_name`<br>`tag_url`<br>`author_name`<br>`author_url`<br>`author_profile_image`<br>`media_align`<br>`media_width`<br>`heading`<br>`density`<br>`size`<br>`aspect_ratio`<br>`reading_time`<br>`published_at`<br>`bordered` | `heading`<br>`size`<br>`bordered`                        | —                                                     | —                                 | beta         |
-| Dialog (`dialog`)                  | `strata-dialog`          | `StrataDialog`         | `open`<br>`title`                                                                                                                                                                                                                                                                | `open`                                                   | —                                                     | `default`                         | beta         |
-| Modal (`modal`)                    | `strata-modal`           | `StrataModal`          | `open`<br>`title`<br>`size`<br>`position`<br>`variant`<br>`animation`<br>`closeOnOverlay`<br>`closeOnEscape`<br>`showClose`<br>`preventScroll`                                                                                                                                   | `open`                                                   | `modal-open`<br>`modal-before-close`<br>`modal-close` | `header`<br>`default`<br>`footer` | beta         |
+| Modal (`modal`)                    | `strata-modal`           | `StrataModal`          | `open`<br>`title`<br>`size`<br>`position`<br>`variant`<br>`animation`<br>`closeOnOverlay`<br>`closeOnEscape`<br>`showClose`<br>`preventScroll`                                                                                                                                   | `open`                                                   | `modal-open`<br>`modal-before-close`<br>`modal-close` | `header`<br>`default`<br>`actions` | beta         |
 | Drawer (`drawer`)                  | `strata-drawer`          | `StrataDrawer`         | `size`<br>`tone`<br>`open`<br>`title`                                                                                                                                                                                                                                            | `size`<br>`open`                                         | —                                                     | `default`                         | beta         |
 | BottomSheet (`bottom-sheet`)       | `strata-bottom-sheet`    | `StrataBottomSheet`    | `size`<br>`tone`<br>`open`<br>`title`                                                                                                                                                                                                                                            | `size`<br>`open`                                         | —                                                     | `default`                         | beta         |
 | Popover (`popover`)                | `strata-popover`         | `StrataPopover`        | `size`<br>`tone`<br>`open`<br>`label`                                                                                                                                                                                                                                            | `size`<br>`open`                                         | —                                                     | `default`                         | experimental |
@@ -495,21 +478,6 @@ Audit of all 76 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Properties (18):** `title` (String), `url` (String), `excerpt` (String), `feature_image` (String), `tag_name` (String), `tag_url` (String), `author_name` (String), `author_url` (String), `author_profile_image` (String), `media_align` (String), `media_width` (String), `heading` (Number, reflected), `density` (String), `size` (String, reflected), `aspect_ratio` (String), `reading_time` (String), `published_at` (String), `bordered` (Boolean, reflected)
 - **Keyboard:** is-one-fifth, is-one-quarter, is-one-third, is-two-fifths
 - **Accessibility:** Title renders as a configurable heading level (h2–h6).
-- **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
-- **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
-- **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
-- **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
-- **Maturity:** beta
-
-### Dialog — `strata-dialog`
-
-- **Purpose:** A modal surface for focused interactions.
-- **Implementation:** `StrataDialog` in `packages/components/src/elements/Dialog`
-- **Properties (2):** `open` (Boolean, reflected), `title` (String)
-- **Slots:** `default`
-- **Keyboard:** Escape, Tab, @keydown
-- **Accessibility:** role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.
-- **Sizing:** content panel is `box-sizing: border-box` so `width: min(100%, 560px)` includes padding/border and cannot overflow narrow viewports.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
