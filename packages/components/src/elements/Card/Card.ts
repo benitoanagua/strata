@@ -110,7 +110,6 @@ export class StrataCard extends BaseClass {
   private getFigureClass() {
     const isHorizontal =
       this.media_align === "left" || this.media_align === "right";
-    const isNormalDensity = this.density === "normal";
     if (!isHorizontal) return "strata-card__figure--flexible";
     switch (this.media_width) {
       case "is-one-fifth":
@@ -138,7 +137,7 @@ export class StrataCard extends BaseClass {
         ? "strata-card__image--square"
         : this.aspect_ratio === "video"
           ? "strata-card__image--video"
-          : "strata-card__image--four-three";
+          : "strata-card__image--monitor";
     return `strata-card__image ${sizeClass} ${aspectClass}`;
   }
 
