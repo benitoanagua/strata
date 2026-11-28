@@ -66,6 +66,23 @@ describe("strata-card contract", () => {
     card.remove();
   });
 
+  it("uses monochrome media by default and supports opting out", async () => {
+    const card = (await mount("strata-card")) as HTMLElement & {
+      is_media: boolean;
+      feature_image: string;
+      monochrome: boolean;
+      updateComplete: Promise<unknown>;
+    };
+    card.is_media = true;
+    card.feature_image = "/sample.jpg";
+    await card.updateComplete;
+    expect(card.querySelector("img")?.classList.contains("strata-card__image--monochrome")).toBe(true);
+    card.monochrome = false;
+    await card.updateComplete;
+    expect(card.querySelector("img")?.classList.contains("strata-card__image--monochrome")).toBe(false);
+    card.remove();
+  });
+
   it("hides media when media width is is-none even with an image", async () => {
     const card = (await mount("strata-card")) as HTMLElement & {
       is_media: boolean;
@@ -86,7 +103,7 @@ describe("strata-card contract", () => {
 });
 
 describe("strata-overlay contract", () => {
-  it("renders defaults: h1, center/center, full fill, background box, light theme", async () => {
+  it("renders defaults: h1, center/center, full fill, background box, auto theme", async () => {
     const overlay = (await mount("strata-overlay")) as HTMLElement & {
       title: string;
       updateComplete: Promise<unknown>;
@@ -102,7 +119,7 @@ describe("strata-overlay contract", () => {
     expect(root.classList.contains("strata-overlay--box-background")).toBe(
       true,
     );
-    expect(root.classList.contains("strata-overlay--theme-light")).toBe(true);
+    expect(root.classList.contains("strata-overlay--theme-auto")).toBe(true);
     expect(overlay.querySelector("h1")?.textContent).toBe("Hero");
     overlay.remove();
   });
@@ -118,6 +135,28 @@ describe("strata-overlay contract", () => {
     await overlay.updateComplete;
     const root = overlay.querySelector(".strata-overlay")!;
     expect(root.className).not.toContain("strata-overlay--fill-");
+    expect(root.classList.contains("strata-overlay--theme-dark")).toBe(true);
+    overlay.remove();
+  });
+
+  it("keeps grayscale on the image layer and supports explicit themes", async () => {
+    const overlay = (await mount("strata-overlay")) as HTMLElement & {
+      feature_image: string;
+      monochrome: boolean;
+      theme: "auto" | "light" | "dark";
+      updateComplete: Promise<unknown>;
+    };
+    overlay.feature_image = "/sample.jpg";
+    await overlay.updateComplete;
+    let root = overlay.querySelector(".strata-overlay")!;
+    expect(root.classList.contains("strata-overlay--has-image")).toBe(true);
+    expect(root.classList.contains("strata-overlay--monochrome")).toBe(true);
+    expect(root.style.getPropertyValue("--strata-overlay-image")).toContain("sample.jpg");
+    overlay.monochrome = false;
+    overlay.theme = "dark";
+    await overlay.updateComplete;
+    root = overlay.querySelector(".strata-overlay")!;
+    expect(root.classList.contains("strata-overlay--monochrome")).toBe(false);
     expect(root.classList.contains("strata-overlay--theme-dark")).toBe(true);
     overlay.remove();
   });
