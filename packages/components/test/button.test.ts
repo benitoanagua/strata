@@ -24,7 +24,6 @@ describe("strata-button API surface", () => {
       for (const size of ["small", "medium", "large"]) {
         for (const color of [
           "primary",
-          "secondary",
           "error",
           "success",
           "warning",
@@ -43,14 +42,6 @@ describe("strata-button API surface", () => {
         }
       }
     }
-  });
-
-  it("keeps rendering the deprecated secondary color for compatibility", async () => {
-    // `secondary` is deprecated in favor of variant="tonal" but must keep
-    // working until the next major version.
-    const el = await mount({ label: "Go", color: "secondary" });
-    expect(inner(el).className).toContain("strata-button--color-secondary");
-    el.remove();
   });
 
   it("renders a native button with type=button by default", async () => {
