@@ -547,7 +547,7 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Badge",
     category: "Feedback",
     tagName: "strata-badge",
-    description: "A compact label for status and classification.",
+    description: "A compact label for status and classification, with optional taxonomy hue, link, or removal.",
     maturity: "stable",
     controls: [
       select("tone", "Tone", "neutral", [
@@ -557,20 +557,7 @@ export const catalog: readonly CatalogEntry[] = [
         "success",
         "info",
       ]),
-    ],
-    slotContent: "In review",
-    a11y: "Status tones render a distinct Carbon icon alongside the text.",
-  },
-  {
-    id: "tag",
-    name: "Tag",
-    category: "Feedback",
-    tagName: "strata-tag",
-    description: "A removable label for categorising content.",
-    maturity: "beta",
-    controls: [
-      text("label", "Label", "Draft"),
-      select("hue", "Hue", "neutral", [
+      select("hue", "Category hue", "neutral", [
         "neutral",
         "auto",
         "red",
@@ -581,6 +568,7 @@ export const catalog: readonly CatalogEntry[] = [
         "indigo",
         "violet",
       ]),
+      text("label", "Label", "In review"),
       text("href", "Href"),
       bool("removable", "Removable"),
     ],
@@ -590,7 +578,7 @@ export const catalog: readonly CatalogEntry[] = [
         description: "Fired when the remove button is clicked.",
       },
     ],
-    a11y: "Taxonomy hues always pair the color with the text label.",
+    a11y: "Status tones include a distinct icon alongside text; taxonomy hues always retain the text label. Use tone for state and hue for category.",
   },
   {
     id: "progress",
