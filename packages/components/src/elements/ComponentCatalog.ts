@@ -27,7 +27,6 @@ export const STRATA_COMPONENT_CATALOG = [
   "pagination",
   "avatar",
   "breadcrumb",
-  "button-group",
   "menu",
   "menu-item",
   "radio",
