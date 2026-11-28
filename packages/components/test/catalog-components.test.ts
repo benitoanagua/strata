@@ -117,5 +117,6 @@ describe("removed compatibility elements", () => {
     expect(customElements.get("strata-tag")).toBeUndefined();
     expect(customElements.get("strata-tag-list")).toBeUndefined();
     expect(customElements.get("strata-dialog")).toBeUndefined();
+    expect(customElements.get("strata-button-group")).toBeUndefined();
   });
 });
