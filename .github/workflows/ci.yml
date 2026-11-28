@@ -26,6 +26,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Audit design system
         run: pnpm run audit
+      - name: Format check
+        run: pnpm format:check
       - name: Lint
         run: pnpm lint
       - name: Typecheck
