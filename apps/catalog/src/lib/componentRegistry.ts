@@ -685,32 +685,6 @@ export const catalog: readonly CatalogEntry[] = [
     a11y: "Title renders as a configurable heading level (h2–h6).",
   },
   {
-    id: "dialog",
-    name: "Dialog",
-    category: "Surfaces",
-    tagName: "strata-dialog",
-    description:
-      "A compact modal dialog with a shared close control and a dedicated actions slot.",
-    maturity: "beta",
-    controls: [
-      bool("open", "Open", true),
-      text("title", "Title", "Dialog title"),
-    ],
-    slotHtml:
-      "<p>Are you sure you want to delete this item?</p>" +
-      '<strata-button slot="actions" variant="outlined" size="small" label="Cancel"></strata-button>' +
-      '<strata-button slot="actions" size="small" label="Delete"></strata-button>',
-    slots: [
-      { name: "header", description: "Optional custom header when title is not set." },
-      { name: "default", description: "Dialog body content." },
-      { name: "actions", description: "Footer actions aligned to the end." },
-    ],
-    events: [],
-    a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
-    notes:
-      "Dialog is the compact interaction surface. Modal is the advanced blocking overlay with configurable size, position, animation and visual treatments. Both share the same close affordance and action-slot convention.",
-  },
-  {
     id: "modal",
     name: "Modal",
     category: "Surfaces",
