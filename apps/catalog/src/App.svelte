@@ -161,6 +161,7 @@
   function onHashChange() {
     route = parseHash();
     sidebarOpen = false;
+    propertyPopoverOpen = false;
   }
 
   $effect(() => {
