@@ -1225,11 +1225,9 @@ h1 {
 }
 
 
-/* Shared preview and playground: compact quick states plus a persistent properties popover. */
-.preview-block .section-toolbar {
-  align-items: center;
-  flex-direction: row;
-  gap: 16px;
+/* Global Playground: one topbar entry point, with automatically generated component controls. */
+.topbar-meta .playground-trigger {
+  min-height: 32px;
 }
 .playground-trigger {
   flex: 0 0 auto;
@@ -1345,15 +1343,8 @@ h1 {
   padding: 6px 0;
 }
 @media (max-width: 640px) {
-  .preview-block .section-toolbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .playground-trigger {
-    align-self: flex-start;
-  }
   .playground-popover {
-    top: 56px;
+    top: 64px;
     right: 8px;
     width: calc(100vw - 16px);
     max-height: calc(100dvh - 64px);
