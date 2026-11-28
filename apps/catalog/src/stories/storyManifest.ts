@@ -99,6 +99,7 @@ export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
   for (const control of entry.controls) {
     if (control.type === "select" && control.options?.length) {
       for (const option of control.options) {
+        if (option === control.defaultValue) continue;
         stories.push(
           story(
             `${control.name}-${option}`,
@@ -107,7 +108,11 @@ export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
               control.name,
             )
               ? "Appearance"
-              : "States",
+              : /media|icon|meta|category|image|content|slot|show/i.test(control.name)
+                ? "Composition"
+                : /fullwidth|inline|mobile|desktop|columns/i.test(control.name)
+                  ? "Responsive"
+                  : "States",
             { [control.name]: option, ...(control.demoProps ?? {}) },
           ),
         );
@@ -144,6 +149,7 @@ export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
   // Keep one story per effective argument set. Preserve authored ordering.
   const seen = new Set<string>();
   return stories.filter((item) => {
+    if (item.id !== "default" && Object.entries(item.args).length > 0 && Object.entries(item.args).every(([name, value]) => entry.controls.find((control) => control.name === name)?.defaultValue === value)) return false;
     const normalized = Object.fromEntries(
       Object.entries(item.args).sort(([a], [b]) => a.localeCompare(b)),
     );
