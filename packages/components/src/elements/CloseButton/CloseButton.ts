@@ -23,7 +23,7 @@ export class StrataCloseButton extends StrataElement {
     `,
   ];
   @property({ type: String }) label = "Close";
-  private emitClose = () => {
+  focus() { this.renderRoot.querySelector<HTMLButtonElement>("button")?.focus(); }\n\n  private emitClose = () => {
     this.dispatchEvent(new CustomEvent("strata-close", { bubbles: true, composed: true }));
   };
   render() {

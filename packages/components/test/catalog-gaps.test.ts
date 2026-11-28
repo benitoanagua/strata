@@ -702,3 +702,33 @@ describe("responsive navigation and shared close", () => {
     close.remove();
   });
 });
+
+describe("floating surface close composition", () => {
+  it("provides a shared close button and action slot in Dialog", async () => {
+    const dialog = (await mount("strata-dialog")) as HTMLElement & { open: boolean; title: string; updateComplete: Promise<unknown> };
+    dialog.title = "Confirm";
+    dialog.open = true;
+    dialog.innerHTML = '<strata-button slot="actions" label="Confirm"></strata-button>';
+    await dialog.updateComplete;
+    await flush();
+    expect(dialog.shadowRoot?.querySelector("strata-close-button")).toBeTruthy();
+    expect(dialog.shadowRoot?.querySelector('slot[name="actions"]')).toBeTruthy();
+    dialog.open = false;
+    await dialog.updateComplete;
+    dialog.remove();
+  });
+
+  it("uses the same close element in Modal, Drawer, BottomSheet and Popover", async () => {
+    const tags = ["strata-modal", "strata-drawer", "strata-bottom-sheet", "strata-popover"];
+    for (const tag of tags) {
+      const el = (await mount(tag)) as HTMLElement & { open: boolean; updateComplete: Promise<unknown> };
+      el.open = true;
+      await el.updateComplete;
+      await flush();
+      expect(el.shadowRoot?.querySelector("strata-close-button")).toBeTruthy();
+      el.open = false;
+      await el.updateComplete;
+      el.remove();
+    }
+  });
+});
