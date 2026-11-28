@@ -55,7 +55,7 @@ export class StrataOverlay extends BaseClass {
       `strata-overlay--position-${this.position}`,
       `strata-overlay--aspect-${this.aspect_ratio}`,
       `strata-overlay--font-${this.font_group}`,
-      `strata-overlay--theme-${this.is_dark ? "dark" : this.theme === "auto" ? "light" : this.theme}`,
+      `strata-overlay--theme-${this.is_dark ? "dark" : this.theme}`,
     ];
     if (this.feature_image) classes.push("strata-overlay--has-image");
     if (this.monochrome) classes.push("strata-overlay--monochrome");
