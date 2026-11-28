@@ -118,6 +118,12 @@ describe("Vue source API parity: Overlay", () => {
 });
 
 describe("Vue source API parity: Grille", () => {
+  it("uses plain article cells to reflect the Vue component's generic HTMLElement slot", () => {
+    expect(entry("grille").slotHtml).toContain("<article");
+    expect(entry("grille").slotHtml).not.toContain("strata-grille-item");
+    expect(entry("grille").slots?.[0]?.description).toContain("Any direct HTML element");
+  });
+
   it("exposes only the four source props and enum values", () => {
     expect(entry("grille").controlAllowlist).toEqual(["desktop", "mobile", "gap", "color"]);
     expect(control("grille", "desktop").defaultValue).toBe(3);
