@@ -22,7 +22,7 @@ type AlertPlacement =
 /** One feedback component for persistent inline alerts and transient notifications. */
 @customElement("strata-alert")
 export class StrataAlert extends StrataElement {
-  static styles = css`
+  static styles = [css`
     :host {
       display: block;
       min-width: 0;
@@ -121,7 +121,7 @@ export class StrataAlert extends StrataElement {
     .strata-alert__close iconify-icon {
       font-size: 16px;
     }
-  `;
+  `];
 
   @property({ reflect: true }) tone: AlertTone = "info";
   @property({ type: String, reflect: true }) mode: AlertMode = "inline";
