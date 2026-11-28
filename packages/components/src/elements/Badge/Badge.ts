@@ -29,7 +29,7 @@ export class StrataBadge extends StrataElement {
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font: var(--strata-type-label-small) var(--strata-font-mono);
+        font: var(--strata-type-label-medium) var(--strata-font-mono);
         font-weight: 500;
         padding: 3px 6px;
         border-radius: var(--strata-radius-micro);
@@ -110,7 +110,7 @@ export class StrataBadge extends StrataElement {
     const href = safeHref(this.href);
     const classes = `strata-badge strata-badge--${this.tone} strata-hue--${hue}`;
     const role = this.tone === "neutral" ? nothing : "status";
-    if (this.interactive) {
+    if (this.interactive && !this.removable) {
       return html`<button type="button" class="${classes} strata-badge--interactive" data-hue=${hue} aria-pressed=${String(this.pressed)}>${this.content()}</button>`;
     }
     if (href && !this.removable) {
