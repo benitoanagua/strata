@@ -98,7 +98,7 @@ export class StrataFilterBar extends StrataElement {
         label=${label}
         hue=${this.hues && value ? "auto" : "neutral"}
         interactive
-        pressed=${this.value === value}
+        ?pressed=${this.value === value}
         @click=${() => this.set({ value })}
       ></strata-badge>
     </li>`;
