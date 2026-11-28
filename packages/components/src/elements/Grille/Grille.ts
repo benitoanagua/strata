@@ -146,7 +146,7 @@ export class StrataGrille extends LitElement implements GrilleProps {
       const hasBottom = position.row < position.rows;
 
       element.style.boxSizing = "content-box";
-      element.style.width = `${itemWidth - (hasRight ? 1 : 0)}px`;
+      element.style.width = `${Math.max(0, itemWidth - (hasRight ? 1 : 0))}px`;
 
       if (hasRight) {
         element.style.paddingRight = `${gap}px`;
