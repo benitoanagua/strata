@@ -48,7 +48,6 @@ export const STRATA_COMPONENT_CATALOG = [
   "stepper",
   "prose",
   "meta",
-  "tag-list",
   "section-header",
   "author-box",
   "share",
