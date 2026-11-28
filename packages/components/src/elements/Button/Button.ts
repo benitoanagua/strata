@@ -9,6 +9,7 @@ import type {
   ButtonColor,
   ButtonType,
 } from "../../types/button.js";
+import { safeHref } from "../../utils/items.js";
 
 @customElement("strata-button")
 export class StrataButton extends LitElement {
@@ -137,11 +138,12 @@ export class StrataButton extends LitElement {
   render() {
     const classes = this.getButtonClasses();
 
-    if (this.href && !this.disabled && !this.loading) {
+    const href = safeHref(this.href);
+    if (href && !this.disabled && !this.loading) {
       return html`
         <a
           class="${classes}"
-          href="${this.href}"
+          href="${href}"
           role="button"
           aria-label=${this.ariaLabel || nothing}
           aria-busy=${this.loading ? "true" : nothing}

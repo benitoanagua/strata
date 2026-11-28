@@ -22,12 +22,7 @@ describe("strata-button API surface", () => {
   it("applies variant, size and color classes for every declared value", async () => {
     for (const variant of ["filled", "outlined", "text", "elevated", "tonal"]) {
       for (const size of ["small", "medium", "large"]) {
-        for (const color of [
-          "primary",
-          "error",
-          "success",
-          "warning",
-        ]) {
+        for (const color of ["primary", "error", "success", "warning"]) {
           const el = await mount({
             label: "Go",
             variant,

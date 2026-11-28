@@ -3,15 +3,16 @@ export const PROPERTY_PLAYGROUND_IDS = ["card", "overlay", "grille"] as const;
 
 export type PlaygroundComponentId = (typeof PROPERTY_PLAYGROUND_IDS)[number];
 
-export function usesPropertyPlayground(id: string): id is PlaygroundComponentId {
+export function usesPropertyPlayground(
+  id: string,
+): id is PlaygroundComponentId {
   return (PROPERTY_PLAYGROUND_IDS as readonly string[]).includes(id);
 }
 
 /** Seed a visually useful example; Reset still returns to source defaults. */
-export function initialPlaygroundValues<T extends Record<string, string | number | boolean>>(
-  id: string,
-  defaults: T,
-): T {
+export function initialPlaygroundValues<
+  T extends Record<string, string | number | boolean>,
+>(id: string, defaults: T): T {
   const values = { ...defaults };
   if (id === "card") {
     Object.assign(values, {
@@ -34,7 +35,10 @@ export function normalizePlaygroundValue(
 ): string | number | boolean {
   if (id === "grille" && (name === "desktop" || name === "mobile")) {
     const numeric = Number(value);
-    return Math.max(1, Math.min(6, Math.round(Number.isFinite(numeric) ? numeric : 1)));
+    return Math.max(
+      1,
+      Math.min(6, Math.round(Number.isFinite(numeric) ? numeric : 1)),
+    );
   }
   return value;
 }

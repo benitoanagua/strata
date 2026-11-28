@@ -12,12 +12,12 @@ the rule.
 Every interactive component separates four independent axes. A prop must
 only ever answer to one of them:
 
-| Axis    | Question it answers         | Button example                                                    |
-| ------- | --------------------------- | ----------------------------------------------------------------- |
-| variant | What does it look like?     | `filled`, `outlined`, `text`, `elevated`, `tonal`                 |
-| color   | What does it mean?          | `primary`, `error`, `success`, `warning` |
-| size    | How big is it?              | `small`, `medium`, `large`                                        |
-| type    | How does it behave in HTML? | `button`, `submit`, `reset`                                       |
+| Axis    | Question it answers         | Button example                                    |
+| ------- | --------------------------- | ------------------------------------------------- |
+| variant | What does it look like?     | `filled`, `outlined`, `text`, `elevated`, `tonal` |
+| color   | What does it mean?          | `primary`, `error`, `success`, `warning`          |
+| size    | How big is it?              | `small`, `medium`, `large`                        |
+| type    | How does it behave in HTML? | `button`, `submit`, `reset`                       |
 
 Never encode hierarchy through `color` (that is what `variant`/`size` are
 for), and never encode semantics through `variant`. `color` carries

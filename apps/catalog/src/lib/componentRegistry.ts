@@ -394,14 +394,18 @@ export const catalog: readonly CatalogEntry[] = [
     description:
       "Responsive primary navigation: desktop topbar, mobile hamburger navigation.",
     maturity: "beta",
-    controls: [text("label", "Label", "Primary navigation"), text("menuLabel", "Mobile toggle label", "Open navigation")],
+    controls: [
+      text("label", "Label", "Primary navigation"),
+      text("menuLabel", "Mobile toggle label", "Open navigation"),
+    ],
     slotHtml:
       '<strata-nav-item label="Home" href="/" selected></strata-nav-item>' +
       '<strata-nav-item label="Docs" href="/docs"></strata-nav-item>' +
       '<strata-nav-item label="Components" href="/components"></strata-nav-item>',
     slots: [{ name: "default", description: "strata-nav-item children." }],
     a11y: "Named nav landmark; mobile toggle exposes aria-expanded and links retain normal tab order.",
-    notes: "Desktop renders a topbar; at mobile widths it collapses into an accessible hamburger panel. This is not the sidebar Menu component.",
+    notes:
+      "Desktop renders a topbar; at mobile widths it collapses into an accessible hamburger panel. This is not the sidebar Menu component.",
   },
   {
     id: "nav-item",
@@ -410,7 +414,12 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-nav-item",
     description: "A labelled navigation entry with selected state.",
     maturity: "stable",
-    controls: [text("label", "Label", "Home"), text("href", "Href", "/"), bool("selected", "Selected"), bool("disabled", "Disabled")],
+    controls: [
+      text("label", "Label", "Home"),
+      text("href", "Href", "/"),
+      bool("selected", "Selected"),
+      bool("disabled", "Disabled"),
+    ],
     a11y: "Selection is exposed via aria-current=page, not color alone.",
     notes:
       "Group entries inside strata-nav for landmark semantics and arrow-key navigation; standalone use is supported.",
@@ -481,16 +490,21 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Menu",
     category: "Navigation",
     tagName: "strata-menu",
-    description: "A vertical sidebar navigation list for contextual pages and sections.",
+    description:
+      "A vertical sidebar navigation list for contextual pages and sections.",
     maturity: "beta",
-    controls: [bool("open", "Open", true), text("label", "Label", "Sidebar navigation")],
+    controls: [
+      bool("open", "Open", true),
+      text("label", "Label", "Sidebar navigation"),
+    ],
     slotHtml:
       '<strata-menu-item label="Profile" href="/profile"></strata-menu-item>' +
       '<strata-menu-item label="Settings" href="/settings" selected></strata-menu-item>' +
       '<strata-menu-item label="Sign out" icon="carbon:logout"></strata-menu-item>',
     slots: [{ name: "default", description: "strata-menu-item children." }],
     a11y: "Named navigation landmark with standard link/button tab order; not an ARIA command menu.",
-    notes: "Use Menu for sidebar navigation. Use Nav/NavItem for the primary responsive topbar.",
+    notes:
+      "Use Menu for sidebar navigation. Use Nav/NavItem for the primary responsive topbar.",
   },
   {
     id: "menu-item",
@@ -515,7 +529,8 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Alert",
     category: "Feedback",
     tagName: "strata-alert",
-    description: "A semantic feedback message with inline and transient notification modes.",
+    description:
+      "A semantic feedback message with inline and transient notification modes.",
     maturity: "stable",
     controls: [
       select("tone", "Tone", "info", ["error", "warning", "success", "info"]),
@@ -524,22 +539,34 @@ export const catalog: readonly CatalogEntry[] = [
       text("message", "Message", "Changes saved successfully."),
       bool("closable", "Closable"),
       num("duration", "Duration (ms)", 3000),
-      select("placement", "Placement", "bottom-center", ["top-start", "top-center", "top-end", "bottom-start", "bottom-center", "bottom-end"]),
+      select("placement", "Placement", "bottom-center", [
+        "top-start",
+        "top-center",
+        "top-end",
+        "bottom-start",
+        "bottom-center",
+        "bottom-end",
+      ]),
     ],
-    events: [{
-      name: "strata-dismiss",
-      detail: '{ reason: "manual" | "timeout" }',
-      description: "Fired when dismissed by the close button or snackbar timer.",
-    }],
+    events: [
+      {
+        name: "strata-dismiss",
+        detail: '{ reason: "manual" | "timeout" }',
+        description:
+          "Fired when dismissed by the close button or snackbar timer.",
+      },
+    ],
     a11y: "Status tone is paired with an icon. Error messages announce assertively; the optional close button is accessible.",
-    notes: "Inline mode stays in document flow. Snackbar mode is fixed-position and auto-dismisses after duration (default 3000 ms); set duration to 0 to disable the timer. closable is opt-in.",
+    notes:
+      "Inline mode stays in document flow. Snackbar mode is fixed-position and auto-dismisses after duration (default 3000 ms); set duration to 0 to disable the timer. closable is opt-in.",
   },
   {
     id: "badge",
     name: "Badge",
     category: "Feedback",
     tagName: "strata-badge",
-    description: "A compact label for status or taxonomy, also used as an interactive filter chip, link, or removable item.",
+    description:
+      "A compact label for status or taxonomy, also used as an interactive filter chip, link, or removable item.",
     maturity: "stable",
     controls: [
       select("tone", "Tone", "neutral", [
@@ -636,33 +663,103 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Card",
     category: "Surfaces",
     tagName: "strata-card",
-    description: "An editorial card with optional media, metadata and responsive media placement.",
+    description:
+      "An editorial card with optional media, metadata and responsive media placement.",
     maturity: "beta",
     controlAllowlist: [
-      "heading", "title", "url", "feature_image", "tag_name", "author_name", "published_at", "excerpt",
-      "is_media", "media_align", "media_width", "aspect_ratio", "inline_mobile", "elevation",
-      "show_excerpt", "show_meta", "show_category", "font_group", "icon",
+      "heading",
+      "title",
+      "url",
+      "feature_image",
+      "tag_name",
+      "author_name",
+      "published_at",
+      "excerpt",
+      "is_media",
+      "media_align",
+      "media_width",
+      "aspect_ratio",
+      "inline_mobile",
+      "elevation",
+      "show_excerpt",
+      "show_meta",
+      "show_category",
+      "font_group",
+      "icon",
     ],
     controls: [
       num("heading", "Heading level", 3),
       text("title", "Title", "Card title"),
       text("url", "Url", "/article"),
-      text("excerpt", "Excerpt", "A short supporting excerpt with enough text to appreciate the reading measure."),
-      text("feature_image", "Feature image", "https://picsum.photos/seed/strata-card/1200/900"),
-      bool("is_media", "Media", false, { feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
-      select("media_align", "Media align", "left", ["top", "left", "right", "bottom"]),
-      select("media_width", "Media width", "is-half", ["is-none", "is-full", "is-half", "is-two-fifths", "is-one-third", "is-one-quarter", "is-one-fifth"]),
-      select("aspect_ratio", "Aspect ratio", "monitor", ["monitor", "square", "video"]),
-      bool("show_excerpt", "Show excerpt", false, { excerpt: "A short supporting excerpt with enough text to appreciate the reading measure.", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
-      bool("show_meta", "Show metadata", false, { author_name: "Ana Ríos", published_at: "12 Nov 2026", tag_name: "Reportaje", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
-      bool("show_category", "Show category", false, { tag_name: "Reportaje", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
+      text(
+        "excerpt",
+        "Excerpt",
+        "A short supporting excerpt with enough text to appreciate the reading measure.",
+      ),
+      text(
+        "feature_image",
+        "Feature image",
+        "https://picsum.photos/seed/strata-card/1200/900",
+      ),
+      bool("is_media", "Media", false, {
+        feature_image: "https://picsum.photos/seed/strata-card/1200/900",
+      }),
+      select("media_align", "Media align", "left", [
+        "top",
+        "left",
+        "right",
+        "bottom",
+      ]),
+      select("media_width", "Media width", "is-half", [
+        "is-none",
+        "is-full",
+        "is-half",
+        "is-two-fifths",
+        "is-one-third",
+        "is-one-quarter",
+        "is-one-fifth",
+      ]),
+      select("aspect_ratio", "Aspect ratio", "monitor", [
+        "monitor",
+        "square",
+        "video",
+      ]),
+      bool("show_excerpt", "Show excerpt", false, {
+        excerpt:
+          "A short supporting excerpt with enough text to appreciate the reading measure.",
+        is_media: true,
+        feature_image: "https://picsum.photos/seed/strata-card/1200/900",
+      }),
+      bool("show_meta", "Show metadata", false, {
+        author_name: "Ana Ríos",
+        published_at: "12 Nov 2026",
+        tag_name: "Reportaje",
+        is_media: true,
+        feature_image: "https://picsum.photos/seed/strata-card/1200/900",
+      }),
+      bool("show_category", "Show category", false, {
+        tag_name: "Reportaje",
+        is_media: true,
+        feature_image: "https://picsum.photos/seed/strata-card/1200/900",
+      }),
       bool("inline_mobile", "Inline on mobile"),
       bool("elevation", "Elevation"),
-      select("font_group", "Font group", "default", ["default", "supplement", "sans", "serif"]),
-      select("icon", "Media icon", "none", ["none", "photo", "video", "gallery"]),
+      select("font_group", "Font group", "default", [
+        "default",
+        "supplement",
+        "sans",
+        "serif",
+      ]),
+      select("icon", "Media icon", "none", [
+        "none",
+        "photo",
+        "video",
+        "gallery",
+      ]),
     ],
     a11y: "Title renders as a configurable heading level (h1–h6). Media is optional and metadata/excerpt are opt-in.",
-    notes: "Mirrors the Vue Card API. Catalog names map imageUrl→feature_image, sectionTitle→tag_name, author→author_name, createdAt→published_at and introduction→excerpt. Vue defaults are retained; non-source density, bordered and reading-time controls are omitted.",
+    notes:
+      "Mirrors the Vue Card API. Catalog names map imageUrl→feature_image, sectionTitle→tag_name, author→author_name, createdAt→published_at and introduction→excerpt. Vue defaults are retained; non-source density, bordered and reading-time controls are omitted.",
   },
   {
     id: "modal",
@@ -787,8 +884,22 @@ export const catalog: readonly CatalogEntry[] = [
     description: "Text and metadata layered over a background image.",
     maturity: "beta",
     controlAllowlist: [
-      "heading", "title", "url", "feature_image", "tag_name", "author_name", "published_at",
-      "aspect_ratio", "show_meta", "show_category", "font_group", "align", "position", "box", "is_dark", "fill",
+      "heading",
+      "title",
+      "url",
+      "feature_image",
+      "tag_name",
+      "author_name",
+      "published_at",
+      "aspect_ratio",
+      "show_meta",
+      "show_category",
+      "font_group",
+      "align",
+      "position",
+      "box",
+      "is_dark",
+      "fill",
     ],
     controls: [
       num("heading", "Heading level", 1),
@@ -802,7 +913,12 @@ export const catalog: readonly CatalogEntry[] = [
       text("tag_name", "Tag", "Reportaje"),
       text("author_name", "Author", "Ana Ríos"),
       text("published_at", "Published", "12 Nov 2026"),
-      select("font_group", "Font group", "default", ["default", "supplement", "sans", "serif"]),
+      select("font_group", "Font group", "default", [
+        "default",
+        "supplement",
+        "sans",
+        "serif",
+      ]),
       bool("show_meta", "Show meta", false),
       bool("show_category", "Show category", false, { tag_name: "Reportaje" }),
       select("aspect_ratio", "Aspect ratio", "monitor", [
@@ -821,7 +937,8 @@ export const catalog: readonly CatalogEntry[] = [
       bool("is_dark", "Dark image treatment"),
     ],
     a11y: "Title renders at a configurable heading level over the media.",
-    notes: "Mirrors the Vue Overlay API and Post fields using the same catalog mappings as Card. Reading-time metadata is not part of the source component and is omitted.",
+    notes:
+      "Mirrors the Vue Overlay API and Post fields using the same catalog mappings as Card. Reading-time metadata is not part of the source component and is omitted.",
   },
   {
     id: "theme-toggle",
@@ -975,7 +1092,8 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Grille",
     category: "Data & Content",
     tagName: "strata-grille",
-    description: "A responsive content grid with source-style spacing and divider tones.",
+    description:
+      "A responsive content grid with source-style spacing and divider tones.",
     maturity: "beta",
     controlAllowlist: ["desktop", "mobile", "gap", "color"],
     controls: [
@@ -991,12 +1109,23 @@ export const catalog: readonly CatalogEntry[] = [
       ["Delta", "04"],
       ["Epsilon", "05"],
       ["Zeta", "06"],
-    ].map(([name, index]) =>
-      '<article style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">' +
-      index + ' / FIELD</small><div><strong style="font:var(--strata-type-headline-small) var(--strata-font-serif)">' +
-      name + '</strong><p style="margin:8px 0 0;max-width:24ch;line-height:1.5">A distinct content cell for an editorial composition.</p></div></article>'
-    ).join(""),
-    slots: [{ name: "default", description: "Any direct HTML element; each assigned element is a grid cell." }],
+    ]
+      .map(
+        ([name, index]) =>
+          '<article style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">' +
+          index +
+          ' / FIELD</small><div><strong style="font:var(--strata-type-headline-small) var(--strata-font-serif)">' +
+          name +
+          '</strong><p style="margin:8px 0 0;max-width:24ch;line-height:1.5">A distinct content cell for an editorial composition.</p></div></article>',
+      )
+      .join(""),
+    slots: [
+      {
+        name: "default",
+        description:
+          "Any direct HTML element; each assigned element is a grid cell.",
+      },
+    ],
   },
   {
     id: "avatar",
@@ -1215,7 +1344,8 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Entry",
     category: "Editorial",
     tagName: "strata-entry",
-    description: "Listing row for articles, search results and recent changes; categories and tags render as Badge.",
+    description:
+      "Listing row for articles, search results and recent changes; categories and tags render as Badge.",
     maturity: "beta",
     controls: [
       text("heading", "Heading", "Crónica de una cuenca"),

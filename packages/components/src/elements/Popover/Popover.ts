@@ -32,8 +32,17 @@ export class StrataPopover extends StrataElement {
       .strata-popover[hidden] {
         display: none;
       }
-      .strata-popover__header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border-bottom:1px solid var(--strata-color-border-subtle); }
-      .strata-popover__body { padding:12px; }
+      .strata-popover__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--strata-color-border-subtle);
+      }
+      .strata-popover__body {
+        padding: 12px;
+      }
       .strata-popover__trigger {
         min-height: 36px;
         padding: 7px 12px;
@@ -98,7 +107,9 @@ export class StrataPopover extends StrataElement {
   private closeOnHover = () => {
     if (this.trigger !== "hover") return;
     if (this.hoverCloseTimer) clearTimeout(this.hoverCloseTimer);
-    this.hoverCloseTimer = setTimeout(() => { this.open = false; }, 140);
+    this.hoverCloseTimer = setTimeout(() => {
+      this.open = false;
+    }, 140);
   };
 
   render() {
@@ -133,7 +144,10 @@ export class StrataPopover extends StrataElement {
         @focusout=${this.closeOnHover}
         ?hidden=${!this.open}
       >
-        <header class="strata-popover__header"><strong>${this.label}</strong><strata-close-button label="Close popover"></strata-close-button></header>
+        <header class="strata-popover__header">
+          <strong>${this.label}</strong
+          ><strata-close-button label="Close popover"></strata-close-button>
+        </header>
         <div class="strata-popover__body"><slot></slot></div>
       </div>
     </div>`;

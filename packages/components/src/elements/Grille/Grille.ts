@@ -87,7 +87,9 @@ export class StrataGrille extends LitElement implements GrilleProps {
     // participates in the grid, not only the optional Strata wrapper element.
     const elements = this.slotElement
       .assignedElements()
-      .filter((element): element is HTMLElement => element instanceof HTMLElement);
+      .filter(
+        (element): element is HTMLElement => element instanceof HTMLElement,
+      );
     const current = new Set(elements);
 
     // Restore styles for items removed from the slot, and preserve consumer
