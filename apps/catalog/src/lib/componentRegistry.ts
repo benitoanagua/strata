@@ -182,25 +182,6 @@ export const catalog: readonly CatalogEntry[] = [
     a11y: "Icon is decorative; the button is named by label via aria-label.",
   },
   {
-    id: "button-group",
-    name: "ButtonGroup",
-    category: "Actions",
-    tagName: "strata-button-group",
-    description: "Groups related actions with a shared orientation.",
-    maturity: "beta",
-    controls: [
-      select("orientation", "Orientation", "horizontal", [
-        "horizontal",
-        "vertical",
-      ]),
-    ],
-    slotHtml:
-      '<strata-button variant="outlined" label="One"></strata-button>' +
-      '<strata-button variant="outlined" label="Two"></strata-button>' +
-      '<strata-button variant="outlined" label="Three"></strata-button>',
-    slots: [{ name: "default", description: "strata-button children." }],
-  },
-  {
     id: "stepper",
     name: "Stepper",
     category: "Actions",
