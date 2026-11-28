@@ -19,16 +19,16 @@ function control(id: string, name: string) {
   return found;
 }
 
-describe("editorial component playground policy", () => {
+describe("rich preview fixture policy", () => {
   it.each(["card", "overlay", "grille"])(
-    "%s uses a live property playground",
+    "%s receives a rich preview fixture",
     (id) => {
       expect(usesPropertyPlayground(id)).toBe(true);
     },
   );
 
   it.each(["button", "dialog", "accordion"])(
-    "%s retains the variant gallery",
+    "%s uses standard source defaults",
     (id) => {
       expect(usesPropertyPlayground(id)).toBe(false);
     },
