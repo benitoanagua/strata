@@ -99,20 +99,6 @@
   );
   let values = $state<Record<string, ControlValue>>({});
 
-  const commonComponents = [
-    "button",
-    "text-field",
-    "select",
-    "checkbox",
-    "card",
-    "badge",
-    "avatar",
-    "popover",
-    "tabs",
-  ]
-    .map((id) => entryById(id))
-    .filter((entry) => entry !== undefined);
-
   const treeNodes = $derived(buildTreeNodes(search));
   const selectedNodeId = $derived(nodeIdForRoute(route));
 
@@ -401,6 +387,15 @@
           <strong>{entry.name}</strong>
         </div>
         <div class="topbar-meta">
+          <button
+            class="playground-trigger"
+            type="button"
+            bind:this={propertyTrigger}
+            aria-expanded={propertyPopoverOpen}
+            aria-controls="playground-properties"
+            aria-haspopup="dialog"
+            onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
+          >Playground</button>
           <strata-viewer-settings
             theme={prefs.theme}
             surface={prefs.surface}
@@ -438,17 +433,8 @@
           <div class="section-toolbar">
             <div class="section-heading">
               <span class="section-mark">▣</span><h2 id="preview-title">Preview</h2>
-              <span class="section-subtitle">Live component · shared viewer settings</span>
+              <span class="section-subtitle">Interactive component</span>
             </div>
-            <button
-              class="playground-trigger"
-              type="button"
-              bind:this={propertyTrigger}
-              aria-expanded={propertyPopoverOpen}
-              aria-controls="playground-properties"
-              aria-haspopup="dialog"
-              onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
-            ><span aria-hidden="true">⚙</span> Open Playground <span class="playground-trigger-hint">Live controls</span></button>
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
             <div class="preview-viewport viewport-{prefs.viewport}">
@@ -457,20 +443,12 @@
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
           </div>
-          <div class="playground-presets" aria-label="Quick component previews">
+          <div class="playground-presets" aria-label="Quick view variants">
             <span class="playground-presets-label">Quick view</span>
             {#each playgroundPresets as preset (preset.label)}
               <button type="button" class="preset-chip" onclick={() => applyPreset(preset.values)}>{preset.label}</button>
             {/each}
           </div>
-          <nav class="common-components" aria-label="Common components">
-            <span class="common-components-label">Common components</span>
-            <div class="common-components-list">
-              {#each commonComponents as common (common.id)}
-                <a class="common-component-link" href="#/{common.id}" aria-current={selectedEntry?.id === common.id ? "page" : undefined}>{common.name}</a>
-              {/each}
-            </div>
-          </nav>
         </section>
 
         <strata-tabs class="detail-tabs">
@@ -493,11 +471,7 @@
                 <div class="metadata-line"><span>MATURITY</span><strong>{entry.maturity}</strong></div>
                 {#if entry.notes}<div class="metadata-line"><span>NOTES</span><span>{entry.notes}</span></div>{/if}
               </section>
-              <section class="usage-panel">
-                <p class="eyebrow">PLAYGROUND</p>
-                <h2>Shared controls.</h2>
-                <p>Open the global Playground above to adjust this component. The API table documents every exposed property.</p>
-              </section>
+
             </div>
           </strata-tab-panel>
 
