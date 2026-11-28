@@ -23,7 +23,6 @@ export const STRATA_COMPONENT_CATALOG = [
   "switch",
   "nav",
   "nav-item",
-  "dialog",
   "data-table",
   "pagination",
   "avatar",
