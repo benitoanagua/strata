@@ -542,8 +542,7 @@
             {#if propertyPopoverOpen}
               <section class="playground-popover" id="playground-properties" role="dialog" aria-label="Playground properties">
                 <div class="playground-popover-heading">
-                  <div><p class="eyebrow">PLAYGROUND</p><h2>Properties</h2></div>
-                  <button type="button" class="popover-close" aria-label="Close properties" onclick={closePropertyPopover}>×</button>
+                  <button type="button" class="popover-close" aria-label="Close properties" onclick={closePropertyPopover}>Close <span aria-hidden="true">×</span></button>
                 </div>
                 <p class="playground-description">Adjust the public properties. The preview updates live; this panel stays open while you interact with the canvas or other controls.</p>
                 <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
