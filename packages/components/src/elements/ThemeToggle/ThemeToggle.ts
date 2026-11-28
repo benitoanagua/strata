@@ -102,10 +102,6 @@ export class StrataThemeToggle extends LitElement {
               `
         }
 
-        <!-- Visual mode indicator -->
-        <span class="strata-theme-toggle-badge">
-          ${this.currentTheme === "light" ? "L" : "D"}
-        </span>
       </button>
     `;
   }
