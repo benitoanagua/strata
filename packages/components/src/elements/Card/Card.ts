@@ -27,6 +27,10 @@ export class StrataCard extends BaseClass {
   @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
   @property({ type: Boolean, attribute: "show-category" }) show_category = false;
   @property({ type: Boolean, attribute: "show-excerpt" }) show_excerpt = false;
+  @property({ type: Boolean, attribute: "inline-mobile" }) inline_mobile = false;
+  @property({ type: Boolean }) elevation = false;
+  @property({ type: String, attribute: "font-group" }) font_group: "default" | "supplement" | "sans" | "serif" = "default";
+  @property({ type: String }) icon: "none" | "photo" | "video" | "gallery" = "none";
   @property({ type: String, attribute: "feature-image" }) feature_image = "";
   @property({ type: String, attribute: "tag-name" }) tag_name = "";
   @property({ type: String, attribute: "tag-url" }) tag_url = "";
@@ -91,10 +95,15 @@ export class StrataCard extends BaseClass {
   private getCardClasses() {
     const classes = ["strata-card", `strata-card--size-${this.size}`];
     if (this.bordered) classes.push("strata-card--bordered");
+    if (this.elevation) classes.push("strata-card--elevated");
+    if (this.inline_mobile) classes.push("strata-card--inline-mobile");
+    classes.push(`strata-card--font-${this.font_group}`);
     return classes.join(" ");
   }
 
   private getFlexClass() {
+    if (this.media_align === "left" && this.inline_mobile) return "strata-card__container--row";
+    if (this.media_align === "right" && this.inline_mobile) return "strata-card__container--row-reverse";
     if (this.media_align === "left" && this.density !== "normal")
       return "strata-card__container--row";
     if (this.media_align === "left" && this.density === "normal")
