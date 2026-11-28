@@ -117,8 +117,6 @@
       : base;
   }
 
-  let quickViewTrack = $state<HTMLDivElement>();
-
   const quickViewStories = $derived.by(() => {
     if (!selectedEntry) return [];
     return createStoryManifest(selectedEntry).map((story) => ({
@@ -425,10 +423,9 @@
             <span class="playground-presets-label">Quick view</span>
             <span class="quick-view-gallery-count">{quickViewStories.length} stories</span>
           </header>
-          <div class="quick-view-gallery-track" bind:this={quickViewTrack}>
+          <div class="quick-view-gallery-track">
             {#each quickViewStories as story (story.id)}
               <QuickPreview
-                root={quickViewTrack}
                 tagName={entry.tagName}
                 props={story.props}
                 slotHtml={entry.slotHtml}
