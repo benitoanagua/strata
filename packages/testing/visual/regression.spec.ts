@@ -24,7 +24,7 @@ test.describe("STRATA responsive layout", () => {
     await expect(gallery).toBeVisible();
     const count = await gallery.locator(".quick-view-card").count();
     const label = await gallery.locator(".quick-view-gallery-count").textContent();
-    expect(count).toBe(Number(label?.match(/\\d+/)?.[0]));
+    expect(count).toBe(Number(label?.match(/\d+/)?.[0]));
     expect(count).toBeGreaterThan(1);
     await expect(
       gallery.locator(".quick-view-card").first().locator(".quick-view-host > strata-button"),
