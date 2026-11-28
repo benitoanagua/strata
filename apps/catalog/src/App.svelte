@@ -50,7 +50,7 @@
   let previewHost = $state<HTMLDivElement>();
   let searchField = $state<HTMLElement>();
   let propertyPopoverOpen = $state(false);
-  let propertyTrigger: HTMLButtonElement | undefined;
+  let propertyTrigger = $state<HTMLButtonElement>();
 
   // Viewer preferences: persisted under `strata-catalog-viewer`, never under
   // the global `strata-theme` key used by strata-theme-toggle.
@@ -110,7 +110,12 @@
     ) as Record<string, ControlValue>;
   }
 
-  const playgroundPresets = $derived.by(() => {
+  interface PlaygroundPreset {
+    label: string;
+    values: Record<string, ControlValue>;
+  }
+
+  const playgroundPresets = $derived.by<PlaygroundPreset[]>(() => {
     if (!selectedEntry || !usesPropertyPlayground(selectedEntry.id)) return [];
     if (selectedEntry.id === "card") return [
       { label: "Editorial", values: { is_media: true, show_excerpt: true, show_meta: true, show_category: true, monochrome: true } },
@@ -540,13 +545,13 @@
               <button type="button" class="preset-chip preset-reset" onclick={resetValues}>Reset defaults</button>
             </div>
             {#if propertyPopoverOpen}
-              <section class="playground-popover" id="playground-properties" role="dialog" aria-label="Playground properties">
+              <div class="playground-popover" id="playground-properties" role="dialog" tabindex="-1" aria-label="Playground properties">
                 <div class="playground-popover-heading">
                   <button type="button" class="popover-close" aria-label="Close properties" onclick={closePropertyPopover}>Close <span aria-hidden="true">×</span></button>
                 </div>
                 <p class="playground-description">Adjust the public properties. The preview updates live; this panel stays open while you interact with the canvas or other controls.</p>
                 <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
-              </section>
+              </div>
             {/if}
           {/if}
         </section>
