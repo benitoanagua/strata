@@ -392,3 +392,34 @@
   border-color: var(--overlay-ink);
   outline-color: var(--overlay-ink);
 }
+
+
+/* Background media is a separate layer so grayscale never affects readable text. */
+.strata-overlay--has-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--strata-overlay-image);
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+.strata-overlay--monochrome::after {
+  filter: grayscale(1);
+}
+.strata-overlay--theme-auto {
+  --overlay-ink: var(--strata-color-text-primary);
+}
+.strata-overlay--theme-auto.strata-overlay--fill-full::before {
+  background-color: color-mix(in srgb, var(--strata-color-surface-page) 58%, transparent);
+}
+.strata-overlay--theme-auto.strata-overlay--fill-gradient.strata-overlay--position-top::before {
+  background-image: linear-gradient(to bottom, color-mix(in srgb, var(--strata-color-surface-page) 88%, transparent), transparent);
+}
+.strata-overlay--theme-auto.strata-overlay--fill-gradient.strata-overlay--position-bottom::before {
+  background-image: linear-gradient(to top, color-mix(in srgb, var(--strata-color-surface-page) 88%, transparent), transparent);
+}
+.strata-overlay--theme-auto.strata-overlay--fill-gradient.strata-overlay--position-center::before {
+  background-image: linear-gradient(to top, transparent, color-mix(in srgb, var(--strata-color-surface-page) 88%, transparent) 50%, transparent);
+}
