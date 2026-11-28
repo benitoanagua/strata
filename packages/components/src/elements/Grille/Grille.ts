@@ -104,9 +104,10 @@ export class StrataGrille extends LitElement implements GrilleProps {
   private gridRendering = () => {
     if (!this.slotElement || !this.containerElement) return;
 
+    // Match the source Vue component contract: every direct element child
+    // participates in the grid, not only the optional Strata wrapper element.
     const elements = this.slotElement
       .assignedElements()
-      .filter((element) => element.tagName.toLowerCase() === "strata-grille-item")
       .filter((element): element is HTMLElement => element instanceof HTMLElement);
     const current = new Set(elements);
 
