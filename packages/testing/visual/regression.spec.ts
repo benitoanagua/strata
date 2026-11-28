@@ -27,9 +27,9 @@ test.describe("STRATA responsive layout", () => {
     expect(count).toBe(Number(label?.match(/\\d+/)?.[0]));
     expect(count).toBeGreaterThan(1);
     await expect(
-      gallery.locator(".quick-view-card").first().locator("strata-button"),
+      gallery.locator(".quick-view-card").first().locator(".quick-view-host > strata-button"),
     ).toBeVisible();
-    expect(await gallery.locator(".quick-view-stage:empty").count()).toBeGreaterThan(
+    expect(await gallery.locator(".quick-view-host:empty").count()).toBeGreaterThan(
       0,
     );
   });
