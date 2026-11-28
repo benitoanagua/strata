@@ -270,7 +270,6 @@
       base.tag_name = "Geografía";
       base.author_name = "Ana Ríos";
       base.published_at = "12 nov 2026";
-      base.reading_time = "4 min";
     }
     if (selectedEntry?.id === "overlay") {
       // Keep the background and all editorial metadata populated while each
@@ -281,7 +280,6 @@
       base.tag_name = "Reportaje";
       base.author_name = "Ana Ríos";
       base.published_at = "12 nov 2026";
-      base.reading_time = "6 min";
       base.show_meta = true;
       base.show_category = true;
     }
