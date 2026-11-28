@@ -34,6 +34,8 @@ export class StrataCard extends BaseClass {
     "default" | "supplement" | "sans" | "serif" = "default";
   @property({ type: String }) icon: "none" | "photo" | "video" | "gallery" =
     "none";
+  /** Images default to grayscale for the editorial monochrome system. */
+  @property({ type: Boolean }) monochrome = true;
   @property({ type: String, attribute: "feature-image" }) feature_image = "";
   @property({ type: String, attribute: "tag-name" }) tag_name = "";
   @property({ type: String, attribute: "tag-url" }) tag_url = "";
@@ -179,7 +181,7 @@ export class StrataCard extends BaseClass {
                       <img
                         src="${this.feature_image}"
                         alt="${this.title}"
-                        class="${this.getImageClasses()}"
+                        class="${this.getImageClasses()} ${this.monochrome ? "strata-card__image--monochrome" : ""}"
                       />
                     </a>
                     ${
