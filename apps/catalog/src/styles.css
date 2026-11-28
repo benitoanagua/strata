@@ -1055,3 +1055,82 @@ h1 {
     padding: 20px;
   }
 }
+
+/* Source-faithful surface showcases: each variant gets enough room to read
+   its layout, media treatment and editorial hierarchy at a glance. */
+.demo-roomy .demo-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 28px;
+}
+.demo-roomy .demo-stage {
+  box-sizing: border-box;
+  min-height: 390px;
+  padding: 36px;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+.demo-roomy .demo-stage > strata-card {
+  width: 100%;
+  max-width: 760px;
+  min-height: 300px;
+}
+.demo-roomy .demo-stage > strata-overlay {
+  width: 100%;
+  min-height: 340px;
+  aspect-ratio: 4 / 3;
+}
+.demo-roomy .demo-stage > strata-grille {
+  width: 100%;
+  min-height: 320px;
+  align-self: stretch;
+}
+.demo-roomy .demo-stage strata-grille-item {
+  min-height: 132px;
+}
+.demo-roomy .demo-cell figcaption {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+@media (min-width: 1200px) {
+  .demo-roomy .demo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+  .demo-roomy .demo-stage {
+    min-height: 440px;
+    padding: 42px;
+  }
+  .demo-roomy .demo-stage > strata-card {
+    min-height: 340px;
+  }
+  .demo-roomy .demo-stage > strata-overlay {
+    min-height: 380px;
+  }
+}
+@media (max-width: 900px) {
+  .demo-roomy .demo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .demo-roomy .demo-stage {
+    min-height: 320px;
+    padding: 18px;
+  }
+  .demo-roomy .demo-stage > strata-card {
+    min-height: 260px;
+  }
+  .demo-roomy .demo-stage > strata-overlay {
+    min-height: 280px;
+  }
+  .demo-roomy .demo-stage > strata-grille {
+    min-height: 260px;
+  }
+}

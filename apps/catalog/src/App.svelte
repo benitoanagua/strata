@@ -256,16 +256,47 @@
     const base = { ...defaultsFor(controls) } as Record<string, unknown>;
     delete base.open;
     if (selectedEntry?.id === "card") {
-      // The source Card's media variants need a visible image fixture.
+      // Use a complete editorial fixture so media, category, author, date,
+      // reading time and excerpt variants are visible in every comparison.
+      base.title = "El río que cambió de rumbo";
+      base.url = "/articles/cuenca-del-plata";
       base.is_media = true;
-      base.feature_image = "https://picsum.photos/seed/strata-card/1200/900";
+      base.feature_image = "https://picsum.photos/seed/strata-card/1440/1080";
       base.show_excerpt = true;
-      base.excerpt = "A short supporting excerpt with enough text to appreciate the reading measure.";
+      base.excerpt = "Una crónica visual sobre la memoria del agua y la transformación del territorio.";
+      base.show_meta = true;
+      base.show_category = true;
+      base.tag_name = "Geografía";
+      base.author_name = "Ana Ríos";
+      base.published_at = "12 nov 2026";
+      base.reading_time = "4 min";
     }
     if (selectedEntry?.id === "overlay") {
-      base.feature_image = "https://picsum.photos/seed/strata-overlay/1200/900";
+      // Keep the background and all editorial metadata populated while each
+      // control changes only the source-defined treatment being showcased.
+      base.title = "El territorio contado desde sus ríos";
+      base.url = "/articles/territorio-y-rios";
+      base.feature_image = "https://picsum.photos/seed/strata-overlay/1440/1080";
+      base.tag_name = "Reportaje";
+      base.author_name = "Ana Ríos";
+      base.published_at = "12 nov 2026";
+      base.reading_time = "6 min";
+      base.show_meta = true;
+      base.show_category = true;
+    }
+    if (selectedEntry?.id === "grille") {
+      // Four generous content cells reveal divider placement on both axes.
+      base.desktop = 3;
+      base.mobile = 1;
     }
     return base;
+  }
+
+  function grilleShowcaseSlot(columns: number): string {
+    const names = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta"];
+    return names.map((name, index) =>
+      `<strata-grille-item><div style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between;background:var(--strata-color-surface-page)"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">0${index + 1} / FIELD</small><div><strong style="display:block;font:var(--strata-type-headline-small) var(--strata-font-serif);color:var(--strata-color-text-primary)">${name}</strong><p style="margin:8px 0 0;max-width:24ch;color:var(--strata-color-text-secondary);font-size:13px;line-height:1.5">A distinct content cell for a ${columns}-column composition.</p></div></div></strata-grille-item>`
+    ).join("");
   }
 
   const variantDemos = $derived.by<DemoCell[]>(() => {
@@ -285,7 +316,7 @@
           options: {
             tagName: entry.tagName,
             props: { ...base, desktop: columns },
-            slotHtml: entry.slotHtml,
+            slotHtml: grilleShowcaseSlot(columns),
             slotContent: entry.slotContent,
           },
         });

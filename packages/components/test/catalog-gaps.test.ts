@@ -459,6 +459,37 @@ describe("strata-carousel", () => {
   });
 });
 
+describe("strata-grille source slot contract", () => {
+  it("applies column widths and internal dividers to ordinary slotted elements", async () => {
+    const grid = document.createElement("strata-grille") as HTMLElement & {
+      desktop: number;
+      mobile: number;
+      updateComplete: Promise<unknown>;
+    };
+    grid.desktop = 2;
+    grid.mobile = 1;
+    const cells = ["article", "section", "div", "aside"].map((tag, index) => {
+      const element = document.createElement(tag);
+      element.textContent = `Cell ${index + 1}`;
+      return element;
+    });
+    grid.append(...cells);
+    document.body.appendChild(grid);
+    await grid.updateComplete;
+    await flush();
+
+    expect(cells[0].style.width).not.toBe("");
+    expect(cells[0].style.borderRight).toContain("solid");
+    expect(cells[0].style.borderBottom).toContain("solid");
+    expect(cells[3].style.borderRight).toBe("");
+    expect(cells[3].style.borderBottom).toBe("");
+
+    grid.remove();
+    expect(cells.every((cell) => cell.style.width === "")).toBe(true);
+    expect(cells.every((cell) => cell.style.borderRight === "")).toBe(true);
+  });
+});
+
 describe("strata-grille", () => {
   it("draws internal row/column divider borders on non-edge items", async () => {
     const el = document.createElement("strata-grille") as HTMLElement & {
