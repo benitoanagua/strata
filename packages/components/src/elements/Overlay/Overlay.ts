@@ -33,6 +33,7 @@ export class StrataOverlay extends BaseClass {
   @property({ type: String }) position: OverlayPosition = "center";
   @property({ type: String }) box: OverlayBox = "background";
   @property({ type: String }) fill: OverlayFill = "full";
+  @property({ type: Boolean, attribute: "is-dark" }) is_dark = false;
 
   protected createRenderRoot() {
     return this;
@@ -52,6 +53,7 @@ export class StrataOverlay extends BaseClass {
 
     // Añadir la clase del tipo de box al contenedor principal
     classes.push(`strata-overlay--box-${this.box}`);
+    classes.push(this.is_dark ? "strata-overlay--theme-dark" : "strata-overlay--theme-light");
 
     return classes.join(" ");
   }
