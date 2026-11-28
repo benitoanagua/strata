@@ -30,10 +30,10 @@ jobs:
         run: pnpm lint
       - name: Typecheck
         run: pnpm typecheck
+      - name: Build workspace and catalog (including catalog CSS parsing)
+        run: pnpm build
       - name: Unit and contract tests
         run: pnpm test
-      - name: Build workspace and catalog
-        run: pnpm build
 
   visual:
     name: Browser & accessibility
