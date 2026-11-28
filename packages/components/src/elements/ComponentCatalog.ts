@@ -1,7 +1,6 @@
 export const STRATA_COMPONENT_CATALOG = [
   "accordion",
   "button",
-  "close-button",
   "card",
   "carousel",
   "grille",
