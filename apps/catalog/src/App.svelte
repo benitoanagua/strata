@@ -110,6 +110,13 @@
     ) as Record<string, ControlValue>;
   }
 
+  function quickViewDefaults() {
+    const base = defaults();
+    return selectedEntry && usesRichPreviewFixture(selectedEntry.id)
+      ? initialPlaygroundValues(selectedEntry.id, base)
+      : base;
+  }
+
   const quickViewStories = $derived.by(() => {
     if (!selectedEntry) return [];
     return createStoryManifest(selectedEntry).map((story) => ({
@@ -119,7 +126,7 @@
   });
 
   function presetProps(preset: Record<string, ControlValue>) {
-    const next = { ...quickViewDefaults(), ...preset };
+    const next: Record<string, ControlValue> = { ...quickViewDefaults(), ...preset };
     return Object.fromEntries(
       Object.entries(next).map(([name, value]) => [
         name,
