@@ -419,9 +419,8 @@ export const catalog: readonly CatalogEntry[] = [
       '<strata-nav-item label="Docs" href="/docs"></strata-nav-item>' +
       '<strata-nav-item label="Components" href="/components"></strata-nav-item>',
     slots: [{ name: "default", description: "strata-nav-item children." }],
-    a11y: "Renders a <nav> landmark named by label; ArrowUp/ArrowDown/Home/End move focus between items.",
-    notes:
-      "MenuItem belongs to strata-menu and Tab to strata-tabs; NavItem belongs here. It also works standalone when a single entry is needed.",
+    a11y: "Named nav landmark; mobile toggle exposes aria-expanded and links retain normal tab order.",
+    notes: "Desktop renders a topbar; at mobile widths it collapses into an accessible hamburger panel. This is not the sidebar Menu component.",
   },
   {
     id: "nav-item",
@@ -711,11 +710,13 @@ export const catalog: readonly CatalogEntry[] = [
     ],
     slotHtml:
       "<p>Are you sure you want to delete this item?</p>" +
-      '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">' +
-      '<strata-button variant="outlined" size="small" label="Cancel"></strata-button>' +
-      '<strata-button size="small" label="Delete"></strata-button>' +
-      "</div>",
-    slots: [{ name: "default", description: "Dialog body and actions." }],
+      '<strata-button slot="actions" variant="outlined" size="small" label="Cancel"></strata-button>' +
+      '<strata-button slot="actions" size="small" label="Delete"></strata-button>',
+    slots: [
+      { name: "header", description: "Optional custom header when title is not set." },
+      { name: "default", description: "Dialog body content." },
+      { name: "actions", description: "Footer actions aligned to the end." },
+    ],
     events: [],
     a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
     notes:
@@ -771,11 +772,12 @@ export const catalog: readonly CatalogEntry[] = [
     ],
     slotHtml:
       "<p>Modal body content.</p>" +
-      ' <strata-button slot="footer" variant="filled" label="Action"></strata-button>',
+      ' <strata-button slot="actions" variant="filled" label="Action"></strata-button>',
     slots: [
       { name: "header", description: "Replaces the generated title header." },
       { name: "default", description: "Body content." },
-      { name: "footer", description: "Footer actions." },
+      { name: "actions", description: "Footer actions (preferred slot)." },
+      { name: "footer", description: "Legacy footer actions slot, retained for compatibility." },
     ],
     events: [
       { name: "modal-open", description: "Fired after the modal opens." },
