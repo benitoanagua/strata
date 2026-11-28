@@ -958,21 +958,21 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Grille",
     category: "Data & Content",
     tagName: "strata-grille",
-    description: "A responsive grid for content tiles.",
+    description: "A responsive content grid with source-style spacing and divider tones.",
     maturity: "beta",
     controls: [
-      num("desktop", "Desktop columns", 2),
-      num("mobile", "Mobile columns", 1),
-      select("gap", "Gap", "medium", ["small", "medium", "large"]),
+      num("desktop", "Desktop columns", 3),
+      num("mobile", "Mobile columns", 3),
+      select("gap", "Gap", "large", ["small", "medium", "large"]),
+      select("color", "Divider color", "soft", ["soft", "muted", "hard"]),
     ],
     slotHtml:
-      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">01</small><p style="margin:4px 0 0">Alpha tile</p></div></strata-grille-item>' +
-      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">02</small><p style="margin:4px 0 0">Beta tile</p></div></strata-grille-item>' +
-      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">03</small><p style="margin:4px 0 0">Gamma tile</p></div></strata-grille-item>' +
-      '<strata-grille-item><div style="padding:16px"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">04</small><p style="margin:4px 0 0">Delta tile</p></div></strata-grille-item>',
+      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">01 / FIELD</small><p style="margin:8px 0 0">Alpha tile</p></div></strata-grille-item>' +
+      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">02 / FIELD</small><p style="margin:8px 0 0">Beta tile</p></div></strata-grille-item>' +
+      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">03 / FIELD</small><p style="margin:8px 0 0">Gamma tile</p></div></strata-grille-item>' +
+      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">04 / FIELD</small><p style="margin:8px 0 0">Delta tile</p></div></strata-grille-item>',
     slots: [{ name: "default", description: "strata-grille-item children." }],
   },
-  {
     id: "avatar",
     name: "Avatar",
     category: "Data & Content",
