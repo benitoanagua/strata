@@ -138,7 +138,7 @@ describe("strata-nav-item standalone", () => {
 });
 
 describe("strata-menu-item", () => {
-  it("renders a menuitem button with icon and disabled state", async () => {
+  it("renders a native button with icon and disabled state", async () => {
     const el = (await mount("strata-menu-item")) as HTMLElement & {
       label: string;
       icon: string;
@@ -149,7 +149,8 @@ describe("strata-menu-item", () => {
     el.icon = "carbon:user";
     await el.updateComplete;
     const button = el.shadowRoot?.querySelector("button")!;
-    expect(button.getAttribute("role")).toBe("menuitem");
+    expect(button.tagName.toLowerCase()).toBe("button");
+    expect(button.getAttribute("role")).toBeNull();
     expect(button.textContent).toContain("Profile");
     expect(el.shadowRoot?.querySelector("iconify-icon")).toBeTruthy();
     el.disabled = true;

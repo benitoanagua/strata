@@ -1,11 +1,12 @@
 import { test, expect, type Page } from "@playwright/test";
 import { stubRemoteFonts } from "./font-stub";
+import { catalog } from "../../../apps/catalog/src/lib/componentRegistry.ts";
 
 test.beforeEach(async ({ page }) => {
   await stubRemoteFonts(page);
 });
 
-const LIBRARY_ENTRIES = 77;
+const LIBRARY_ENTRIES = catalog.length;
 const SCENARIOS = 5;
 
 /**
@@ -125,7 +126,7 @@ test("deep links expand only the ancestors of the selected entry", async ({
 
 test("search filters the library by name and description", async ({ page }) => {
   await page.goto("/");
-  await page.getByLabel("Search components").fill("dialog");
+  await page.getByLabel("Search components").fill("modal");
   const entries = page.locator(".sidebar-nav [data-node-id^='entry:']");
   await expect(entries.first()).toBeVisible();
   const count = await entries.count();
@@ -139,7 +140,7 @@ test("search filters the library by name and description", async ({ page }) => {
   expect(cats).toBeLessThan(8);
   // The expanded result category reveals matching entries.
   const texts = await entries.allTextContents();
-  expect(texts.some((t) => /dialog/i.test(t))).toBe(true);
+  expect(texts.some((t) => /modal/i.test(t))).toBe(true);
   // Clearing the search restores the compact route-driven state.
   await page.getByLabel("Search components").fill("");
   await expect(
