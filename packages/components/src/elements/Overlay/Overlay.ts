@@ -29,6 +29,7 @@ export class StrataOverlay extends BaseClass {
   aspect_ratio: CardAspectRatio = "monitor";
   @property({ type: Number, reflect: true }) heading: CardHeading = 4;
   @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
+  @property({ type: Boolean, attribute: "show-category" }) show_category = false;
   @property({ type: String }) align: OverlayAlign = "center";
   @property({ type: String }) position: OverlayPosition = "center";
   @property({ type: String }) box: OverlayBox = "background";
@@ -70,7 +71,7 @@ export class StrataOverlay extends BaseClass {
       >
         <div class="strata-overlay__content">
           ${
-            this.tag_name
+            this.show_category && this.tag_name
               ? html`
                   <span class="strata-overlay__category">${this.tag_name}</span>
                 `
