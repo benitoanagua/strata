@@ -32,10 +32,10 @@ describe("buildTreeNodes", () => {
     const byId = new Map(
       entryNodes(buildTreeNodes()).map((n) => [n.id.slice("entry:".length), n]),
     );
-    // Alert exposes four tones; Badge five; Tag nine hues.
+    // Alert exposes four tones; Badge has five tones and nine taxonomy hues.
     expect(byId.get("alert")?.meta).toBe("4");
-    expect(byId.get("badge")?.meta).toBe("5");
-    expect(byId.get("tag")?.meta).toBe("9");
+    expect(byId.get("badge")?.meta).toBe("14");
+    expect(byId.get("tag")).toBeUndefined();
     // No meta repeats the element tag anymore.
     for (const node of byId.values()) {
       expect(node.meta).not.toBe(node.id.replace("entry:", ""));
