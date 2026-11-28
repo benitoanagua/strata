@@ -413,11 +413,11 @@ export const catalog: readonly CatalogEntry[] = [
     description:
       "Responsive primary navigation: desktop topbar, mobile hamburger navigation.",
     maturity: "beta",
-    controls: [text("label", "Label", "Main")],
+    controls: [text("label", "Label", "Primary navigation"), text("menuLabel", "Mobile toggle label", "Open navigation")],
     slotHtml:
-      '<strata-nav-item label="Home" selected></strata-nav-item>' +
-      '<strata-nav-item label="Docs"></strata-nav-item>' +
-      '<strata-nav-item label="Components"></strata-nav-item>',
+      '<strata-nav-item label="Home" href="/" selected></strata-nav-item>' +
+      '<strata-nav-item label="Docs" href="/docs"></strata-nav-item>' +
+      '<strata-nav-item label="Components" href="/components"></strata-nav-item>',
     slots: [{ name: "default", description: "strata-nav-item children." }],
     a11y: "Renders a <nav> landmark named by label; ArrowUp/ArrowDown/Home/End move focus between items.",
     notes:
@@ -430,7 +430,7 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-nav-item",
     description: "A labelled navigation entry with selected state.",
     maturity: "stable",
-    controls: [text("label", "Label", "Home"), bool("selected", "Selected")],
+    controls: [text("label", "Label", "Home"), text("href", "Href", "/"), bool("selected", "Selected"), bool("disabled", "Disabled")],
     a11y: "Selection is exposed via aria-current=page, not color alone.",
     notes:
       "Group entries inside strata-nav for landmark semantics and arrow-key navigation; standalone use is supported.",
@@ -503,11 +503,11 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-menu",
     description: "A vertical sidebar navigation list for contextual pages and sections.",
     maturity: "beta",
-    controls: [bool("open", "Open", true), text("label", "Label", "Menu")],
+    controls: [bool("open", "Open", true), text("label", "Label", "Sidebar navigation")],
     slotHtml:
-      '<strata-menu-item label="Profile"></strata-menu-item>' +
-      '<strata-menu-item label="Settings"></strata-menu-item>' +
-      '<strata-menu-item label="Sign out"></strata-menu-item>',
+      '<strata-menu-item label="Profile" href="/profile"></strata-menu-item>' +
+      '<strata-menu-item label="Settings" href="/settings" selected></strata-menu-item>' +
+      '<strata-menu-item label="Sign out" icon="carbon:logout"></strata-menu-item>',
     slots: [{ name: "default", description: "strata-menu-item children." }],
     a11y: "Named navigation landmark with standard link/button tab order; not an ARIA command menu.",
     notes: "Use Menu for sidebar navigation. Use Nav/NavItem for the primary responsive topbar.",
@@ -522,6 +522,8 @@ export const catalog: readonly CatalogEntry[] = [
     controls: [
       text("label", "Label", "Settings"),
       text("icon", "Icon", "carbon:settings"),
+      text("href", "Href", "/settings"),
+      bool("selected", "Selected"),
       bool("disabled", "Disabled"),
     ],
     notes: "Used inside strata-menu; emits no events of its own yet.",
