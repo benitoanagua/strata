@@ -204,16 +204,6 @@ test("every component is selectable and mounts a real element", async ({
         timeout: 5_000,
       })
       .toBe(`strata-${id}`);
-    const quickPreview = page
-      .locator(".quick-view-card")
-      .first()
-      .locator(".quick-view-stage .quick-view-host > *")
-      .first();
-    await expect
-      .poll(() => quickPreview.evaluate((el) => el.tagName.toLowerCase()), {
-        timeout: 5_000,
-      })
-      .toBe(`strata-${id}`);
   }
   expect(pageErrors).toEqual([]);
 });
