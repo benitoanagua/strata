@@ -387,6 +387,15 @@
           <strong>{entry.name}</strong>
         </div>
         <div class="topbar-meta">
+          <button
+            class="playground-trigger"
+            type="button"
+            bind:this={propertyTrigger}
+            aria-expanded={propertyPopoverOpen}
+            aria-controls="playground-properties"
+            aria-haspopup="dialog"
+            onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
+          >Playground</button>
           <strata-viewer-settings
             theme={prefs.theme}
             surface={prefs.surface}
@@ -398,6 +407,17 @@
           <span class="topbar-divider"></span><span class="mono">{entry.tagName}</span>
         </div>
       </header>
+
+      {#if propertyPopoverOpen}
+        <div class="playground-popover" id="playground-properties" role="dialog" tabindex="-1" aria-label="Playground properties">
+          <div class="playground-popover-heading">
+            <span class="popover-title">Playground · {entry.name}</span>
+            <button type="button" class="popover-close" aria-label="Close properties" onclick={closePropertyPopover}>Close <span aria-hidden="true">×</span></button>
+          </div>
+          <p class="playground-description">Interactive controls are generated automatically from this component's public properties. Preview and viewer settings remain shared across the catalog.</p>
+          <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
+        </div>
+      {/if}
 
       <div class="page-content">
         <section class="page-heading">
@@ -415,15 +435,6 @@
               <span class="section-mark">▣</span><h2 id="preview-title">Preview</h2>
               <span class="section-subtitle">Live component · global settings and properties</span>
             </div>
-            <button
-                class="playground-trigger"
-                type="button"
-                bind:this={propertyTrigger}
-                aria-expanded={propertyPopoverOpen}
-                aria-controls="playground-properties"
-                aria-haspopup="dialog"
-                onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
-              >Playground</button>
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
             <div class="preview-viewport viewport-{prefs.viewport}">
@@ -438,16 +449,6 @@
               <button type="button" class="preset-chip" onclick={() => applyPreset(preset.values)}>{preset.label}</button>
             {/each}
           </div>
-          {#if propertyPopoverOpen}
-            <div class="playground-popover" id="playground-properties" role="dialog" tabindex="-1" aria-label="Playground properties">
-              <div class="playground-popover-heading">
-                <span class="popover-title">Playground</span>
-                <button type="button" class="popover-close" aria-label="Close properties" onclick={closePropertyPopover}>Close <span aria-hidden="true">×</span></button>
-              </div>
-              <p class="playground-description">Explore this component's public properties. Preview settings are shared across the catalog and the component updates live.</p>
-              <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
-            </div>
-          {/if}
         </section>
 
         <strata-tabs class="detail-tabs">
