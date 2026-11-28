@@ -51,7 +51,7 @@ describe("overlay accessibility fixes", () => {
     await flush();
     await flush();
     const focused = el.shadowRoot?.activeElement;
-    expect(focused).toBeTruthy();
+    expect(focused?.tagName.toLowerCase()).toBe("strata-close-button");
     el.open = false;
     await flush();
     expect(document.activeElement).toBe(trigger);
@@ -59,15 +59,14 @@ describe("overlay accessibility fixes", () => {
     trigger.remove();
   });
 
-  it("dialog closes on Escape and keeps a fallback accessible name", async () => {
-    const el = await mount<HTMLElement & { open: boolean }>("strata-dialog");
+  it("modal closes on Escape and keeps a fallback accessible name", async () => {
+    const el = await mount<HTMLElement & { open: boolean }>("strata-modal");
     el.open = true;
     await flush();
     const content = el.shadowRoot?.querySelector("[role=dialog]");
-    expect(content?.getAttribute("aria-label")).toBe("Dialog");
-    content?.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
-    );
+    expect(content?.getAttribute("aria-label")).toBe("Modal");
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    await new Promise((resolve) => setTimeout(resolve, 320));
     await flush();
     expect(el.open).toBe(false);
     el.remove();
