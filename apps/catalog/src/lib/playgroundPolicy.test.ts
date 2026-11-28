@@ -145,6 +145,14 @@ describe("Vue source API parity: Card", () => {
       "square",
       "video",
     ]);
+    expect(control("card", "heading").defaultValue).toBe(3);
+    expect(control("card", "media_width").defaultValue).toBe("is-half");
+    expect(control("card", "aspect_ratio").defaultValue).toBe("monitor");
+    expect(control("card", "media_align").defaultValue).toBe("left");
+    expect(control("card", "inline_mobile").defaultValue).toBe(false);
+    expect(control("card", "elevation").defaultValue).toBe(false);
+    expect(control("card", "font_group").defaultValue).toBe("default");
+    expect(control("card", "icon").defaultValue).toBe("none");
     expect(control("card", "is_media").defaultValue).toBe(false);
     expect(control("card", "show_meta").defaultValue).toBe(false);
     expect(control("card", "show_category").defaultValue).toBe(false);
@@ -200,6 +208,13 @@ describe("Vue source API parity: Overlay", () => {
       "gradient",
       "none",
     ]);
+    expect(control("overlay", "heading").defaultValue).toBe(1);
+    expect(control("overlay", "aspect_ratio").defaultValue).toBe("monitor");
+    expect(control("overlay", "position").defaultValue).toBe("center");
+    expect(control("overlay", "box").defaultValue).toBe("background");
+    expect(control("overlay", "fill").defaultValue).toBe("full");
+    expect(control("overlay", "is_dark").defaultValue).toBe(false);
+    expect(control("overlay", "font_group").defaultValue).toBe("default");
     expect(control("overlay", "show_meta").defaultValue).toBe(false);
     expect(control("overlay", "show_category").defaultValue).toBe(false);
   });
@@ -223,6 +238,8 @@ describe("Vue source API parity: Grille", () => {
     ]);
     expect(control("grille", "desktop").defaultValue).toBe(3);
     expect(control("grille", "mobile").defaultValue).toBe(3);
+    expect(control("grille", "gap").defaultValue).toBe("large");
+    expect(control("grille", "color").defaultValue).toBe("soft");
     expect(control("grille", "gap").options).toEqual([
       "small",
       "medium",
