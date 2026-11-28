@@ -56,7 +56,7 @@
   }
 
   .edge-handle-open {
-    right: clamp(320px, 30vw, 440px);
+    right: max(0px, calc(var(--catalog-playground-width) - 34px));
     border-right: 1px solid var(--strata-color-border-strong);
     border-radius: var(--strata-radius-small) 0 0 var(--strata-radius-small);
   }
@@ -82,18 +82,6 @@
     font: 9px var(--strata-font-mono);
     letter-spacing: 0.09em;
     text-transform: uppercase;
-  }
-
-  @media (max-width: 700px) {
-    .edge-handle-open {
-      right: min(100vw, 420px);
-    }
-  }
-
-  @media (max-width: 420px) {
-    .edge-handle-open {
-      right: 100vw;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

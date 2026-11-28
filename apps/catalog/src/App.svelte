@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
+  import QuickPreview from "./lib/QuickPreview.svelte";
   import { createStoryManifest } from "./stories/storyManifest";
   import EdgeHandle from "./lib/EdgeHandle.svelte";
   import CodeExample from "./lib/CodeExample.svelte";
@@ -116,13 +117,13 @@
       : base;
   }
 
-  let quickViewTrack = $state<HTMLDivElement>();
-
   const quickViewStories = $derived.by(() => {
     if (!selectedEntry) return [];
     return createStoryManifest(selectedEntry).map((story) => ({
       ...story,
       props: presetProps(story.args),
+      slotHtml: story.slotHtml ?? selectedEntry.slotHtml,
+      slotContent: story.slotContent ?? selectedEntry.slotContent,
     }));
   });
 
@@ -261,6 +262,11 @@
         handle.element.style.flex = entry.id === "reading-progress" ? "0 0 100%" : "0 0 220px";
         if (entry.id === "heading-anchors") handle.element.style.display = "none";
         host.insertBefore(handle.element, article);
+      }
+    }).catch(() => {
+      if (mountedTag === entry.tagName) {
+        host.textContent = "Preview unavailable";
+        host.setAttribute("role", "status");
       }
     });
   });
@@ -424,14 +430,13 @@
             <span class="playground-presets-label">Quick view</span>
             <span class="quick-view-gallery-count">{quickViewStories.length} stories</span>
           </header>
-          <div class="quick-view-gallery-track" bind:this={quickViewTrack}>
+          <div class="quick-view-gallery-track">
             {#each quickViewStories as story (story.id)}
               <QuickPreview
-                root={quickViewTrack}
                 tagName={entry.tagName}
                 props={story.props}
-                slotHtml={entry.slotHtml}
-                slotContent={entry.slotContent}
+                slotHtml={story.slotHtml}
+                slotContent={story.slotContent}
                 label={story.title}
                 group={story.group}
               />

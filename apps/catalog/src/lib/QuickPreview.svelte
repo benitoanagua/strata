@@ -2,7 +2,6 @@
   import { mountStrataElement, type StrataMountHandle } from "./renderer";
 
   let {
-    root = null,
     tagName,
     props,
     slotHtml,
@@ -10,7 +9,6 @@
     label,
     group = "States",
   }: {
-    root?: HTMLElement | null;
     tagName: string;
     props: Record<string, unknown>;
     slotHtml?: string;
@@ -22,12 +20,12 @@
   let card = $state<HTMLElement>();
   let host = $state<HTMLDivElement>();
   let nearViewport = $state(false);
+  let previewFailed = $state(false);
 
   // All stories are known and listed immediately; only previews near the
-  // horizontal viewport are mounted, keeping custom-element work bounded.
+  // viewport-adjacent previews are mounted, keeping custom-element work bounded.
   $effect(() => {
     const target = card;
-    const scrollRoot = root;
     if (!target) return;
 
     if (typeof IntersectionObserver === "undefined") {
@@ -40,8 +38,7 @@
         nearViewport = entry?.isIntersecting ?? false;
       },
       {
-        root: scrollRoot,
-        rootMargin: "260px 0px",
+        rootMargin: "260px",
         threshold: 0,
       },
     );
@@ -59,6 +56,7 @@
     let cancelled = false;
     let mounted: StrataMountHandle | undefined;
     target.replaceChildren();
+    previewFailed = false;
 
     if (!active) return;
 
@@ -77,6 +75,8 @@
       handle.element.style.width = "100%";
       handle.element.style.minWidth = "0";
       handle.element.style.maxWidth = "100%";
+    }).catch(() => {
+      if (!cancelled) previewFailed = true;
     });
 
     return () => {
@@ -87,7 +87,12 @@
 </script>
 
 <article class="quick-view-card" aria-label={`${group}: ${label}`} bind:this={card}>
-  <div class="quick-view-stage" bind:this={host}></div>
+  <div class="quick-view-stage">
+    <div class="quick-view-host" bind:this={host}></div>
+    {#if previewFailed}
+      <span class="quick-view-error" role="status">Preview unavailable</span>
+    {/if}
+  </div>
   <div class="quick-view-caption">
     <span>{label}</span>
     <small>{group}</small>

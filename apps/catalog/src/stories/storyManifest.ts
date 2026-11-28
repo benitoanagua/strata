@@ -12,6 +12,8 @@ export interface CatalogStory {
   title: string;
   group: StoryGroup;
   args: Record<string, ControlValue>;
+  slotHtml?: string;
+  slotContent?: string;
 }
 
 const story = (
@@ -26,6 +28,17 @@ const story = (
  * single property. The property stories below cover the complete public option
  * and boolean state space without producing a Cartesian product.
  */
+const QUICK_VIEW_GRILLE = ["A", "B", "C", "D", "E", "F"]
+  .map(
+    (label, index) =>
+      '<article style="box-sizing:border-box;min-height:56px;padding:8px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono)">' +
+      String(index + 1).padStart(2, "0") +
+      '</small><strong style="font:var(--strata-type-title-medium) var(--strata-font-serif)">' +
+      label +
+      "</strong></article>",
+  )
+  .join("");
+
 const curated: Record<string, CatalogStory[]> = {
   button: [
     story("icon-leading", "Leading icon", "Composition", { icon: "carbon:add" }),
@@ -145,6 +158,12 @@ export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
   }
 
   stories.push(...(curated[entry.id] ?? []));
+
+  // Grille's full editorial fixture is too dense for a compact thumbnail.
+  // Keep the real component but use short cells so all column states remain legible.
+  if (entry.id === "grille") {
+    for (const item of stories) item.slotHtml = QUICK_VIEW_GRILLE;
+  }
 
   // Keep one story per effective argument set. Preserve authored ordering.
   const seen = new Set<string>();
