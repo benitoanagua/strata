@@ -89,6 +89,7 @@ describe("STRATA accessibility contracts", () => {
     await modal.updateComplete;
     modal.open = true;
     await modal.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 0));
     const title = modal.shadowRoot?.querySelector("h2");
     const content = modal.shadowRoot?.querySelector("[role=dialog]");
     expect(title?.id).toBeTruthy();
