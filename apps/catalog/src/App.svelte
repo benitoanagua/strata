@@ -10,7 +10,7 @@
     type ControlValue,
   } from "./lib/componentRegistry";
   import { scenarioById } from "./lib/scenarios";
-  import { initialPlaygroundValues, normalizePlaygroundValue, usesPropertyPlayground } from "./lib/playgroundPolicy";
+  import { initialPlaygroundValues, normalizePlaygroundValue, usesRichPreviewFixture } from "./lib/playgroundPolicy";
   import {
     buildTreeNodes,
     nodeIdForRoute,
