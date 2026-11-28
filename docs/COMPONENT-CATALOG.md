@@ -1,6 +1,6 @@
 # STRATA component catalog
 
-STRATA ships a 72-component catalog. The catalog is deliberately broad enough for mobile product UI and long-form reading while keeping each component small and composable.
+The canonical component catalog is defined in `STRATA_COMPONENT_CATALOG` and synchronized with the public exports and interactive catalog registry by automated tests. It is deliberately broad enough for mobile product UI and long-form reading while keeping each component small and composable.
 
 ## Actions
 
@@ -48,11 +48,13 @@ editorial scenarios. See `docs/CATALOG-GUIDE.md`.
 ## Contract
 
 Every component documents: purpose, anatomy, variants, size, states,
-accessibility, responsive behavior, tokens, examples and tests — enforced by
-`docs/IMPLEMENTATION-AUDIT.md` and `docs/COMPONENT-COVERAGE.md`.
+accessibility, responsive behavior, tokens, examples and tests. The source
+implementation, public Lit metadata, `STRATA_COMPONENT_CATALOG`, catalog
+registry and executable tests are kept synchronized by automated checks.
 
 ## Maturity
 
-Every component ships as a composable baseline. Components with complex
-interaction semantics must complete `docs/COMPONENT-CHECKLIST.md` before
-being marked Stable. Current counts: 18 stable, 55 beta, 1 experimental.
+Maturity is declared in the interactive catalog registry and is not copied
+into a manually maintained count. Components with complex interaction
+semantics must complete `docs/COMPONENT-CHECKLIST.md` before being marked
+Stable.

@@ -2,8 +2,8 @@
 
 Source of truth for how STRATA components size themselves — width, height,
 box model and overflow. Complements `COMPONENT-UX-CONTRACT.md` (semantics)
-and `DESIGN-LAWS.md` (visual laws). Per-component specs live in
-`IMPLEMENTATION-AUDIT.md`.
+and `DESIGN-LAWS.md` (visual laws). Component-specific behavior is defined
+by the public implementation and verified by its contract and browser tests.
 
 ## 1. Box model
 
@@ -47,7 +47,7 @@ Other families keep their own scales (they are not form fields):
 - Tabs: 40px; tree rows: 30px; icon buttons: 40/48/56px.
 
 A component may deviate only with a documented functional reason (e.g.
-multi-line inputs, icon-only targets) recorded in its audit spec.
+multi-line inputs, icon-only targets) recorded in the component contract tests and examples.
 
 ## 4. Overflow behavior
 

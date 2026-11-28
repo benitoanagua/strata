@@ -37,11 +37,9 @@ pnpm test:visual
 pnpm test:a11y
 ```
 
-The Svelte catalog is a private development tool under `apps/catalog`. It renders all 76 canonical components with live property controls derived from Lit metadata, copyable snippets and five editorial scenarios — see `docs/CATALOG-GUIDE.md`. Published Web Components remain in `@strata/components`.
+The Svelte catalog is a private development tool under `apps/catalog`. It renders the canonical component registry with live property controls derived from Lit metadata, copyable snippets and composed editorial scenarios — see `docs/CATALOG-GUIDE.md`. Published Web Components remain in `@strata/components`.
 
 ## Documentation
 
-- `docs/IMPLEMENTATION-AUDIT.md` — per-component audit matrix (76 entries).
-- `docs/COMPONENT-COVERAGE.md` — test coverage per component.
-- `docs/COMPONENT-STATUS.md` — maturity counts and promotion rules.
+Start at [`docs/README.md`](docs/README.md) for the maintained documentation index. The component registry, public Lit metadata and test suites are the sources of truth for current API, maturity and coverage; the repository does not maintain static audit or coverage snapshots.
 - `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/COMPONENT-CONTRACT.md`, `docs/COMPONENT-UX-CONTRACT.md`, `docs/DESIGN-LAWS.md`.

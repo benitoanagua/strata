@@ -2,10 +2,10 @@
 
 Source of truth for how STRATA components express intent, hierarchy, state
 and iconography. It complements — never replaces — `DESIGN-LAWS.md` (visual
-laws), `COMPONENT-CONTRACT.md` (structural contract) and
-`IMPLEMENTATION-AUDIT.md` (per-component specs). When documents disagree,
-this contract and the design laws win; fix the contradiction, do not fork
-the rule.
+laws) and `COMPONENT-CONTRACT.md` (structural contract). Component-specific
+behavior is defined by its public implementation and executable tests. When
+contracts disagree, this contract and the design laws win; fix the
+contradiction, do not fork the rule.
 
 ## 1. Axes are not interchangeable
 
