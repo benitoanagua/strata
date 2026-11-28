@@ -42,7 +42,6 @@ export const STRATA_COMPONENT_CATALOG = [
   "drawer",
   "bottom-sheet",
   "snackbar",
-  "tag",
   "list",
   "list-item",
   "spinner",
