@@ -22,8 +22,6 @@ export class StrataCard extends BaseClass {
   @property({ type: String }) url = "";
   @property({ type: String }) excerpt = "";
   @property({ type: Boolean, attribute: "is-media" }) is_media = false;
-  @property({ type: String, attribute: "media-width" }) media_width: CardMediaWidth = "is-half";
-  @property({ type: String, attribute: "aspect-ratio" }) aspect_ratio: CardAspectRatio = "monitor";
   @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
   @property({ type: Boolean, attribute: "show-category" }) show_category = false;
   @property({ type: Boolean, attribute: "show-excerpt" }) show_excerpt = false;
@@ -42,7 +40,7 @@ export class StrataCard extends BaseClass {
   media_align: CardMediaAlign = "left";
   @property({ type: String, attribute: "media-width" })
   media_width: CardMediaWidth = "is-half";
-  @property({ type: Number, reflect: true }) heading: CardHeading = 4;
+  @property({ type: Number, reflect: true }) heading: CardHeading = 3;
   @property({ type: String }) density: CardDensity = "normal";
   @property({ type: String, reflect: true }) size:
     "small" | "medium" | "large" | "hero" = "medium";
