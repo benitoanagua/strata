@@ -168,7 +168,7 @@ export class StrataCard extends BaseClass {
                     ${
                       this.icon !== "none"
                         ? html`<span class="strata-card__media-shade" aria-hidden="true"></span>
-                            <iconify-icon class="strata-card__media-icon" icon="${this.icon === "photo" ? "clarity:image-line" : this.icon === "video" ? "clarity:play-line" : "clarity:image-gallery-line"}" aria-hidden="true"></iconify-icon>`
+                            <iconify-icon class="strata-card__media-icon" icon="${this.icon === "photo" ? "carbon:image" : this.icon === "video" ? "carbon:play" : "carbon:images"}" aria-hidden="true"></iconify-icon>`
                         : ""
                     }
                   </figure>
