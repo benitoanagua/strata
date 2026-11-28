@@ -341,7 +341,7 @@ test("every component shares Preview, Playground and compact quick views", async
 
   await page.goto("/#/text-field");
   await expect(page.getByRole("button", { name: "Playground", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Quick view", exact: true })).toHaveCount(0);
+  await expect(page.locator(".playground-presets-label")).toHaveText("Quick view");
   await expect(page.getByRole("button", { name: "Default", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Variants" })).toHaveCount(0);
 });
@@ -401,7 +401,8 @@ test("properties panel controls never overflow their field", async ({
   page,
 }) => {
   await page.goto("/#/button");
-  const overflowCount = await page.locator(".controls-panel").evaluate((el) => {
+  await page.getByRole("button", { name: "Playground", exact: true }).click();
+  const overflowCount = await page.locator(".playground-popover .controls-panel").evaluate((el) => {
     const panel = el.getBoundingClientRect();
     return [...el.querySelectorAll("*")].filter((child) => {
       const r = child.getBoundingClientRect();
