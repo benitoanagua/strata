@@ -30,7 +30,7 @@ export class StrataOverlay extends BaseClass {
   @property({ type: Number, reflect: true }) heading: CardHeading = 4;
   @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
   @property({ type: Boolean, attribute: "show-category" }) show_category = false;
-  @property({ type: String }) align: OverlayAlign = "center";
+  @property({ type: String, attribute: "font-group" }) font_group: "default" | "supplement" | "sans" | "serif" = "default";\n  @property({ type: String }) align: OverlayAlign = "center";
   @property({ type: String }) position: OverlayPosition = "center";
   @property({ type: String }) box: OverlayBox = "background";
   @property({ type: String }) fill: OverlayFill = "full";
@@ -45,7 +45,7 @@ export class StrataOverlay extends BaseClass {
       "strata-overlay",
       `strata-overlay--align-${this.align}`,
       `strata-overlay--position-${this.position}`,
-      `strata-overlay--aspect-${this.aspect_ratio}`,
+      `strata-overlay--aspect-${this.aspect_ratio}`,\n      `strata-overlay--font-${this.font_group}`,
     ];
 
     if (this.fill !== "none") {
