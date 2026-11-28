@@ -32,6 +32,8 @@ export class StrataPopover extends StrataElement {
       .strata-popover[hidden] {
         display: none;
       }
+      .strata-popover__header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border-bottom:1px solid var(--strata-color-border-subtle); }
+      .strata-popover__body { padding:12px; }
       .strata-popover__trigger {
         min-height: 36px;
         padding: 7px 12px;
@@ -52,6 +54,7 @@ export class StrataPopover extends StrataElement {
   ];
 
   @property({ type: Boolean, reflect: true }) open = false;
+  private hoverCloseTimer: ReturnType<typeof setTimeout> | undefined;
   @property({ type: String }) label = "Popover";
   @property({ type: String }) trigger: "click" | "hover" = "click";
   @property({ type: String, attribute: "trigger-label" }) triggerLabel =
@@ -66,6 +69,7 @@ export class StrataPopover extends StrataElement {
 
   disconnectedCallback() {
     document.removeEventListener("pointerdown", this.handleOutside, true);
+    if (this.hoverCloseTimer) clearTimeout(this.hoverCloseTimer);
     super.disconnectedCallback();
   }
 
@@ -87,10 +91,14 @@ export class StrataPopover extends StrataElement {
   };
 
   private openOnHover = () => {
-    if (this.trigger === "hover") this.open = true;
+    if (this.trigger !== "hover") return;
+    if (this.hoverCloseTimer) clearTimeout(this.hoverCloseTimer);
+    this.open = true;
   };
   private closeOnHover = () => {
-    if (this.trigger === "hover") this.open = false;
+    if (this.trigger !== "hover") return;
+    if (this.hoverCloseTimer) clearTimeout(this.hoverCloseTimer);
+    this.hoverCloseTimer = setTimeout(() => { this.open = false; }, 140);
   };
 
   render() {
@@ -119,6 +127,10 @@ export class StrataPopover extends StrataElement {
         aria-label=${this.label}
         @click=${(event: Event) => event.stopPropagation()}
         @strata-close=${() => (this.open = false)}
+        @mouseenter=${this.openOnHover}
+        @mouseleave=${this.closeOnHover}
+        @focusin=${this.openOnHover}
+        @focusout=${this.closeOnHover}
         ?hidden=${!this.open}
       >
         <header class="strata-popover__header"><strong>${this.label}</strong><strata-close-button label="Close popover"></strata-close-button></header>

@@ -78,6 +78,16 @@
   padding-right: 2rem;
 }
 
+.strata-modal > strata-close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+.strata-modal__header {
+  padding-right: 4rem;
+}
+
 .strata-modal {
   position: relative;
   width: 100%;

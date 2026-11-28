@@ -33,7 +33,7 @@ export class StrataNav extends StrataElement {
   private toggleMenu = () => { this.expanded = !this.expanded; };
   private closeAfterNavigation = (event: Event) => {
     const item = event.composedPath().find((node) => node instanceof HTMLElement && node.tagName === "STRATA-NAV-ITEM") as HTMLElement | undefined;
-    if (item?.hasAttribute("href")) this.expanded = false;
+    if (item) this.expanded = false;
   };
   render() {
     return html`<div class="strata-nav">
