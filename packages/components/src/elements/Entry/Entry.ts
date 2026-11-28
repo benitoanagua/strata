@@ -124,7 +124,7 @@ export class StrataEntry extends StrataElement {
         }
         ${
           tagItems.length
-            ? html`<div class="tags" aria-label="Tags">
+            ? html`<div class="tags" role="group" aria-label="Tags">
                 ${tagItems.map((item) => html`<strata-badge label=${item.label} hue="auto" href=${item.href || ""}></strata-badge>`)}
               </div>`
             : ""
