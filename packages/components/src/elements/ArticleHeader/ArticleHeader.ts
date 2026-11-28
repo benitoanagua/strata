@@ -1,7 +1,7 @@
 import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { StrataElement, strataComponentStyles } from "../StrataBase.js";
-import "../Tag/Tag.js";
+import "../Badge/Badge.js";
 import "../Meta/Meta.js";
 import { safeHref } from "../../utils/items.js";
 
@@ -80,7 +80,7 @@ export class StrataArticleHeader extends StrataElement {
       ${
         this.category
           ? html`<div>
-              <strata-tag label=${this.category} hue="auto"></strata-tag>
+              <strata-badge label=${this.category} hue="auto"></strata-badge>
             </div>`
           : ""
       }

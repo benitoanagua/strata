@@ -547,7 +547,7 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Badge",
     category: "Feedback",
     tagName: "strata-badge",
-    description: "A compact label for status and classification.",
+    description: "A compact label for status and classification, with optional taxonomy hue, link, or removal.",
     maturity: "stable",
     controls: [
       select("tone", "Tone", "neutral", [
@@ -557,20 +557,7 @@ export const catalog: readonly CatalogEntry[] = [
         "success",
         "info",
       ]),
-    ],
-    slotContent: "In review",
-    a11y: "Status tones render a distinct Carbon icon alongside the text.",
-  },
-  {
-    id: "tag",
-    name: "Tag",
-    category: "Feedback",
-    tagName: "strata-tag",
-    description: "A removable label for categorising content.",
-    maturity: "beta",
-    controls: [
-      text("label", "Label", "Draft"),
-      select("hue", "Hue", "neutral", [
+      select("hue", "Category hue", "neutral", [
         "neutral",
         "auto",
         "red",
@@ -581,6 +568,7 @@ export const catalog: readonly CatalogEntry[] = [
         "indigo",
         "violet",
       ]),
+      text("label", "Label", "In review"),
       text("href", "Href"),
       bool("removable", "Removable"),
     ],
@@ -590,7 +578,7 @@ export const catalog: readonly CatalogEntry[] = [
         description: "Fired when the remove button is clicked.",
       },
     ],
-    a11y: "Taxonomy hues always pair the color with the text label.",
+    a11y: "Status tones include a distinct icon alongside text; taxonomy hues always retain the text label. Use tone for state and hue for category.",
   },
   {
     id: "progress",
@@ -697,32 +685,6 @@ export const catalog: readonly CatalogEntry[] = [
     a11y: "Title renders as a configurable heading level (h2–h6).",
   },
   {
-    id: "dialog",
-    name: "Dialog",
-    category: "Surfaces",
-    tagName: "strata-dialog",
-    description:
-      "A compact modal dialog with a shared close control and a dedicated actions slot.",
-    maturity: "beta",
-    controls: [
-      bool("open", "Open", true),
-      text("title", "Title", "Dialog title"),
-    ],
-    slotHtml:
-      "<p>Are you sure you want to delete this item?</p>" +
-      '<strata-button slot="actions" variant="outlined" size="small" label="Cancel"></strata-button>' +
-      '<strata-button slot="actions" size="small" label="Delete"></strata-button>',
-    slots: [
-      { name: "header", description: "Optional custom header when title is not set." },
-      { name: "default", description: "Dialog body content." },
-      { name: "actions", description: "Footer actions aligned to the end." },
-    ],
-    events: [],
-    a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
-    notes:
-      "Dialog is the compact interaction surface. Modal is the advanced blocking overlay with configurable size, position, animation and visual treatments. Both share the same close affordance and action-slot convention.",
-  },
-  {
     id: "modal",
     name: "Modal",
     category: "Surfaces",
@@ -776,8 +738,7 @@ export const catalog: readonly CatalogEntry[] = [
     slots: [
       { name: "header", description: "Replaces the generated title header." },
       { name: "default", description: "Body content." },
-      { name: "actions", description: "Footer actions (preferred slot)." },
-      { name: "footer", description: "Legacy footer actions slot, retained for compatibility." },
+      { name: "actions", description: "Footer actions." },
     ],
     events: [
       { name: "modal-open", description: "Fired after the modal opens." },
@@ -790,7 +751,7 @@ export const catalog: readonly CatalogEntry[] = [
     ],
     a11y: "role=dialog aria-modal; scroll lock, focus trap and Escape handling; focus restored on close.",
     notes:
-      "Modal is the blocking overlay variant of the dialog pattern — it owns the backdrop, scroll lock and transition choreography. For a plain content dialog use strata-dialog.",
+      "Modal is the blocking overlay variant of the dialog pattern — it owns the backdrop, scroll lock and transition choreography. ",
   },
   {
     id: "drawer",

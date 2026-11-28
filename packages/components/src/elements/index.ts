@@ -30,7 +30,6 @@ export { StrataCheckbox } from "./Checkbox/Checkbox.js";
 export { StrataSwitch } from "./Switch/Switch.js";
 export { StrataNav } from "./Nav/Nav.js";
 export { StrataNavItem } from "./NavItem/NavItem.js";
-export { StrataDialog } from "./Dialog/Dialog.js";
 export { StrataDataTable } from "./DataTable/DataTable.js";
 export { StrataPagination } from "./Pagination/Pagination.js";
 
@@ -50,7 +49,6 @@ export { StrataPopover } from "./Popover/Popover.js";
 export { StrataDrawer } from "./Drawer/Drawer.js";
 export { StrataBottomSheet } from "./BottomSheet/BottomSheet.js";
 export { StrataSnackbar } from "./Snackbar/Snackbar.js";
-export { StrataTag } from "./Tag/Tag.js";
 export { StrataList } from "./List/List.js";
 export { StrataListItem } from "./ListItem/ListItem.js";
 export { StrataSpinner } from "./Spinner/Spinner.js";
@@ -165,7 +163,6 @@ declare global {
     "strata-switch": import("./Switch/Switch.js").StrataSwitch;
     "strata-nav": import("./Nav/Nav.js").StrataNav;
     "strata-nav-item": import("./NavItem/NavItem.js").StrataNavItem;
-    "strata-dialog": import("./Dialog/Dialog.js").StrataDialog;
     "strata-data-table": import("./DataTable/DataTable.js").StrataDataTable;
     "strata-pagination": import("./Pagination/Pagination.js").StrataPagination;
     "strata-avatar": import("./Avatar/Avatar.js").StrataAvatar;
@@ -184,7 +181,6 @@ declare global {
     "strata-drawer": import("./Drawer/Drawer.js").StrataDrawer;
     "strata-bottom-sheet": import("./BottomSheet/BottomSheet.js").StrataBottomSheet;
     "strata-snackbar": import("./Snackbar/Snackbar.js").StrataSnackbar;
-    "strata-tag": import("./Tag/Tag.js").StrataTag;
     "strata-list": import("./List/List.js").StrataList;
     "strata-list-item": import("./ListItem/ListItem.js").StrataListItem;
     "strata-spinner": import("./Spinner/Spinner.js").StrataSpinner;

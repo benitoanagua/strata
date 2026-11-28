@@ -2,7 +2,7 @@ import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 import "../Avatar/Avatar.js";
-import "../Tag/Tag.js";
+import "../Badge/Badge.js";
 import { emitValueEvent } from "../../events.js";
 import { safeHref } from "../../utils/items.js";
 
@@ -133,11 +133,10 @@ export class StrataComment extends StrataElement {
           <span class="author">${this.author}</span>
           ${
             this.role
-              ? html`<strata-tag
-                  size="small"
+              ? html`<strata-badge
                   label=${this.role}
                   hue="auto"
-                ></strata-tag>`
+                ></strata-badge>`
               : ""
           }
           ${

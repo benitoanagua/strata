@@ -1,7 +1,7 @@
 import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { StrataElement, strataComponentStyles } from "../StrataBase.js";
-import "../Tag/Tag.js";
+import "../Badge/Badge.js";
 import { parseItems, safeHref } from "../../utils/items.js";
 import type { TagHueInput } from "../../utils/hue.js";
 
@@ -45,11 +45,11 @@ export class StrataTagList extends StrataElement {
       ${items.map(
         (item) =>
           html`<li>
-            <strata-tag
+            <strata-badge
               label=${item.label}
               hue=${this.hue}
               href=${this.link(item.label, item.href)}
-            ></strata-tag>
+            ></strata-badge>
           </li>`,
       )}
       <slot></slot>

@@ -282,7 +282,7 @@ export class StrataModal extends LitElement {
           </div>
 
           <!-- Footer -->
-          <slot name="actions"><slot name="footer"></slot></slot>
+          <slot name="actions"></slot>
         </div>
       </div>
     `;
