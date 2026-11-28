@@ -244,7 +244,7 @@
 .strata-card__media-shade {
   position: absolute;
   inset: 0;
-  background: rgb(0 0 0 / 25%);
+  background: color-mix(in srgb, var(--strata-color-black) 25%, transparent);
   pointer-events: none;
 }
 .strata-card__media-icon {
