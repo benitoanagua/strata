@@ -96,20 +96,17 @@ export class StrataCard extends BaseClass {
     if (this.elevation) classes.push("strata-card--elevated");
     if (this.inline_mobile) classes.push("strata-card--inline-mobile");
     classes.push(`strata-card--font-${this.font_group}`);
+    classes.push(`strata-card--density-${this.density}`);
     return classes.join(" ");
   }
 
   private getFlexClass() {
     if (this.media_align === "left" && this.inline_mobile) return "strata-card__container--row";
     if (this.media_align === "right" && this.inline_mobile) return "strata-card__container--row-reverse";
-    if (this.media_align === "left" && this.density !== "normal")
-      return "strata-card__container--row";
-    if (this.media_align === "left" && this.density === "normal")
-      return "strata-card__container--responsive-row";
-    if (this.media_align === "right" && this.density !== "normal")
-      return "strata-card__container--row-reverse";
-    if (this.media_align === "right" && this.density === "normal")
-      return "strata-card__container--responsive-row-reverse";
+    if (this.media_align === "left")
+      return this.inline_mobile ? "strata-card__container--row" : "strata-card__container--responsive-row";
+    if (this.media_align === "right")
+      return this.inline_mobile ? "strata-card__container--row-reverse" : "strata-card__container--responsive-row-reverse";
     if (this.media_align === "top") return "strata-card__container--column";
     return "strata-card__container--column-reverse";
   }
@@ -153,7 +150,7 @@ export class StrataCard extends BaseClass {
       <div class="${this.getCardClasses()}">
         <div class="strata-card__container ${this.getFlexClass()}">
           ${
-            this.is_media && this.feature_image
+            this.is_media && this.feature_image && this.media_width !== "is-none"
               ? html`
                   <figure class="strata-card__figure ${this.getFigureClass()}">
                     <a href="${this.url}">
@@ -212,7 +209,7 @@ export class StrataCard extends BaseClass {
             </a>
 
             ${
-              this.show_excerpt && this.density === "normal"
+              this.show_excerpt
                 ? html`<p class="strata-card__excerpt">${this.excerpt}</p>`
                 : ""
             }
