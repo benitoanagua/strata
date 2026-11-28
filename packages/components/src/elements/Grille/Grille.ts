@@ -4,6 +4,22 @@ import baseCSS from "../../component-base.css?inline";
 import componentCSS from "./Grille.css?inline";
 import type { GrilleProps, Gap } from "../../types/grille.js";
 
+const STYLE_PROPERTIES = [
+  "box-sizing",
+  "width",
+  "padding-right",
+  "margin-right",
+  "border-right-width",
+  "border-right-style",
+  "border-right-color",
+  "padding-bottom",
+  "margin-bottom",
+  "border-bottom-width",
+  "border-bottom-style",
+  "border-bottom-color",
+  "border-image",
+] as const;
+
 @customElement("strata-grille")
 export class StrataGrille extends LitElement implements GrilleProps {
   static styles = [unsafeCSS(baseCSS), unsafeCSS(componentCSS)];
@@ -20,136 +36,134 @@ export class StrataGrille extends LitElement implements GrilleProps {
   private slotElement!: HTMLSlotElement;
 
   private resizeObserver?: ResizeObserver;
-  private readonly handleResize = () => {
-    window.setTimeout(() => this.gridRendering(), 100);
-  };
+  private readonly originalStyles = new WeakMap<HTMLElement, Map<string, string>>();
+  private readonly managedElements = new Set<HTMLElement>();
+  private readonly handleResize = () => this.gridRendering();
 
   connectedCallback() {
     super.connectedCallback();
-    this.setupResizeObserver();
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  firstUpdated() {
+    if (typeof ResizeObserver === "function" && this.containerElement) {
+      this.resizeObserver = new ResizeObserver(this.handleResize);
+      this.resizeObserver.observe(this.containerElement);
+    }
+    this.gridRendering();
+  }
+
+  updated() {
+    this.gridRendering();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.resizeObserver?.disconnect();
     window.removeEventListener("resize", this.handleResize);
-  }
-
-  firstUpdated(): void {
-    this.gridRendering();
-  }
-
-  updated(): void {
-    this.gridRendering();
-  }
-
-  private setupResizeObserver(): void {
-    if (this.containerElement && window.ResizeObserver) {
-      this.resizeObserver = new ResizeObserver(() => {
-        this.gridRendering();
-      });
-      this.resizeObserver.observe(this.containerElement);
-    }
-
-    window.addEventListener("resize", this.handleResize);
+    this.restoreManagedElements();
   }
 
   private grid(
-    breakpoint: number,
+    columns: number,
     index: number,
     length: number,
   ): { rows: number; row: number; col: number } {
-    const divInt = Math.floor(length / breakpoint);
-    const divMod = length % breakpoint;
-    const rows = divMod > 0 ? divInt + 1 : divInt;
-    const row = Math.floor(index / breakpoint) + 1;
-    const col = index - Math.floor(index / breakpoint) * breakpoint;
+    const count = Math.max(1, Math.floor(Number(columns) || 1));
+    const rows = Math.ceil(length / count);
+    const row = Math.floor(index / count) + 1;
+    const col = index % count;
     return { rows, row, col };
   }
 
-  private gridRendering(): void {
+  private rememberAndRestore(element: HTMLElement) {
+    let original = this.originalStyles.get(element);
+    if (!original) {
+      original = new Map(
+        STYLE_PROPERTIES.map((name) => [
+          name,
+          element.style.getPropertyValue(name),
+        ]),
+      );
+      this.originalStyles.set(element, original);
+    }
+    for (const name of STYLE_PROPERTIES) {
+      const value = original.get(name) ?? "";
+      if (value) element.style.setProperty(name, value);
+      else element.style.removeProperty(name);
+    }
+  }
+
+  private restoreManagedElements() {
+    for (const element of this.managedElements) {
+      this.rememberAndRestore(element);
+    }
+    this.managedElements.clear();
+  }
+
+  private gridRendering = () => {
     if (!this.slotElement || !this.containerElement) return;
 
-    const assignedElements = this.slotElement
+    const elements = this.slotElement
       .assignedElements()
-      .filter(
-        (element) => element.tagName.toLowerCase() === "strata-grille-item",
-      );
+      .filter((element) => element.tagName.toLowerCase() === "strata-grille-item")
+      .filter((element): element is HTMLElement => element instanceof HTMLElement);
+    const current = new Set(elements);
 
-    assignedElements.forEach((element: Element, i: number) => {
-      if (!(element instanceof HTMLElement)) return;
+    // Restore styles for items removed from the slot, and preserve consumer
+    // inline styles before applying this component's layout declarations.
+    for (const element of this.managedElements) {
+      if (!current.has(element)) {
+        this.rememberAndRestore(element);
+        this.managedElements.delete(element);
+      }
+    }
 
-      // Reset styles
-      element.style.cssText = "";
+    const isMobile = window.innerWidth < 768;
+    const columns = Math.max(
+      1,
+      Math.floor(Number(isMobile ? this.mobile : this.desktop) || 1),
+    );
+    const gap = this.gap === "small" ? 8 : this.gap === "medium" ? 16 : 24;
+    const width = this.containerElement.clientWidth;
+    const itemWidth = Math.max(
+      0,
+      Math.floor((width - 2 * gap * (columns - 1)) / columns),
+    );
+    const borderColor =
+      this.color === "muted"
+        ? "#e3e0cf"
+        : this.color === "hard"
+          ? "#434343"
+          : "#d9d9d9";
 
-      const isMobile: boolean = window.innerWidth < 768;
-      const dsk = this.grid(this.desktop, i, assignedElements.length);
-      const mbl = this.grid(this.mobile, i, assignedElements.length);
+    elements.forEach((element, index) => {
+      this.rememberAndRestore(element);
+      this.managedElements.add(element);
 
-      const padding: number =
-        this.gap === "small" ? 8 : this.gap === "medium" ? 16 : 24;
+      const position = this.grid(columns, index, elements.length);
+      const hasRight = position.col < columns - 1;
+      const hasBottom = position.row < position.rows;
 
       element.style.boxSizing = "content-box";
+      element.style.width = `${itemWidth - (hasRight ? 1 : 0)}px`;
 
-      // Calcular ancho (igual que en Vue)
-      if (isMobile) {
-        const widthM = Math.floor(
-          (this.containerElement.clientWidth -
-            2 * padding * (this.mobile - 1)) /
-            this.mobile,
-        );
-        const borderM: number = (i + 1) % this.mobile !== 0 ? 1 : 0;
-        element.style.width = `${widthM - borderM}px`;
-      } else {
-        const widthd = Math.floor(
-          (this.containerElement.clientWidth -
-            2 * padding * (this.desktop - 1)) /
-            this.desktop,
-        );
-        const borderD: number = (i + 1) % this.desktop !== 0 ? 1 : 0;
-        element.style.width = `${widthd - borderD}px`;
-      }
-
-      let hasRightBorder = false;
-      let hasBottomBorder = false;
-      const borderColor =
-        this.color === "muted"
-          ? "var(--strata-color-border-strong)"
-          : this.color === "hard"
-            ? "var(--strata-color-text-primary)"
-            : "var(--strata-color-border-subtle)";
-
-      // Línea derecha (igual que en Vue)
-      if (
-        (dsk.col < this.desktop - 1 && !isMobile) ||
-        (mbl.col < this.mobile - 1 && isMobile)
-      ) {
-        element.style.paddingRight = `${padding}px`;
-        element.style.marginRight = `${padding}px`;
+      if (hasRight) {
+        element.style.paddingRight = `${gap}px`;
+        element.style.marginRight = `${gap}px`;
         element.style.borderRight = `1px solid ${borderColor}`;
-        hasRightBorder = true;
       }
-
-      // Línea abajo (igual que en Vue)
-      if (
-        (dsk.row < dsk.rows && !isMobile) ||
-        (mbl.row < mbl.rows && isMobile)
-      ) {
-        element.style.paddingBottom = `${padding}px`;
-        element.style.marginBottom = `${padding}px`;
+      if (hasBottom) {
+        element.style.paddingBottom = `${gap}px`;
+        element.style.marginBottom = `${gap}px`;
         element.style.borderBottom = `1px solid ${borderColor}`;
-        hasBottomBorder = true;
       }
-
-      // Esquina (donde se cruzan las líneas) - igual que en Vue
-      if (hasRightBorder && hasBottomBorder) {
-        const gradientSize: number = Math.round(
-          (2 * padding * Math.sqrt(2)) / 4 + 1,
-        );
-        element.style.borderImage = `linear-gradient(315deg, transparent ${gradientSize}px, ${borderColor} 0) 1`;
+      if (hasRight && hasBottom) {
+        const corner = Math.round((2 * gap * Math.sqrt(2)) / 4 + 1);
+        element.style.borderImage = `linear-gradient(315deg, transparent ${corner}px, ${borderColor} 0) 1`;
       }
     });
-  }
+  };
 
   render() {
     return html`
