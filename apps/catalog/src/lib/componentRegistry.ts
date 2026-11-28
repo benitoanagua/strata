@@ -793,6 +793,7 @@ export const catalog: readonly CatalogEntry[] = [
       text("published_at", "Published", "12 Nov 2026"),
       text("reading_time", "Reading time", "4 min"),
       bool("show_meta", "Show meta"),
+      bool("show_category", "Show category", false, { tag_name: "Reportaje" }),
       select("aspect_ratio", "Aspect ratio", "monitor", [
         "square",
         "video",
