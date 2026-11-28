@@ -1017,6 +1017,38 @@ h1 {
   padding: 6px 0;
 }
 @media (max-width: 640px) {
+  .topbar {
+    height: 48px;
+    padding: 0 16px 0 56px;
+  }
+  /* Keep viewer settings reachable on small screens; hide decorative metadata. */
+  .topbar-meta {
+    display: flex;
+  }
+  .topbar-meta .maturity,
+  .topbar-meta .topbar-divider,
+  .topbar-meta .mono {
+    display: none;
+  }
+  .page-content {
+    padding: 26px 16px 16px;
+  }
+  .page-heading {
+    display: block;
+    margin-bottom: 24px;
+  }
+  .element-tag {
+    display: inline-block;
+    margin-top: 15px;
+  }
+  .section-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 13px;
+  }
+  .playground-trigger {
+    width: 100%;
+  }
   .playground-popover {
     top: 64px;
     right: 8px;
