@@ -147,8 +147,6 @@ export const catalog: readonly CatalogEntry[] = [
         "color",
         "Color",
         "primary",
-        // `secondary` is deprecated (see ButtonColor): soft neutral emphasis
-        // is expressed with variant="tonal", not a second neutral color.
         ["primary", "error", "success", "warning"],
         // Semantic colors only read as solid actions when filled; the
         // outlined default would reduce them to a tinted label.
