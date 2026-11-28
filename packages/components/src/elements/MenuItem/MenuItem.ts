@@ -29,7 +29,7 @@ export class StrataMenuItem extends StrataElement {
     const content = html`${this.icon ? html`<iconify-icon icon=${this.icon} aria-hidden="true"></iconify-icon>` : ""}
       <span>${this.label || html`<slot></slot>`}</span>`;
     return this.href && !this.disabled
-      ? html`<a class="item" href=${this.href} aria-current=${this.selected ? "page" : nothing}>${content}</a>`
-      : html`<button class="item" type="button" ?disabled=${this.disabled} aria-current=${this.selected ? "page" : nothing}>${content}</button>`;
+      ? html`<a class="item" role="menuitem" href=${this.href} aria-current=${this.selected ? "page" : nothing}>${content}</a>`
+      : html`<button class="item" role="menuitem" type="button" ?disabled=${this.disabled} aria-current=${this.selected ? "page" : nothing}>${content}</button>`;
   }
 }
