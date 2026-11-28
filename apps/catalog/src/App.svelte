@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
+  import QuickPreview from "./lib/QuickPreview.svelte;
   import CodeExample from "./lib/CodeExample.svelte";
   import { deriveControls, type PropInfo } from "./lib/props";
   import {
@@ -140,7 +141,7 @@
       ) {
         presets.push({
           label: control.label,
-          values: { [control.name]: true },
+          values: { [control.name]: true, ...(control.demoProps ?? {}) },
         });
       }
       if (presets.length >= 4) break;
@@ -148,14 +149,16 @@
     return presets.slice(0, 4);
   });
 
-  function applyPreset(preset: Record<string, ControlValue>) {
-    const next = { ...values };
-    for (const [name, value] of Object.entries(preset)) {
-      next[name] = selectedEntry
-        ? normalizePlaygroundValue(selectedEntry.id, name, value)
-        : value;
-    }
-    values = next;
+  function presetProps(preset: Record<string, ControlValue>) {
+    const next = { ...defaults(), ...preset };
+    return Object.fromEntries(
+      Object.entries(next).map(([name, value]) => [
+        name,
+        selectedEntry
+          ? normalizePlaygroundValue(selectedEntry.id, name, value)
+          : value,
+      ]),
+    ) as Record<string, ControlValue>;
   }
 
   function onHashChange() {
@@ -443,10 +446,16 @@
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
           </div>
-          <div class="playground-presets" aria-label="Quick view variants">
+          <div class="playground-presets" aria-label="Quick view component instances">
             <span class="playground-presets-label">Quick view</span>
             {#each playgroundPresets as preset (preset.label)}
-              <button type="button" class="preset-chip" onclick={() => applyPreset(preset.values)}>{preset.label}</button>
+              <QuickPreview
+                tagName={entry.tagName}
+                props={presetProps(preset.values)}
+                slotHtml={entry.slotHtml}
+                slotContent={entry.slotContent}
+                label={preset.label}
+              />
             {/each}
           </div>
         </section>
