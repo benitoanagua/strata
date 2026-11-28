@@ -36,6 +36,8 @@ export interface CatalogEntry {
   description: string;
   maturity: Maturity;
   controls: readonly PropControl[];
+  /** Public catalog properties mirrored from the source component contract. */
+  controlAllowlist?: readonly string[];
   slotContent?: string;
   slotHtml?: string;
   events?: readonly EventDoc[];
@@ -636,27 +638,31 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-card",
     description: "An editorial card with optional media, metadata and responsive media placement.",
     maturity: "beta",
+    controlAllowlist: [
+      "heading", "title", "url", "feature_image", "tag_name", "author_name", "published_at", "excerpt",
+      "is_media", "media_align", "media_width", "aspect_ratio", "inline_mobile", "elevation",
+      "show_excerpt", "show_meta", "show_category", "font_group", "icon",
+    ],
     controls: [
       num("heading", "Heading level", 3),
       text("title", "Title", "Card title"),
       text("url", "Url", "/article"),
       text("excerpt", "Excerpt", "A short supporting excerpt with enough text to appreciate the reading measure."),
       text("feature_image", "Feature image", "https://picsum.photos/seed/strata-card/1200/900"),
-      bool("is_media", "Media", true, { feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
+      bool("is_media", "Media", false, { feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
       select("media_align", "Media align", "left", ["top", "left", "right", "bottom"]),
       select("media_width", "Media width", "is-half", ["is-none", "is-full", "is-half", "is-two-fifths", "is-one-third", "is-one-quarter", "is-one-fifth"]),
       select("aspect_ratio", "Aspect ratio", "monitor", ["monitor", "square", "video"]),
-      select("density", "Density", "normal", ["normal", "compact", "minimal"]),
-      bool("show_excerpt", "Show excerpt", true, { excerpt: "A short supporting excerpt with enough text to appreciate the reading measure.", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
-      bool("show_meta", "Show metadata", true, { author_name: "Ana Ríos", published_at: "12 Nov 2026", reading_time: "4 min", tag_name: "Reportaje", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
-      bool("show_category", "Show category", true, { tag_name: "Reportaje", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
+      bool("show_excerpt", "Show excerpt", false, { excerpt: "A short supporting excerpt with enough text to appreciate the reading measure.", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
+      bool("show_meta", "Show metadata", false, { author_name: "Ana Ríos", published_at: "12 Nov 2026", tag_name: "Reportaje", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
+      bool("show_category", "Show category", false, { tag_name: "Reportaje", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
       bool("inline_mobile", "Inline on mobile"),
       bool("elevation", "Elevation"),
       select("font_group", "Font group", "default", ["default", "supplement", "sans", "serif"]),
       select("icon", "Media icon", "none", ["none", "photo", "video", "gallery"]),
-      bool("bordered", "Bordered"),
     ],
     a11y: "Title renders as a configurable heading level (h1–h6). Media is optional and metadata/excerpt are opt-in.",
+    notes: "Mirrors the Vue Card API. Catalog names map imageUrl→feature_image, sectionTitle→tag_name, author→author_name, createdAt→published_at and introduction→excerpt. Vue defaults are retained; non-source density, bordered and reading-time controls are omitted.",
   },
   {
     id: "modal",
@@ -780,6 +786,10 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-overlay",
     description: "Text and metadata layered over a background image.",
     maturity: "beta",
+    controlAllowlist: [
+      "heading", "title", "url", "feature_image", "tag_name", "author_name", "published_at",
+      "aspect_ratio", "show_meta", "show_category", "font_group", "align", "position", "box", "is_dark", "fill",
+    ],
     controls: [
       num("heading", "Heading level", 1),
       text("title", "Title", "Overlay title"),
@@ -792,10 +802,9 @@ export const catalog: readonly CatalogEntry[] = [
       text("tag_name", "Tag", "Reportaje"),
       text("author_name", "Author", "Ana Ríos"),
       text("published_at", "Published", "12 Nov 2026"),
-      text("reading_time", "Reading time", "4 min"),
       select("font_group", "Font group", "default", ["default", "supplement", "sans", "serif"]),
-      bool("show_meta", "Show meta", true),
-      bool("show_category", "Show category", true, { tag_name: "Reportaje" }),
+      bool("show_meta", "Show meta", false),
+      bool("show_category", "Show category", false, { tag_name: "Reportaje" }),
       select("aspect_ratio", "Aspect ratio", "monitor", [
         "square",
         "video",
@@ -812,6 +821,7 @@ export const catalog: readonly CatalogEntry[] = [
       bool("is_dark", "Dark image treatment"),
     ],
     a11y: "Title renders at a configurable heading level over the media.",
+    notes: "Mirrors the Vue Overlay API and Post fields using the same catalog mappings as Card. Reading-time metadata is not part of the source component and is omitted.",
   },
   {
     id: "theme-toggle",
@@ -967,6 +977,7 @@ export const catalog: readonly CatalogEntry[] = [
     tagName: "strata-grille",
     description: "A responsive content grid with source-style spacing and divider tones.",
     maturity: "beta",
+    controlAllowlist: ["desktop", "mobile", "gap", "color"],
     controls: [
       num("desktop", "Desktop columns", 3),
       num("mobile", "Mobile columns", 3),
@@ -981,11 +992,11 @@ export const catalog: readonly CatalogEntry[] = [
       ["Epsilon", "05"],
       ["Zeta", "06"],
     ].map(([name, index]) =>
-      '<strata-grille-item><div style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">' +
+      '<article style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">' +
       index + ' / FIELD</small><div><strong style="font:var(--strata-type-headline-small) var(--strata-font-serif)">' +
-      name + '</strong><p style="margin:8px 0 0;max-width:24ch;line-height:1.5">A distinct content cell for an editorial composition.</p></div></div></strata-grille-item>'
+      name + '</strong><p style="margin:8px 0 0;max-width:24ch;line-height:1.5">A distinct content cell for an editorial composition.</p></div></article>'
     ).join(""),
-    slots: [{ name: "default", description: "strata-grille-item children." }],
+    slots: [{ name: "default", description: "Any direct HTML element; each assigned element is a grid cell." }],
   },
   {
     id: "avatar",

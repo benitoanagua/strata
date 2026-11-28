@@ -471,6 +471,7 @@ describe("strata-grille source slot contract", () => {
     const cells = ["article", "section", "div", "aside"].map((tag, index) => {
       const element = document.createElement(tag);
       element.textContent = `Cell ${index + 1}`;
+      if (index === 0) element.style.color = "rgb(1, 2, 3)";
       return element;
     });
     grid.append(...cells);
@@ -487,6 +488,7 @@ describe("strata-grille source slot contract", () => {
     grid.remove();
     expect(cells.every((cell) => cell.style.width === "")).toBe(true);
     expect(cells.every((cell) => cell.style.borderRight === "")).toBe(true);
+    expect(cells[0].style.color).toBe("rgb(1, 2, 3)");
   });
 });
 

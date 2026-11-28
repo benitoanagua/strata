@@ -10,6 +10,7 @@
     type ControlValue,
   } from "./lib/componentRegistry";
   import { scenarioById } from "./lib/scenarios";
+  import { initialPlaygroundValues, normalizePlaygroundValue, usesPropertyPlayground } from "./lib/playgroundPolicy";
   import {
     buildTreeNodes,
     nodeIdForRoute,
@@ -125,7 +126,10 @@
   });
 
   function updateValue(name: string, value: ControlValue) {
-    values = { ...values, [name]: value };
+    const normalized = selectedEntry
+      ? normalizePlaygroundValue(selectedEntry.id, name, value)
+      : value;
+    values = { ...values, [name]: normalized };
   }
 
   function resetValues() {
@@ -269,7 +273,6 @@
       base.tag_name = "Geografía";
       base.author_name = "Ana Ríos";
       base.published_at = "12 nov 2026";
-      base.reading_time = "4 min";
     }
     if (selectedEntry?.id === "overlay") {
       // Keep the background and all editorial metadata populated while each
@@ -280,7 +283,6 @@
       base.tag_name = "Reportaje";
       base.author_name = "Ana Ríos";
       base.published_at = "12 nov 2026";
-      base.reading_time = "6 min";
       base.show_meta = true;
       base.show_category = true;
     }
@@ -292,36 +294,11 @@
     return base;
   }
 
-  function grilleShowcaseSlot(columns: number): string {
-    const names = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta"];
-    return names.map((name, index) =>
-      `<strata-grille-item><div style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between;background:var(--strata-color-surface-page)"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">0${index + 1} / FIELD</small><div><strong style="display:block;font:var(--strata-type-headline-small) var(--strata-font-serif);color:var(--strata-color-text-primary)">${name}</strong><p style="margin:8px 0 0;max-width:24ch;color:var(--strata-color-text-secondary);font-size:13px;line-height:1.5">A distinct content cell for a ${columns}-column composition.</p></div></div></strata-grille-item>`
-    ).join("");
-  }
-
   const variantDemos = $derived.by<DemoCell[]>(() => {
     const entry = selectedEntry;
-    if (!entry || OVERLAY_TAGS.has(entry.tagName)) return [];
+    if (!entry || usesPropertyPlayground(entry.id) || OVERLAY_TAGS.has(entry.tagName)) return [];
     const base = demoBaseProps();
     const cells: DemoCell[] = [];
-    // Grille's source API uses numeric column counts, so expose those as
-    // explicit visual examples even though they remain number controls in
-    // the live Properties panel.
-    if (entry.id === "grille") {
-      for (const columns of [1, 2, 3, 4]) {
-        cells.push({
-          key: `variant-desktop-columns-${columns}`,
-          label: `Desktop columns: ${columns}`,
-          group: "Desktop columns",
-          options: {
-            tagName: entry.tagName,
-            props: { ...base, desktop: columns },
-            slotHtml: grilleShowcaseSlot(columns),
-            slotContent: entry.slotContent,
-          },
-        });
-      }
-    }
     for (const control of variantControls(controls)) {
       for (const option of control.options ?? []) {
         cells.push({
@@ -361,7 +338,7 @@
 
   const stateDemos = $derived.by<DemoCell[]>(() => {
     const entry = selectedEntry;
-    if (!entry || OVERLAY_TAGS.has(entry.tagName)) return [];
+    if (!entry || usesPropertyPlayground(entry.id) || OVERLAY_TAGS.has(entry.tagName)) return [];
     const base = demoBaseProps();
     return controls
       .filter((control) => control.type === "boolean" && control.name !== "open")
@@ -486,7 +463,7 @@
           <code class="element-tag">{entry.tagName}</code>
         </section>
 
-        <section class="preview-block" aria-labelledby="preview-title">
+        <section class="preview-block" class:preview-editorial={usesPropertyPlayground(entry.id)} aria-labelledby="preview-title">
           <div class="section-toolbar">
             <div class="section-heading">
               <span class="section-mark">▣</span><h2 id="preview-title">Preview</h2>
@@ -501,6 +478,20 @@
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
           </div>
         </section>
+
+        {#if usesPropertyPlayground(entry.id)}
+          <section class="property-playground" aria-labelledby="playground-title">
+            <div class="section-heading">
+              <span class="section-mark">⌘</span><h2 id="playground-title">Playground</h2>
+              <span class="section-subtitle">Adjust properties · preview updates live</span>
+            </div>
+            <p class="playground-description">
+              Explore the source component's public properties in one place. The preview starts with
+              a populated editorial fixture; Reset restores the component defaults.
+            </p>
+            <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
+          </section>
+        {/if}
 
         {#if variantDemos.length}
           <section class="demo-block" class:demo-roomy={["card", "overlay", "grille"].includes(entry.id)} aria-labelledby="variants-title">
@@ -559,7 +550,15 @@
                 <div class="metadata-line"><span>MATURITY</span><strong>{entry.maturity}</strong></div>
                 {#if entry.notes}<div class="metadata-line"><span>NOTES</span><span>{entry.notes}</span></div>{/if}
               </section>
-              <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
+              {#if !usesPropertyPlayground(entry.id)}
+                <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
+              {:else}
+                <section class="usage-panel">
+                  <p class="eyebrow">PLAYGROUND</p>
+                  <h2>Live properties.</h2>
+                  <p>Adjust the component in the Playground section above. The API table continues to document every exposed property.</p>
+                </section>
+              {/if}
             </div>
           </strata-tab-panel>
 

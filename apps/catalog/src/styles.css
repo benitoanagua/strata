@@ -1134,3 +1134,94 @@ h1 {
     min-height: 260px;
   }
 }
+
+
+/* Large, uncluttered editorial previews plus one shared property playground. */
+.preview-editorial .canvas {
+  min-height: 480px;
+  padding: 54px 42px 58px;
+}
+.preview-editorial .preview-viewport {
+  min-height: 370px;
+  padding: 22px;
+}
+.preview-editorial .preview-stage {
+  min-height: 300px;
+  padding: 42px 24px;
+}
+.preview-editorial .preview-stage > strata-card,
+.preview-editorial .preview-stage > strata-overlay,
+.preview-editorial .preview-stage > strata-grille {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+.preview-editorial .preview-stage > strata-card {
+  max-width: 960px;
+}
+.preview-editorial .preview-stage > strata-overlay {
+  min-height: 320px;
+}
+.preview-editorial .preview-stage > strata-grille {
+  min-height: 300px;
+}
+.property-playground {
+  margin-top: 30px;
+  padding: 22px;
+  border: 1px solid var(--strata-color-border-subtle);
+  border-radius: var(--strata-radius-medium);
+  background: var(--strata-color-surface-subtle);
+}
+.property-playground .section-heading {
+  flex-wrap: wrap;
+}
+.playground-description {
+  max-width: 680px;
+  margin: 12px 0 18px;
+  color: var(--strata-color-text-secondary);
+  font: 13px/1.6 var(--strata-font-sans);
+}
+.property-playground .controls-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 100%;
+  background: var(--strata-color-surface-page);
+}
+.property-playground .control-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 22px;
+}
+.property-playground .control-field {
+  align-content: start;
+}
+@media (max-width: 900px) {
+  .preview-editorial .canvas {
+    padding: 34px 20px 42px;
+  }
+  .preview-editorial .preview-stage {
+    padding: 24px 8px;
+  }
+  .property-playground .control-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .preview-editorial .canvas {
+    min-height: 360px;
+    padding: 24px 12px 36px;
+  }
+  .preview-editorial .preview-viewport {
+    min-height: 280px;
+    padding: 12px;
+  }
+  .preview-editorial .preview-stage {
+    min-height: 220px;
+    padding: 20px 4px;
+  }
+  .preview-editorial .preview-stage > strata-overlay {
+    min-height: 240px;
+  }
+  .property-playground {
+    padding: 15px;
+  }
+}

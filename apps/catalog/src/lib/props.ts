@@ -70,9 +70,14 @@ function humanize(name: string): string {
     .replace(/^./, (c) => c.toUpperCase());
 }
 
+/** Returns whether a reactive property belongs in the public catalog API. */
+export function allowsCatalogControl(entry: CatalogEntry, name: string): boolean {
+  return !entry.controlAllowlist || entry.controlAllowlist.includes(name);
+}
+
 /**
- * Builds the full control list for an entry: every public reactive property
- * becomes a control; curated definitions override label/type/options/default.
+ * Builds the control list for an entry from its reactive public properties.
+ * Source-mirrored entries may restrict the list with controlAllowlist.
  */
 export function deriveControls(entry: CatalogEntry): PropInfo[] {
   const props = elementProperties(entry.tagName);
@@ -81,6 +86,7 @@ export function deriveControls(entry: CatalogEntry): PropInfo[] {
   const result: PropInfo[] = [];
 
   for (const [name, decl] of props) {
+    if (!allowsCatalogControl(entry, name)) continue;
     if (decl.state) continue;
     if (typeof name !== "string" || name.startsWith("_")) continue;
     const override = curated.get(name);
