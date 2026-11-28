@@ -27,7 +27,7 @@ export class StrataOverlay extends BaseClass {
   @property({ type: String, attribute: "reading-time" }) reading_time = "";
   @property({ type: String, attribute: "aspect-ratio" })
   aspect_ratio: CardAspectRatio = "monitor";
-  @property({ type: Number, reflect: true }) heading: CardHeading = 4;
+  @property({ type: Number, reflect: true }) heading: CardHeading = 1;
   @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
   @property({ type: Boolean, attribute: "show-category" }) show_category = false;
   @property({ type: String, attribute: "font-group" }) font_group: "default" | "supplement" | "sans" | "serif" = "default";
