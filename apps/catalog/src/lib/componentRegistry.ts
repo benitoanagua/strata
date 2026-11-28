@@ -702,7 +702,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Surfaces",
     tagName: "strata-dialog",
     description:
-      "A dialog surface for focused content and actions; closes via Escape or backdrop.",
+      "A compact modal dialog with a shared close control and a dedicated actions slot.",
     maturity: "beta",
     controls: [
       bool("open", "Open", true),
@@ -720,7 +720,7 @@ export const catalog: readonly CatalogEntry[] = [
     events: [],
     a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
     notes:
-      "Dialog is the compact modal interaction. Modal is the advanced presentation variant with configurable size, position, animation and visual treatments. Both share a close-button component and actions slot.",
+      "Dialog is the compact interaction surface. Modal is the advanced blocking overlay with configurable size, position, animation and visual treatments. Both share the same close affordance and action-slot convention.",
   },
   {
     id: "modal",
