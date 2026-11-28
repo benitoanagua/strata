@@ -658,6 +658,7 @@ export const catalog: readonly CatalogEntry[] = [
     ],
     a11y: "Title renders as a configurable heading level (h1–h6). Media is optional and metadata/excerpt are opt-in.",
   },
+  {
     id: "modal",
     name: "Modal",
     category: "Surfaces",
@@ -792,6 +793,7 @@ export const catalog: readonly CatalogEntry[] = [
       text("author_name", "Author", "Ana Ríos"),
       text("published_at", "Published", "12 Nov 2026"),
       text("reading_time", "Reading time", "4 min"),
+      select("font_group", "Font group", "default", ["default", "supplement", "sans", "serif"]),
       bool("show_meta", "Show meta"),
       bool("show_category", "Show category", false, { tag_name: "Reportaje" }),
       select("aspect_ratio", "Aspect ratio", "monitor", [
@@ -978,6 +980,7 @@ export const catalog: readonly CatalogEntry[] = [
       '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">04 / FIELD</small><p style="margin:8px 0 0">Delta tile</p></div></strata-grille-item>',
     slots: [{ name: "default", description: "strata-grille-item children." }],
   },
+  {
     id: "avatar",
     name: "Avatar",
     category: "Data & Content",
