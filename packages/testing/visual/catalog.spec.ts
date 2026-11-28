@@ -446,3 +446,43 @@ test("single-line form controls share one control height", async ({ page }) => {
     expect(Math.round(h)).toBe(44);
   }
 });
+
+test("editorial playground keeps a compact, persistent properties popover", async ({ page }) => {
+  await page.goto("/#/card");
+  await expect(page.getByRole("heading", { name: "Playground", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Preview", exact: true })).toHaveCount(0);
+  const trigger = page.getByRole("button", { name: "Configure" });
+  await trigger.click();
+  const popover = page.getByRole("dialog", { name: "Playground properties" });
+  await expect(popover).toBeVisible();
+  await expect(popover.getByText("CONFIGURATION", { exact: true })).toHaveCount(0);
+  await expect(popover.getByText("Elevation", { exact: true })).toHaveCount(0);
+  await expect(popover.getByText("Font group", { exact: true })).toHaveCount(0);
+  await expect(popover.getByText("Monochrome images", { exact: true })).toBeVisible();
+
+  // Presets live outside the popover; using them must not light-dismiss it.
+  await page.getByRole("button", { name: "Minimal", exact: true }).click();
+  await expect(popover).toBeVisible();
+  await expect(page.locator(".preview-stage > strata-card")).toHaveJSProperty("is_media", false);
+
+  await popover.getByRole("button", { name: "Close properties" }).click();
+  await expect(popover).toHaveCount(0);
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await trigger.click();
+  await expect(popover).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(popover).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
+test("Overlay playground exposes monochrome and theme instead of dark image treatment", async ({ page }) => {
+  await page.goto("/#/overlay");
+  const root = page.locator(".preview-stage > strata-overlay .strata-overlay");
+  await expect(root).toHaveClass(/strata-overlay--monochrome/);
+  await expect(root).toHaveClass(/strata-overlay--theme-auto/);
+  await page.getByRole("button", { name: "Configure" }).click();
+  const popover = page.getByRole("dialog", { name: "Playground properties" });
+  await expect(popover.getByText("Monochrome images", { exact: true })).toBeVisible();
+  await expect(popover.getByText("Theme", { exact: true })).toBeVisible();
+  await expect(popover.getByText("Dark image treatment", { exact: true })).toHaveCount(0);
+});
