@@ -485,6 +485,35 @@ h1 {
   gap: 14px;
   margin-top: 14px;
 }
+/* Editorial surface variants need room to show media and layout. */
+.demo-roomy .demo-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.demo-roomy .demo-stage {
+  min-height: 280px;
+  padding: 28px;
+  align-items: stretch;
+  justify-content: stretch;
+}
+.demo-roomy .demo-stage > strata-card,
+.demo-roomy .demo-stage > strata-overlay,
+.demo-roomy .demo-stage > strata-grille {
+  display: block;
+  width: 100%;
+}
+.demo-roomy .demo-stage > strata-overlay {
+  min-height: 260px;
+}
+.demo-roomy .demo-stage > strata-grille {
+  min-height: 200px;
+}
+@media (max-width: 640px) {
+  .demo-roomy .demo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .demo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
