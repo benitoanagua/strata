@@ -2,7 +2,7 @@
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
   import CodeExample from "./lib/CodeExample.svelte";
-  import { deriveControls, variantControls, type PropInfo } from "./lib/props";
+  import { deriveControls, type PropInfo } from "./lib/props";
   import {
     catalog,
     defaultsFor,
@@ -26,9 +26,7 @@
   import {
     mountStrataElement,
     type StrataMountHandle,
-    type StrataMountOptions,
   } from "./lib/renderer";
-  import { mountStrata } from "./lib/mount";
 
   type Route =
     | { kind: "component"; id: string }
