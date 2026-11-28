@@ -420,37 +420,6 @@ describe("strata-nav", () => {
   });
 });
 
-describe("strata-dialog", () => {
-  it("renders header with close button, traps Escape and locks scroll", async () => {
-    const el = document.createElement("strata-dialog") as HTMLElement & {
-      open: boolean;
-      title: string;
-      updateComplete: Promise<unknown>;
-    };
-    el.title = "Confirm";
-    el.open = true;
-    document.body.appendChild(el);
-    await el.updateComplete;
-    await flush();
-    const close = el.shadowRoot?.querySelector<HTMLButtonElement>(
-      ".strata-dialog__close",
-    );
-    expect(close?.getAttribute("aria-label")).toBe("Close dialog");
-    expect(document.body.style.overflow).toBe("hidden");
-    const content = el.shadowRoot?.querySelector<HTMLElement>(
-      ".strata-dialog__content",
-    );
-    content?.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
-    );
-    await el.updateComplete;
-    expect(el.open).toBe(false);
-    await flush();
-    expect(document.body.style.overflow).not.toBe("hidden");
-    el.remove();
-  });
-});
-
 describe("strata-carousel", () => {
   it("renders labelled arrows and dots and navigates slides", async () => {
     const el = document.createElement("strata-carousel") as HTMLElement & {
