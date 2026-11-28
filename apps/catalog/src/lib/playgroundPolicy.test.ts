@@ -23,7 +23,7 @@ describe("rich preview fixture policy", () => {
   it.each(["card", "overlay", "grille"])(
     "%s receives a rich preview fixture",
     (id) => {
-      expect(usesPropertyPlayground(id)).toBe(true);
+      expect(usesRichPreviewFixture(id)).toBe(true);
     },
   );
 
