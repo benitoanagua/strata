@@ -1,5 +1,16 @@
 # @strata/components
 
+## 4.1.0
+
+### Minor Changes
+
+- e5abcd9: Complete source-parity behavior for Card, Overlay and Grille, including responsive media widths, font-group and theme-aware overlay treatments, stable grille layout recalculation, and larger catalog variant examples.
+
+### Patch Changes
+
+- @strata/tokens@4.1.0
+- @strata/core@4.1.0
+
 ## 4.0.0
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # @strata/core
 
+## 4.1.0
+
+### Patch Changes
+
+- @strata/tokens@4.1.0
+
 ## 4.0.0
 
 ### Patch Changes
