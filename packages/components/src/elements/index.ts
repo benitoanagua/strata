@@ -49,7 +49,6 @@ export { StrataPopover } from "./Popover/Popover.js";
 export { StrataDrawer } from "./Drawer/Drawer.js";
 export { StrataBottomSheet } from "./BottomSheet/BottomSheet.js";
 export { StrataSnackbar } from "./Snackbar/Snackbar.js";
-export { StrataTag } from "./Tag/Tag.js";
 export { StrataList } from "./List/List.js";
 export { StrataListItem } from "./ListItem/ListItem.js";
 export { StrataSpinner } from "./Spinner/Spinner.js";
