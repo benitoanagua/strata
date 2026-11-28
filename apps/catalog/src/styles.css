@@ -1032,30 +1032,39 @@ h1 {
 }
 
 
-/* Quick view is a compact, independent flex rail below the main preview. */
-.playground-presets {
+/* QuickViewGallery lists every story up front and mounts previews near view. */
+.quick-view-gallery {
+  min-width: 0;
+  margin: 14px 0 18px;
+}
+.quick-view-gallery-heading {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-width: 0;
-  margin: 14px 0 0;
-  padding: 8px 0 12px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: thin;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
 }
 .playground-presets-label {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-  align-self: center;
-  flex: 0 0 78px;
-  padding: 0 8px 0 0;
   color: var(--strata-color-text-secondary);
   font: 9px var(--strata-font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: var(--strata-color-surface-page);
+}
+.quick-view-gallery-count {
+  color: var(--strata-color-text-secondary);
+  font: 9px var(--strata-font-mono);
+  white-space: nowrap;
+}
+.quick-view-gallery-track {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  min-width: 0;
+  padding: 4px 0 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scroll-snap-type: x proximity;
 }
 .quick-view-card {
   display: flex;
@@ -1070,6 +1079,7 @@ h1 {
   scroll-snap-align: start;
 }
 .quick-view-stage {
+  position: relative;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -1080,6 +1090,14 @@ h1 {
   padding: 8px;
   color: var(--strata-color-text-primary);
 }
+.quick-view-stage:empty::before {
+  content: "";
+  width: 48%;
+  height: 38%;
+  border-radius: 2px;
+  background: var(--strata-color-surface-sunken);
+  opacity: 0.55;
+}
 .quick-view-stage > * {
   display: block;
   width: 100%;
@@ -1087,30 +1105,38 @@ h1 {
   max-width: 100%;
 }
 .quick-view-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   flex: 0 0 auto;
-  min-height: 30px;
+  min-height: 32px;
   padding: 7px 9px;
   border-top: 1px solid var(--strata-color-border-subtle);
-  color: var(--strata-color-text-secondary);
+  color: var(--strata-color-text-primary);
   font: 9px var(--strata-font-mono);
-  letter-spacing: 0.02em;
-  text-align: center;
-  white-space: nowrap;
+}
+.quick-view-caption span {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.quick-view-caption small {
+  flex: 0 0 auto;
+  color: var(--strata-color-text-secondary);
+  font: inherit;
+  font-size: 8px;
 }
 @media (max-width: 700px) {
-  .playground-presets-label {
-    flex-basis: 64px;
-  }
   .quick-view-card {
     flex-basis: 180px;
     height: 150px;
   }
 }
 @media (max-width: 420px) {
-  .playground-presets {
-    padding: 8px 0;
+  .quick-view-gallery-track {
+    padding: 4px 0 8px;
   }
   .quick-view-stage {
     padding: 6px;
