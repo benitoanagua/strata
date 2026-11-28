@@ -1,12 +1,12 @@
-/** Editorial components whose source APIs are best explored with live controls. */
-export const PROPERTY_PLAYGROUND_IDS = ["card", "overlay", "grille"] as const;
+/** Components with editorial fixtures that seed a richer initial preview. */
+export const RICH_PREVIEW_FIXTURE_IDS = ["card", "overlay", "grille"] as const;
 
-export type PlaygroundComponentId = (typeof PROPERTY_PLAYGROUND_IDS)[number];
+export type RichPreviewFixtureId = (typeof RICH_PREVIEW_FIXTURE_IDS)[number];
 
-export function usesPropertyPlayground(
+export function usesRichPreviewFixture(
   id: string,
-): id is PlaygroundComponentId {
-  return (PROPERTY_PLAYGROUND_IDS as readonly string[]).includes(id);
+): id is RichPreviewFixtureId {
+  return (RICH_PREVIEW_FIXTURE_IDS as readonly string[]).includes(id);
 }
 
 /** Seed a visually useful example; Reset still returns to source defaults. */
