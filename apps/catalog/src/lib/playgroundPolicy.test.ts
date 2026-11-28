@@ -4,7 +4,7 @@ import { allowsCatalogControl } from "./props";
 import {
   initialPlaygroundValues,
   normalizePlaygroundValue,
-  usesPropertyPlayground,
+  usesRichPreviewFixture,
 } from "./playgroundPolicy";
 
 function entry(id: string) {
