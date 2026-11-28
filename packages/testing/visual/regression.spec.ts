@@ -34,6 +34,29 @@ test.describe("STRATA responsive layout", () => {
     );
   });
 
+  test("Quick view mounts real previews for representative component families", async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    for (const id of ["button", "card", "grille", "overlay", "avatar", "modal"]) {
+      await page.goto(`/#/${id}`);
+      const preview = page
+        .locator(".quick-view-card")
+        .first()
+        .locator(".quick-view-host > *")
+        .first();
+      await expect
+        .poll(() => preview.evaluate((el) => el.tagName.toLowerCase()), {
+          timeout: 5_000,
+        })
+        .toBe(`strata-${id}`);
+    }
+    await page.goto("/#/grille");
+    await expect(
+      page.locator(".quick-view-card").first().locator(".quick-view-host > strata-grille article"),
+    ).toHaveCount(6);
+  });
+
   test("Playground collapse handle remains visible and aligned at 320px", async ({
     page,
   }) => {
