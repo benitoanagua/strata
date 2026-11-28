@@ -250,11 +250,11 @@ test("snippet tab shows copyable markup for the selected component", async ({
   context,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/#/tag");
+  await page.goto("/#/badge");
   await page.getByRole("tab", { name: "Examples" }).click();
   const code = await snippetCode(page);
   expect(code).toContain('import "@strata/components"');
-  expect(code).toContain("<strata-tag");
+  expect(code).toContain("<strata-badge");
   await page.locator(".code-tools strata-button").click();
   await expect(page.locator(".code-tools strata-button")).toContainText(
     "Copied",
