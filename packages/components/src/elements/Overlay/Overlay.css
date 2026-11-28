@@ -331,3 +331,23 @@
 .strata-overlay--theme-light .strata-overlay__meta {
   border-color: color-mix(in srgb, var(--overlay-ink) 20%, transparent);
 }
+
+/* Theme-aware source gradient strengths and focus treatment. */
+.strata-overlay--theme-dark.strata-overlay--fill-gradient.strata-overlay--position-top::before {
+  background-image: linear-gradient(to bottom, color-mix(in srgb, var(--strata-color-black) 90%, transparent), transparent);
+}
+.strata-overlay--theme-dark.strata-overlay--fill-gradient.strata-overlay--position-bottom::before {
+  background-image: linear-gradient(to top, color-mix(in srgb, var(--strata-color-black) 90%, transparent), transparent);
+}
+.strata-overlay--theme-dark.strata-overlay--fill-gradient.strata-overlay--position-center::before {
+  background-image: linear-gradient(to top, transparent, color-mix(in srgb, var(--strata-color-black) 90%, transparent) 50%, transparent);
+}
+.strata-overlay--theme-light .strata-overlay__meta-item:hover,
+.strata-overlay--theme-dark .strata-overlay__meta-item:hover {
+  color: var(--overlay-ink);
+}
+.strata-overlay--theme-light.strata-overlay:focus-within .strata-overlay__content,
+.strata-overlay--theme-dark.strata-overlay:focus-within .strata-overlay__content {
+  border-color: var(--overlay-ink);
+  outline-color: var(--overlay-ink);
+}
