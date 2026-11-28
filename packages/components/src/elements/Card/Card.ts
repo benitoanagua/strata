@@ -101,6 +101,7 @@ export class StrataCard extends BaseClass {
   }
 
   private getFlexClass() {
+    if (this.is_media && this.media_width === "is-full") return "strata-card__container--column";
     if (this.media_align === "left" && this.inline_mobile) return "strata-card__container--row";
     if (this.media_align === "right" && this.inline_mobile) return "strata-card__container--row-reverse";
     if (this.media_align === "left")
@@ -112,6 +113,8 @@ export class StrataCard extends BaseClass {
   }
 
   private getFigureClass() {
+    if (this.media_width === "is-none") return "strata-card__figure--none";
+    if (this.media_width === "is-full") return "strata-card__figure--full";
     const isHorizontal =
       this.media_align === "left" || this.media_align === "right";
     if (!isHorizontal) return "strata-card__figure--flexible";
