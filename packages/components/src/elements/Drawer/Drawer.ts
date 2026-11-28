@@ -26,11 +26,12 @@ export class StrataDrawer extends StrataElement {
         document.activeElement instanceof HTMLElement
           ? document.activeElement
           : null;
-      queueMicrotask(() =>
-        this.renderRoot
-          .querySelector<HTMLElement>(".strata-drawer button")
-          ?.focus(),
-      );
+      queueMicrotask(() => {
+        const closeButton = this.renderRoot.querySelector<HTMLElement>("strata-close-button") as
+          | (HTMLElement & { focus: () => void })
+          | null;
+        closeButton?.focus();
+      });
     } else {
       this.restoreFocus();
     }
