@@ -4,24 +4,6 @@ import baseCSS from "../../component-base.css?inline";
 import componentCSS from "./Grille.css?inline";
 import type { GrilleProps, Gap } from "../../types/grille.js";
 
-const STYLE_PROPERTIES = [
-  "box-sizing",
-  "width",
-  "padding-right",
-  "margin-right",
-  "border-right-width",
-  "border-right-style",
-  "border-right-color",
-  "border-right",
-  "padding-bottom",
-  "margin-bottom",
-  "border-bottom-width",
-  "border-bottom-style",
-  "border-bottom-color",
-  "border-bottom",
-  "border-image",
-] as const;
-
 @customElement("strata-grille")
 export class StrataGrille extends LitElement implements GrilleProps {
   static styles = [unsafeCSS(baseCSS), unsafeCSS(componentCSS)];
@@ -38,7 +20,7 @@ export class StrataGrille extends LitElement implements GrilleProps {
   private slotElement!: HTMLSlotElement;
 
   private resizeObserver?: ResizeObserver;
-  private readonly originalStyles = new WeakMap<HTMLElement, Map<string, string>>();
+  private readonly originalStyles = new WeakMap<HTMLElement, string>();
   private readonly managedElements = new Set<HTMLElement>();
   private readonly handleResize = () => this.gridRendering();
 
@@ -80,20 +62,15 @@ export class StrataGrille extends LitElement implements GrilleProps {
 
   private rememberAndRestore(element: HTMLElement) {
     let original = this.originalStyles.get(element);
-    if (!original) {
-      original = new Map<string, string>(
-        STYLE_PROPERTIES.map((name) => [
-          name,
-          element.style.getPropertyValue(name),
-        ] as [string, string]),
-      );
+    if (original === undefined) {
+      original = element.getAttribute("style") ?? "";
       this.originalStyles.set(element, original);
     }
-    for (const name of STYLE_PROPERTIES) {
-      const value = original.get(name) ?? "";
-      if (value) element.style.setProperty(name, value);
-      else element.style.removeProperty(name);
-    }
+    // Restore the complete inline style attribute before applying grid
+    // geometry. This preserves consumer styles and clears every declaration
+    // (including shorthands) owned by a previous grid pass.
+    if (original) element.setAttribute("style", original);
+    else element.removeAttribute("style");
   }
 
   private restoreManagedElements() {
