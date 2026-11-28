@@ -703,3 +703,78 @@ describe("floating surface close composition", () => {
     }
   });
 });
+
+
+describe("source parity: Card, Overlay and Grille", () => {
+  it("Card supports full/none media widths and keeps excerpts across density variants", async () => {
+    const card = (await mount("strata-card")) as HTMLElement & {
+      is_media: boolean;
+      feature_image: string;
+      media_width: string;
+      density: string;
+      show_excerpt: boolean;
+      excerpt: string;
+      updateComplete: Promise<unknown>;
+    };
+    card.is_media = true;
+    card.feature_image = "https://example.test/card.jpg";
+    card.media_width = "is-full";
+    card.density = "minimal";
+    card.show_excerpt = true;
+    card.excerpt = "Source excerpt remains available in compact densities.";
+    await card.updateComplete;
+    expect(card.querySelector(".strata-card__container")?.classList.contains("strata-card__container--column")).toBe(true);
+    expect(card.querySelector(".strata-card__figure--full")).toBeTruthy();
+    expect(card.querySelector(".strata-card__excerpt")?.textContent).toContain("Source excerpt");
+    card.media_width = "is-none";
+    await card.updateComplete;
+    expect(card.querySelector(".strata-card__figure")).toBeNull();
+    card.remove();
+  });
+
+  it("Overlay exposes source font group and theme-specific gradient classes", async () => {
+    const overlay = (await mount("strata-overlay")) as HTMLElement & {
+      font_group: string;
+      fill: string;
+      is_dark: boolean;
+      position: string;
+      updateComplete: Promise<unknown>;
+    };
+    overlay.font_group = "supplement";
+    overlay.fill = "gradient";
+    overlay.is_dark = false;
+    overlay.position = "top";
+    await overlay.updateComplete;
+    const root = overlay.querySelector(".strata-overlay");
+    expect(root?.classList.contains("strata-overlay--font-supplement")).toBe(true);
+    expect(root?.classList.contains("strata-overlay--theme-light")).toBe(true);
+    expect(root?.classList.contains("strata-overlay--fill-gradient")).toBe(true);
+    overlay.remove();
+  });
+
+  it("Grille recalculates internal dividers and restores consumer styles on removal", async () => {
+    const grid = document.createElement("strata-grille") as HTMLElement & {
+      desktop: number;
+      mobile: number;
+      updateComplete: Promise<unknown>;
+    };
+    grid.desktop = 2;
+    grid.mobile = 1;
+    const first = document.createElement("strata-grille-item");
+    first.style.width = "77px";
+    first.style.color = "red";
+    grid.append(first, document.createElement("strata-grille-item"), document.createElement("strata-grille-item"), document.createElement("strata-grille-item"));
+    document.body.appendChild(grid);
+    await grid.updateComplete;
+    await flush();
+    const items = [...grid.querySelectorAll("strata-grille-item")];
+    expect(items[0].style.borderRight).toContain("solid");
+    expect(items[0].style.borderBottom).toContain("solid");
+    expect(items[3].style.borderRight).toBe("");
+    expect(items[3].style.borderBottom).toBe("");
+    expect(first.style.color).toBe("red");
+    grid.remove();
+    expect(first.style.width).toBe("77px");
+    expect(first.style.color).toBe("red");
+  });
+});
