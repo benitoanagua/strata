@@ -35,7 +35,6 @@ export { StrataPagination } from "./Pagination/Pagination.js";
 
 export { StrataAvatar } from "./Avatar/Avatar.js";
 export { StrataBreadcrumb } from "./Breadcrumb/Breadcrumb.js";
-export { StrataButtonGroup } from "./ButtonGroup/ButtonGroup.js";
 export { StrataMenu } from "./Menu/Menu.js";
 export { StrataMenuItem } from "./MenuItem/MenuItem.js";
 export { StrataRadio } from "./Radio/Radio.js";
@@ -165,7 +164,6 @@ declare global {
     "strata-pagination": import("./Pagination/Pagination.js").StrataPagination;
     "strata-avatar": import("./Avatar/Avatar.js").StrataAvatar;
     "strata-breadcrumb": import("./Breadcrumb/Breadcrumb.js").StrataBreadcrumb;
-    "strata-button-group": import("./ButtonGroup/ButtonGroup.js").StrataButtonGroup;
     "strata-menu": import("./Menu/Menu.js").StrataMenu;
     "strata-menu-item": import("./MenuItem/MenuItem.js").StrataMenuItem;
     "strata-radio": import("./Radio/Radio.js").StrataRadio;
