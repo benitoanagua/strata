@@ -9,8 +9,9 @@ export class StrataGrille extends LitElement implements GrilleProps {
   static styles = [unsafeCSS(baseCSS), unsafeCSS(componentCSS)];
 
   @property({ type: Number }) desktop: GrilleProps["desktop"] = 3;
-  @property({ type: Number }) mobile: GrilleProps["mobile"] = 2;
-  @property({ type: String }) gap: Gap = "medium";
+  @property({ type: Number }) mobile: GrilleProps["mobile"] = 3;
+  @property({ type: String }) gap: Gap = "large";
+  @property({ type: String }) color: NonNullable<GrilleProps["color"]> = "soft";
 
   @query(".strata-grille__container", true)
   private containerElement!: HTMLElement;
@@ -111,7 +112,12 @@ export class StrataGrille extends LitElement implements GrilleProps {
 
       let hasRightBorder = false;
       let hasBottomBorder = false;
-      const borderColor = "var(--strata-color-border-subtle)";
+      const borderColor =
+        this.color === "muted"
+          ? "#e3e0cf"
+          : this.color === "hard"
+            ? "#434343"
+            : "#d9d9d9";
 
       // Línea derecha (igual que en Vue)
       if (
