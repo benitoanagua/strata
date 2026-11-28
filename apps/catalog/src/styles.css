@@ -950,6 +950,16 @@ h1 {
     flex-direction: column;
     padding: 13px;
   }
+  .playground-trigger {
+    width: 100%;
+  }
+  .playground-trigger-hint {
+    margin-left: auto;
+  }
+  .common-components {
+    flex-direction: column;
+    gap: 8px;
+  }
   .canvas {
     min-height: 250px;
     padding: 24px 12px 32px;
@@ -1226,23 +1236,31 @@ h1 {
 
 
 /* Global Playground: one topbar entry point, with automatically generated component controls. */
-.topbar-meta .playground-trigger {
-  min-height: 32px;
-}
 .playground-trigger {
   flex: 0 0 auto;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 1px solid var(--strata-color-border-strong);
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 16px;
+  border: 1px solid var(--strata-color-text-primary);
   border-radius: var(--strata-radius-small);
-  background: var(--strata-color-surface-page);
-  color: var(--strata-color-text-primary);
+  background: var(--strata-color-text-primary);
+  color: var(--strata-color-surface-page);
   font: 600 12px/1 var(--strata-font-sans);
   cursor: pointer;
 }
 .playground-trigger:hover,
 .playground-trigger[aria-expanded="true"] {
-  background: var(--strata-color-surface-selected);
+  filter: brightness(0.9);
+}
+.playground-trigger-hint {
+  padding-left: 9px;
+  border-left: 1px solid currentColor;
+  opacity: 0.72;
+  font-size: 10px;
+  font-weight: 400;
 }
 .playground-trigger:focus-visible,
 .preset-chip:focus-visible,
@@ -1265,13 +1283,14 @@ h1 {
   text-transform: uppercase;
 }
 .preset-chip {
-  min-height: 30px;
-  padding: 0 10px;
-  border: 1px solid var(--strata-color-border-subtle);
-  border-radius: 999px;
+  appearance: none;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--strata-color-border-strong);
+  border-radius: var(--strata-radius-small);
   background: var(--strata-color-surface-page);
   color: var(--strata-color-text-primary);
-  font: 11px var(--strata-font-sans);
+  font: 600 11px var(--strata-font-sans);
   cursor: pointer;
 }
 .preset-chip:hover {
@@ -1281,6 +1300,50 @@ h1 {
 .preset-reset {
   margin-left: auto;
   color: var(--strata-color-text-secondary);
+}
+.common-components {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--strata-color-border-subtle);
+}
+.common-components-label {
+  padding-top: 8px;
+  color: var(--strata-color-text-secondary);
+  font: 10px var(--strata-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.common-components-list {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-width: 0;
+}
+.common-component-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--strata-color-border-subtle);
+  border-radius: var(--strata-radius-small);
+  background: var(--strata-color-surface-page);
+  color: var(--strata-color-text-primary);
+  font: 11px var(--strata-font-sans);
+  text-decoration: none;
+}
+.common-component-link:hover,
+.common-component-link[aria-current="page"] {
+  border-color: var(--strata-color-border-strong);
+  background: var(--strata-color-surface-selected);
+}
+.common-component-link:focus-visible {
+  outline: 2px solid var(--strata-color-focus-ring);
+  outline-offset: 2px;
 }
 .playground-popover {
   position: fixed;
