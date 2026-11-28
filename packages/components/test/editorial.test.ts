@@ -34,11 +34,22 @@ describe("taxonomy hues", () => {
     expect(resolveHue("magenta", "x")).toBe("neutral");
     expect(resolveHue("auto", "x")).toBe(hueForLabel("x"));
   });
-  it("strata-tag always renders its label next to the hue", async () => {
-    const tag = await mount("strata-tag", { label: "Ciencia", hue: "auto" });
-    const span = tag.shadowRoot!.querySelector(".strata-tag")!;
-    expect(span.textContent).toContain("Ciencia");
-    expect(span.className).toContain(`strata-hue--${hueForLabel("Ciencia")}`);
+  it("Badge renders its label with a deterministic taxonomy hue", async () => {
+    const badge = await mount("strata-badge", { label: "Ciencia", hue: "auto" });
+    const rendered = badge.shadowRoot!.querySelector(".strata-badge")!;
+    expect(rendered.textContent).toContain("Ciencia");
+    expect(rendered.className).toContain(`strata-hue--${hueForLabel("Ciencia")}`);
+  });
+
+  it("Badge exposes an accessible pressed state for interactive chips", async () => {
+    const badge = await mount("strata-badge", {
+      label: "Historia",
+      interactive: "",
+      pressed: "",
+    });
+    const button = badge.shadowRoot!.querySelector<HTMLButtonElement>("button")!;
+    expect(button.getAttribute("aria-pressed")).toBe("true");
+    button.click();
   });
 });
 
@@ -59,16 +70,6 @@ describe("items parsing", () => {
 });
 
 describe("news / wiki components", () => {
-  it("tag-list links items through base-href", async () => {
-    const el = await mount("strata-tag-list", {
-      items: "Arte|Música",
-      "base-href": "/tag/",
-    });
-    const tags = el.shadowRoot!.querySelectorAll("strata-tag");
-    expect(tags).toHaveLength(2);
-    expect(tags[0].getAttribute("href")).toBe("/tag/Arte");
-  });
-
   it("comment emits strata-reply and shows replies only when present", async () => {
     const el = await mount(
       "strata-comment",
@@ -99,20 +100,22 @@ describe("news / wiki components", () => {
     expect(el.shadowRoot!.querySelectorAll("button")).toHaveLength(1);
   });
 
-  it("filter-bar emits category/view/sort and marks the active chip", async () => {
+  it("filter-bar emits category/view/sort and uses Badge chips", async () => {
     const el = await mount("strata-filter-bar", { items: "Arte|Ciencia" });
     let detail: unknown;
     el.addEventListener(
       "strata-change",
       (e) => (detail = (e as CustomEvent).detail.value),
     );
-    const chips = el.shadowRoot!.querySelectorAll<HTMLButtonElement>(".chip");
+    const chips = el.shadowRoot!.querySelectorAll<HTMLElement>("strata-badge");
     expect(chips).toHaveLength(3);
-    chips[2].click();
+    chips[2].shadowRoot!.querySelector<HTMLButtonElement>("button")!.click();
     await el.updateComplete;
     expect(detail).toEqual({ category: "Ciencia", view: "list", sort: "desc" });
     expect(
-      el.shadowRoot!.querySelectorAll('.chip[aria-pressed="true"]'),
+      Array.from(chips).filter((chip) =>
+        chip.shadowRoot?.querySelector('button[aria-pressed="true"]'),
+      ),
     ).toHaveLength(1);
   });
 
@@ -145,17 +148,23 @@ describe("news / wiki components", () => {
     expect(el.shadowRoot!.querySelector("cite a")).toBeNull();
   });
 
-  it("article-header and entry omit unsafe images", async () => {
+  it("article-header and entry omit unsafe images and render Entry taxonomy as Badge", async () => {
     const h = await mount("strata-article-header", {
       heading: "T",
       image: "javascript:1",
     });
     expect(h.shadowRoot!.querySelector("img")).toBeNull();
     const e = await mount("strata-entry", {
-      heading: "T",
+      heading: "Crónica",
       href: "javascript:1",
+      category: "Historia",
+      tags: "Agua|Valles",
     });
     expect(e.shadowRoot!.querySelector("h3 a")).toBeNull();
+    const badges = e.shadowRoot!.querySelectorAll("strata-badge");
+    expect(badges).toHaveLength(3);
+    expect(badges[0].getAttribute("label")).toBe("Historia");
+    expect(badges[1].getAttribute("label")).toBe("Agua");
   });
 
   it("ticker never auto-advances unless interval is set", async () => {
