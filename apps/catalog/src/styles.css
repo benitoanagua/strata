@@ -1020,3 +1020,38 @@ h1 {
   box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
   font: 12px/1.45 var(--strata-font-sans);
 }
+
+
+/* More generous editorial component variant previews. */
+.demo-roomy .demo-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+}
+.demo-roomy .demo-stage {
+  min-height: 360px;
+  padding: 32px;
+}
+.demo-roomy .demo-stage > strata-card,
+.demo-roomy .demo-stage > strata-overlay,
+.demo-roomy .demo-stage > strata-grille {
+  width: 100%;
+}
+.demo-roomy .demo-stage > strata-overlay {
+  min-height: 340px;
+}
+.demo-roomy .demo-stage > strata-grille {
+  min-height: 320px;
+}
+.demo-roomy .demo-cell figcaption {
+  padding: 10px 14px;
+  font-size: 10px;
+}
+@media (max-width: 640px) {
+  .demo-roomy .demo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .demo-roomy .demo-stage {
+    min-height: 300px;
+    padding: 20px;
+  }
+}
