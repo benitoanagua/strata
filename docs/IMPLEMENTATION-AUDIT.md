@@ -1,11 +1,11 @@
 # STRATA — Implementation Audit
 
-Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
+Audit of all 73 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
 
 ## Summary
 
-- **74 canonical entries**, all registered as custom elements (`strata-*`).
-- **78 registered elements**: the four extra tags (`strata-accordion-item`, `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) are composition-only children, not catalog entries.
+- **73 canonical entries**, all registered as custom elements (`strata-*`).
+- **77 registered elements**: the four extra tags (`strata-accordion-item`, `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) are composition-only children, not catalog entries.
 - Catalog registry, public exports and `STRATA_COMPONENT_CATALOG` are synchronized (verified by `apps/catalog/test/catalog-registry.test.ts`).
 - Every entry mounts a real element in the catalog canvas; controls are derived from Lit `elementProperties` metadata (`apps/catalog/src/lib/props.ts`).
 
@@ -36,7 +36,6 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 | ---------------------------- | --------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------ | --------- | -------- |
 | Button (`button`)            | `strata-button`       | `StrataButton`      | `label`<br>`ariaLabel`<br>`variant`<br>`size`<br>`color`<br>`disabled`<br>`loading`<br>`href`<br>`type`<br>`icon`<br>`trailingIcon`<br>`fullWidth` | —                    | —      | —         | stable   |
 | IconButton (`icon-button`)   | `strata-icon-button`  | `StrataIconButton`  | `size`<br>`disabled`<br>`label`<br>`icon`                                                                                                          | —                    | —      | —         | stable   |
-| ButtonGroup (`button-group`) | `strata-button-group` | `StrataButtonGroup` | `size`<br>`tone`<br>`orientation`                                                                                                                  | `size`               | —      | `default` | beta     |
 | Stepper (`stepper`)          | `strata-stepper`      | `StrataStepper`     | `size`<br>`tone`<br>`value`<br>`disabled`<br>`min`<br>`max`                                                                                        | `size`<br>`disabled` | —      | —         | beta     |
 
 ### Button — `strata-button`
@@ -64,18 +63,6 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
 - **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
 - **Maturity:** stable
-
-### ButtonGroup — `strata-button-group`
-
-- **Purpose:** Groups related actions with a shared orientation.
-- **Implementation:** `StrataButtonGroup` in `packages/components/src/elements/ButtonGroup`
-- **Properties (3):** `size` (String, reflected), `tone` (String), `orientation` (String)
-- **Slots:** `default` — strata-button children.
-- **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
-- **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
-- **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
-- **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
-- **Maturity:** beta
 
 ### Stepper — `strata-stepper`
 
