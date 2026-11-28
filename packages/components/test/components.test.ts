@@ -52,7 +52,7 @@ describe("STRATA NavItem", () => {
       .updateComplete;
     const button = el.shadowRoot?.querySelector<HTMLButtonElement>("button");
     expect(button).toBeTruthy();
-    expect(button?.getAttribute("aria-current")).toBe("false");
+    expect(button?.getAttribute("aria-current")).toBeNull();
     el.setAttribute("selected", "");
     await (el as unknown as { updateComplete: Promise<unknown> })
       .updateComplete;
@@ -80,23 +80,23 @@ describe("STRATA accessibility contracts", () => {
     const trigger = document.createElement("button");
     document.body.appendChild(trigger);
     trigger.focus();
-    const dialog = document.createElement("strata-dialog") as HTMLElement & {
+    const modal = document.createElement("strata-modal") as HTMLElement & {
       open: boolean;
+      updateComplete: Promise<unknown>;
     };
-    dialog.setAttribute("title", "Details");
-    dialog.open = true;
-    document.body.appendChild(dialog);
-    await (dialog as unknown as { updateComplete: Promise<unknown> })
-      .updateComplete;
-    const title = dialog.shadowRoot?.querySelector("h2");
-    const content = dialog.shadowRoot?.querySelector("[role=dialog]");
+    modal.setAttribute("title", "Details");
+    document.body.appendChild(modal);
+    await modal.updateComplete;
+    modal.open = true;
+    await modal.updateComplete;
+    const title = modal.shadowRoot?.querySelector("h2");
+    const content = modal.shadowRoot?.querySelector("[role=dialog]");
     expect(title?.id).toBeTruthy();
     expect(content?.getAttribute("aria-labelledby")).toBe(title?.id);
-    dialog.open = false;
-    await (dialog as unknown as { updateComplete: Promise<unknown> })
-      .updateComplete;
+    modal.open = false;
+    await modal.updateComplete;
     expect(document.activeElement).toBe(trigger);
-    dialog.remove();
+    modal.remove();
     trigger.remove();
   });
 });
