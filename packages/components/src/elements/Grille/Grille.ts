@@ -132,10 +132,10 @@ export class StrataGrille extends LitElement implements GrilleProps {
     );
     const borderColor =
       this.color === "muted"
-        ? "#e3e0cf"
+        ? "var(--strata-color-border-strong)"
         : this.color === "hard"
-          ? "#434343"
-          : "#d9d9d9";
+          ? "var(--strata-color-text-primary)"
+          : "var(--strata-color-border-subtle)";
 
     elements.forEach((element, index) => {
       this.rememberAndRestore(element);
