@@ -10,7 +10,7 @@
     type ControlValue,
   } from "./lib/componentRegistry";
   import { scenarioById } from "./lib/scenarios";
-  import { initialPlaygroundValues, usesPropertyPlayground } from "./lib/playgroundPolicy";
+  import { initialPlaygroundValues, normalizePlaygroundValue, usesPropertyPlayground } from "./lib/playgroundPolicy";
   import {
     buildTreeNodes,
     nodeIdForRoute,
@@ -126,7 +126,10 @@
   });
 
   function updateValue(name: string, value: ControlValue) {
-    values = { ...values, [name]: value };
+    const normalized = selectedEntry
+      ? normalizePlaygroundValue(selectedEntry.id, name, value)
+      : value;
+    values = { ...values, [name]: normalized };
   }
 
   function resetValues() {
