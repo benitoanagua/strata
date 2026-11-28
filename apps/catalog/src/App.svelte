@@ -295,124 +295,7 @@
     if (typeof href === "string" && href) location.hash = href;
   }
 
-  interface DemoCell {
-    key: string;
-    label: string;
-    group: string;
-    options: StrataMountOptions;
-  }
-
-  const OVERLAY_TAGS = new Set([
-    "strata-dialog",
-    "strata-modal",
-    "strata-drawer",
-    "strata-bottom-sheet",
-    "strata-popover",
-    "strata-menu",
-  ]);
-
-  // Demo cells mount the element with its declared defaults plus the varied
-  // prop, so every example is a complete, accessible instance. `open` is
-  // stripped so overlays never cover the page, and overlay entries are
-  // skipped entirely — a closed overlay has nothing to show.
-  function demoBaseProps(): Record<string, unknown> {
-    const base = { ...defaultsFor(controls) } as Record<string, unknown>;
-    delete base.open;
-    if (selectedEntry?.id === "card") {
-      // Use a complete editorial fixture so media, category, author, date,
-      // reading time and excerpt variants are visible in every comparison.
-      base.title = "El río que cambió de rumbo";
-      base.url = "/articles/cuenca-del-plata";
-      base.is_media = true;
-      base.feature_image = "https://picsum.photos/seed/strata-card/1440/1080";
-      base.show_excerpt = true;
-      base.excerpt = "Una crónica visual sobre la memoria del agua y la transformación del territorio.";
-      base.show_meta = true;
-      base.show_category = true;
-      base.tag_name = "Geografía";
-      base.author_name = "Ana Ríos";
-      base.published_at = "12 nov 2026";
-    }
-    if (selectedEntry?.id === "overlay") {
-      // Keep the background and all editorial metadata populated while each
-      // control changes only the source-defined treatment being showcased.
-      base.title = "El territorio contado desde sus ríos";
-      base.url = "/articles/territorio-y-rios";
-      base.feature_image = "https://picsum.photos/seed/strata-overlay/1440/1080";
-      base.tag_name = "Reportaje";
-      base.author_name = "Ana Ríos";
-      base.published_at = "12 nov 2026";
-      base.show_meta = true;
-      base.show_category = true;
-    }
-    if (selectedEntry?.id === "grille") {
-      // Four generous content cells reveal divider placement on both axes.
-      base.desktop = 3;
-      base.mobile = 1;
-    }
-    return base;
-  }
-
-  const variantDemos = $derived.by<DemoCell[]>(() => {
-    const entry = selectedEntry;
-    if (!entry || usesPropertyPlayground(entry.id) || OVERLAY_TAGS.has(entry.tagName)) return [];
-    const base = demoBaseProps();
-    const cells: DemoCell[] = [];
-    for (const control of variantControls(controls)) {
-      for (const option of control.options ?? []) {
-        cells.push({
-          key: `variant-${control.name}-${option}`,
-          label: `${control.label}: ${option}`,
-          group: control.label,
-          options: {
-            tagName: entry.tagName,
-            props: {
-              ...base,
-              ...control.demoProps,
-              [control.name]: option,
-            },
-            slotHtml: entry.slotHtml,
-            slotContent: entry.slotContent,
-          },
-        });
-      }
-    }
-    return cells;
-  });
-
-  // Variant cells arrive grouped by control already; chunk them so the
-  // section can label each property (Variant, Size, Color…) separately
-  // instead of presenting one flat grid of mixed combinations.
-  const variantGroups = $derived.by<{ label: string; cells: DemoCell[] }[]>(
-    () => {
-      const groups: { label: string; cells: DemoCell[] }[] = [];
-      for (const cell of variantDemos) {
-        const last = groups[groups.length - 1];
-        if (last && last.label === cell.group) last.cells.push(cell);
-        else groups.push({ label: cell.group, cells: [cell] });
-      }
-      return groups;
-    },
-  );
-
-  const stateDemos = $derived.by<DemoCell[]>(() => {
-    const entry = selectedEntry;
-    if (!entry || usesPropertyPlayground(entry.id) || OVERLAY_TAGS.has(entry.tagName)) return [];
-    const base = demoBaseProps();
-    return controls
-      .filter((control) => control.type === "boolean" && control.name !== "open")
-      .map((control) => ({
-        key: `state-${control.name}`,
-        label: control.label,
-        group: "States",
-        options: {
-          tagName: entry.tagName,
-          props: { ...base, ...control.demoProps, [control.name]: true },
-          slotHtml: entry.slotHtml,
-          slotContent: entry.slotContent,
-        },
-      }));
-  });
+  // Variant and state exploration now use the shared Quick view row above.
 
   function onKeydown(event: KeyboardEvent) {
     if (event.key === "Escape" && propertyPopoverOpen) {
@@ -545,7 +428,7 @@
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
             <div class="preview-viewport viewport-{prefs.viewport}">
-              <div class="canvas-labels"><span>{usesPropertyPlayground(entry.id) ? "PLAYGROUND PREVIEW" : "PREVIEW AREA"}</span><span>{prefs.viewport.toUpperCase()} / 01</span></div>
+              <div class="canvas-labels"><span>"PREVIEW AREA"</span><span>{prefs.viewport.toUpperCase()} / 01</span></div>
               <div class="preview-stage" bind:this={previewHost}></div>
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
@@ -568,43 +451,6 @@
           {/if}
         </section>
 
-        {#if variantDemos.length}
-          <section class="demo-block" class:demo-roomy={["card", "overlay", "grille"].includes(entry.id)} aria-labelledby="variants-title">
-            <div class="section-heading">
-              <span class="section-mark">◫</span><h2 id="variants-title">Variants</h2>
-              <span class="section-subtitle">{variantDemos.length} combinations</span>
-            </div>
-            {#each variantGroups as group}
-              <h3 class="demo-group-title">{group.label}</h3>
-              <div class="demo-grid">
-                {#each group.cells as cell (cell.key)}
-                  <figure class="demo-cell">
-                    <div class="demo-stage" use:mountStrata={cell.options}></div>
-                    <figcaption><code>{cell.label}</code></figcaption>
-                  </figure>
-                {/each}
-              </div>
-            {/each}
-          </section>
-        {/if}
-
-        {#if stateDemos.length}
-          <section class="demo-block" class:demo-roomy={["card", "overlay", "grille"].includes(entry.id)} aria-labelledby="states-title">
-            <div class="section-heading">
-              <span class="section-mark">◉</span><h2 id="states-title">States</h2>
-              <span class="section-subtitle">Boolean properties enabled</span>
-            </div>
-            <div class="demo-grid">
-              {#each stateDemos as cell (cell.key)}
-                <figure class="demo-cell">
-                  <div class="demo-stage" use:mountStrata={cell.options}></div>
-                  <figcaption><code>{cell.label}: true</code></figcaption>
-                </figure>
-              {/each}
-            </div>
-          </section>
-        {/if}
-
         <strata-tabs class="detail-tabs">
           <strata-tab slot="tabs">Properties</strata-tab>
           <strata-tab slot="tabs">API</strata-tab>
@@ -625,15 +471,11 @@
                 <div class="metadata-line"><span>MATURITY</span><strong>{entry.maturity}</strong></div>
                 {#if entry.notes}<div class="metadata-line"><span>NOTES</span><span>{entry.notes}</span></div>{/if}
               </section>
-              {#if !usesPropertyPlayground(entry.id)}
-                <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
-              {:else}
-                <section class="usage-panel">
-                  <p class="eyebrow">PLAYGROUND</p>
-                  <h2>Live properties.</h2>
-                  <p>Adjust the component in the Playground section above. The API table continues to document every exposed property.</p>
-                </section>
-              {/if}
+              <section class="usage-panel">
+                <p class="eyebrow">PLAYGROUND</p>
+                <h2>Shared controls.</h2>
+                <p>Open the global Playground above to adjust this component. The API table documents every exposed property.</p>
+              </section>
             </div>
           </strata-tab-panel>
 
