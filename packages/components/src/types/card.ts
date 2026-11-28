@@ -13,6 +13,12 @@ export interface CardProps {
   title: string;
   url: string;
   excerpt: string;
+  is_media?: boolean;
+  media_width?: CardMediaWidth;
+  aspect_ratio?: CardAspectRatio;
+  show_meta?: boolean;
+  show_category?: boolean;
+  show_excerpt?: boolean;
   feature_image: string;
   tag_name: string;
   tag_url: string;
