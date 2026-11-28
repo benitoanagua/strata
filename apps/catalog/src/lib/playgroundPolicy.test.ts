@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import { catalog } from "./componentRegistry";
 import {
   initialPlaygroundValues,
+  normalizePlaygroundValue,
   usesPropertyPlayground,
 } from "./playgroundPolicy";
+import { allowsCatalogControl } from "./props";
 
 function entry(id: string) {
   const found = catalog.find((item) => item.id === id);
@@ -47,11 +49,30 @@ describe("editorial component playground policy", () => {
       .toEqual({ show_meta: true, show_category: true });
   });
 
+
+  it("keeps Grille column counts integral and within the Vue 1–6 contract", () => {
+    expect(normalizePlaygroundValue("grille", "desktop", 0)).toBe(1);
+    expect(normalizePlaygroundValue("grille", "mobile", 7)).toBe(6);
+    expect(normalizePlaygroundValue("grille", "desktop", 2.6)).toBe(3);
+    expect(normalizePlaygroundValue("grille", "desktop", "invalid")).toBe(1);
+    expect(normalizePlaygroundValue("card", "heading", 7)).toBe(7);
+  });
+
   it("does not add demo-only values to Grille's source defaults", () => {
     expect(initialPlaygroundValues("grille", { desktop: 3, mobile: 3, gap: "large", color: "soft" }))
       .toEqual({ desktop: 3, mobile: 3, gap: "large", color: "soft" });
   });
 });
+
+
+  it("filters Lit-only properties that do not exist in the Vue Card API", () => {
+    expect(allowsCatalogControl(entry("card"), "media_align")).toBe(true);
+    expect(allowsCatalogControl(entry("card"), "density")).toBe(false);
+    expect(allowsCatalogControl(entry("card"), "bordered")).toBe(false);
+    expect(allowsCatalogControl(entry("overlay"), "reading_time")).toBe(false);
+    expect(allowsCatalogControl(entry("grille"), "gap")).toBe(true);
+    expect(allowsCatalogControl(entry("grille"), "debug")).toBe(false);
+  });
 
 describe("Vue source API parity: Card", () => {
   it("restricts catalog controls to the source component API and inherited post fields", () => {
