@@ -18,7 +18,7 @@
   aria-haspopup="dialog"
   onclick={onToggle}
 >
-  <span class="edge-handle-chevron" aria-hidden="true">{open ? "‹" : "›"}</span>
+  <span class="edge-handle-chevron" aria-hidden="true"></span>
   <span class="edge-handle-label">Playground</span>
 </button>
 
@@ -41,7 +41,7 @@
     border-radius: var(--strata-radius-small) 0 0 var(--strata-radius-small);
     background: var(--strata-color-surface-raised);
     color: var(--strata-color-text-primary);
-    box-shadow: -5px 3px 18px rgb(0 0 0 / 10%);
+    box-shadow: var(--catalog-shadow-1);
     cursor: pointer;
     transition: right 180ms ease, background 120ms ease, color 120ms ease;
   }
@@ -62,7 +62,18 @@
   }
 
   .edge-handle-chevron {
-    font: 24px/1 var(--strata-font-sans);
+    display: block;
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    transform: rotate(135deg);
+    transition: transform 180ms ease;
+  }
+
+  .edge-handle-open .edge-handle-chevron {
+    transform: rotate(-45deg);
   }
 
   .edge-handle-label {
