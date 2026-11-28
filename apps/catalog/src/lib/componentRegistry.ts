@@ -752,7 +752,7 @@ export const catalog: readonly CatalogEntry[] = [
     ],
     a11y: "role=dialog aria-modal; scroll lock, focus trap and Escape handling; focus restored on close.",
     notes:
-      "Modal is the blocking overlay variant of the dialog pattern — it owns the backdrop, scroll lock and transition choreography. For a plain content dialog use strata-dialog.",
+      "Modal is the blocking overlay variant of the dialog pattern — it owns the backdrop, scroll lock and transition choreography. ",
   },
   {
     id: "drawer",
