@@ -122,6 +122,8 @@
     return createStoryManifest(selectedEntry).map((story) => ({
       ...story,
       props: presetProps(story.args),
+      slotHtml: story.slotHtml ?? selectedEntry.slotHtml,
+      slotContent: story.slotContent ?? selectedEntry.slotContent,
     }));
   });
 
@@ -433,8 +435,8 @@
               <QuickPreview
                 tagName={entry.tagName}
                 props={story.props}
-                slotHtml={entry.slotHtml}
-                slotContent={entry.slotContent}
+                slotHtml={story.slotHtml}
+                slotContent={story.slotContent}
                 label={story.title}
                 group={story.group}
               />
