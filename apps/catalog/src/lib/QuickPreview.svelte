@@ -87,10 +87,12 @@
 </script>
 
 <article class="quick-view-card" aria-label={`${group}: ${label}`} bind:this={card}>
-  <div class="quick-view-stage" bind:this={host}></div>
-  {#if previewFailed}
-    <span class="quick-view-error" role="status">Preview unavailable</span>
-  {/if}
+  <div class="quick-view-stage">
+    <div class="quick-view-host" bind:this={host}></div>
+    {#if previewFailed}
+      <span class="quick-view-error" role="status">Preview unavailable</span>
+    {/if}
+  </div>
   <div class="quick-view-caption">
     <span>{label}</span>
     <small>{group}</small>
