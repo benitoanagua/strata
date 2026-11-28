@@ -31,6 +31,24 @@ export class StrataNav extends StrataElement {
   @property({ type: String, attribute: "menu-label" }) menuLabel = "Open navigation";
   @state() private expanded = false;
   private toggleMenu = () => { this.expanded = !this.expanded; };
+  private handleItemKeydown = (event: KeyboardEvent) => {
+    const key = event.key;
+    if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"].includes(key)) return;
+    const items = Array.from(this.querySelectorAll<HTMLElement>("strata-nav-item")).filter(
+      (item) => !(item as HTMLElement & { disabled: boolean }).disabled,
+    );
+    if (!items.length) return;
+    const activeIndex = items.findIndex(
+      (item) => document.activeElement === item || item.shadowRoot?.activeElement != null,
+    );
+    let nextIndex = activeIndex < 0 ? 0 : activeIndex;
+    if (key === "Home") nextIndex = 0;
+    else if (key === "End") nextIndex = items.length - 1;
+    else if (key === "ArrowDown" || key === "ArrowRight") nextIndex = (nextIndex + 1) % items.length;
+    else if (key === "ArrowUp" || key === "ArrowLeft") nextIndex = (nextIndex - 1 + items.length) % items.length;
+    event.preventDefault();
+    items[nextIndex].focus();
+  };
   private closeAfterNavigation = (event: Event) => {
     const item = event.composedPath().find((node) => node instanceof HTMLElement && node.tagName === "STRATA-NAV-ITEM") as HTMLElement | undefined;
     if (item) this.expanded = false;
@@ -42,7 +60,7 @@ export class StrataNav extends StrataElement {
         <iconify-icon icon=${this.expanded ? "carbon:close" : "carbon:menu"} aria-hidden="true"></iconify-icon>
       </button>
       <nav aria-label=${this.label} class="strata-nav__items" ?data-expanded=${this.expanded}
-        @click=${this.closeAfterNavigation}><slot></slot></nav>
+        @click=${this.closeAfterNavigation} @keydown=${this.handleItemKeydown}><slot></slot></nav>
     </div>`;
   }
 }
