@@ -990,9 +990,9 @@ export const catalog: readonly CatalogEntry[] = [
       ["Epsilon", "05"],
       ["Zeta", "06"],
     ].map(([name, index]) =>
-      '<strata-grille-item><div style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">' +
+      '<article style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">' +
       index + ' / FIELD</small><div><strong style="font:var(--strata-type-headline-small) var(--strata-font-serif)">' +
-      name + '</strong><p style="margin:8px 0 0;max-width:24ch;line-height:1.5">A distinct content cell for an editorial composition.</p></div></div></strata-grille-item>'
+      name + '</strong><p style="margin:8px 0 0;max-width:24ch;line-height:1.5">A distinct content cell for an editorial composition.</p></div></div></article>'
     ).join(""),
     slots: [{ name: "default", description: "strata-grille-item children." }],
   },
