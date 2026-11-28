@@ -56,7 +56,6 @@ export { StrataFileUpload } from "./FileUpload/FileUpload.js";
 export { StrataStepper } from "./Stepper/Stepper.js";
 export { StrataProse } from "./Prose/Prose.js";
 export { StrataMeta } from "./Meta/Meta.js";
-export { StrataTagList } from "./TagList/TagList.js";
 export { StrataSectionHeader } from "./SectionHeader/SectionHeader.js";
 export { StrataAuthorBox } from "./AuthorBox/AuthorBox.js";
 export { StrataShare } from "./Share/Share.js";
@@ -119,7 +118,6 @@ declare global {
     "strata-tree": import("./Tree/Tree.js").StrataTree;
     "strata-viewer-settings": import("./ViewerSettings/ViewerSettings.js").StrataViewerSettings;
     "strata-meta": import("./Meta/Meta.js").StrataMeta;
-    "strata-tag-list": import("./TagList/TagList.js").StrataTagList;
     "strata-section-header": import("./SectionHeader/SectionHeader.js").StrataSectionHeader;
     "strata-author-box": import("./AuthorBox/AuthorBox.js").StrataAuthorBox;
     "strata-share": import("./Share/Share.js").StrataShare;
