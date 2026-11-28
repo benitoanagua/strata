@@ -1,6 +1,7 @@
 @import "@strata/tokens/styles.css";
 
 :root {
+  --catalog-playground-width: clamp(320px, 30vw, 440px);
   --catalog-shadow-1: 0 2px 8px rgb(0 0 0 / 8%);
   --catalog-shadow-2: 0 8px 24px rgb(0 0 0 / 12%);
   --catalog-shadow-3: 0 18px 48px rgb(0 0 0 / 18%);
@@ -173,7 +174,7 @@ select:focus-visible {
   top: 60px;
   right: 0;
   bottom: 0;
-  width: clamp(320px, 30vw, 440px);
+  width: var(--catalog-playground-width);
   max-height: none;
   overflow: auto;
   padding: 20px 16px 28px;
