@@ -9,6 +9,10 @@ export interface OverlayProps {
   title: string;
   url: string;
   feature_image: string;
+  /** Apply grayscale to the background image without affecting text. */
+  monochrome?: boolean;
+  /** Resolve theme from design tokens by default, or force a theme. */
+  theme?: "auto" | "light" | "dark";
   tag_name?: string;
   author_name?: string;
   published_at?: string;
