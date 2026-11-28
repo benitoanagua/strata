@@ -119,7 +119,7 @@ describe("strata-overlay contract", () => {
     expect(root.classList.contains("strata-overlay--box-background")).toBe(
       true,
     );
-    expect(root.classList.contains("strata-overlay--theme-auto")).toBe(true);
+    expect(root.classList.contains("strata-overlay--theme-light")).toBe(true);
     expect(overlay.querySelector("h1")?.textContent).toBe("Hero");
     overlay.remove();
   });
