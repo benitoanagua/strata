@@ -411,7 +411,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Navigation",
     tagName: "strata-nav",
     description:
-      "Navigation landmark grouping strata-nav-item entries with arrow-key support.",
+      "Responsive primary navigation: desktop topbar, mobile hamburger navigation.",
     maturity: "beta",
     controls: [text("label", "Label", "Main")],
     slotHtml:
@@ -501,7 +501,7 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Menu",
     category: "Navigation",
     tagName: "strata-menu",
-    description: "A menu of actionable items with arrow-key navigation.",
+    description: "A vertical sidebar navigation list for contextual pages and sections.",
     maturity: "beta",
     controls: [bool("open", "Open", true), text("label", "Label", "Menu")],
     slotHtml:
@@ -509,8 +509,8 @@ export const catalog: readonly CatalogEntry[] = [
       '<strata-menu-item label="Settings"></strata-menu-item>' +
       '<strata-menu-item label="Sign out"></strata-menu-item>',
     slots: [{ name: "default", description: "strata-menu-item children." }],
-    a11y: "role=menu/menuitem; ArrowUp/Down, Home and End move focus; Escape closes.",
-    notes: "No trigger/anchor API yet — control open state from the host page.",
+    a11y: "Named navigation landmark with standard link/button tab order; not an ARIA command menu.",
+    notes: "Use Menu for sidebar navigation. Use Nav/NavItem for the primary responsive topbar.",
   },
   {
     id: "menu-item",
@@ -717,7 +717,7 @@ export const catalog: readonly CatalogEntry[] = [
     events: [],
     a11y: "role=dialog aria-modal; focus is trapped, Escape and backdrop click close, focus is restored.",
     notes:
-      "Dialog is the lightweight content+actions surface with a built-in header and close button. Use strata-modal for the configurable blocking overlay (size, position, animation, scroll lock, optional close button).",
+      "Dialog is the compact modal interaction. Modal is the advanced presentation variant with configurable size, position, animation and visual treatments. Both share a close-button component and actions slot.",
   },
   {
     id: "modal",
