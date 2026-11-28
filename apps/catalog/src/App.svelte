@@ -173,7 +173,7 @@
   $effect(() => {
     selectedEntry;
     controls;
-    values = selectedEntry && usesPropertyPlayground(selectedEntry.id)
+    values = selectedEntry && usesRichPreviewFixture(selectedEntry.id)
       ? initialPlaygroundValues(selectedEntry.id, defaults())
       : defaults();
   });
