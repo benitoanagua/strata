@@ -781,7 +781,7 @@ export const catalog: readonly CatalogEntry[] = [
     description: "Text and metadata layered over a background image.",
     maturity: "beta",
     controls: [
-      num("heading", "Heading level", 4),
+      num("heading", "Heading level", 1),
       text("title", "Title", "Overlay title"),
       text("url", "Url", "/article"),
       text(
