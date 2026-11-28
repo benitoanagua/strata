@@ -1,11 +1,11 @@
 import { css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { StrataElement } from "../StrataBase.js";
+import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 
 @customElement("strata-menu-item")
 export class StrataMenuItem extends StrataElement {
   static styles = [
-    StrataElement.styles,
+    strataComponentStyles,
     css`
       :host { display:block; min-width:0; }
       .item { box-sizing:border-box; display:flex; width:100%; min-height:40px; align-items:center; gap:10px;

@@ -1,12 +1,12 @@
 import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { StrataElement } from "../StrataBase.js";
+import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 
 /** Shared close affordance for floating surfaces. Emits a composed strata-close event. */
 @customElement("strata-close-button")
 export class StrataCloseButton extends StrataElement {
   static styles = [
-    StrataElement.styles,
+    strataComponentStyles,
     css`
       :host { display: inline-flex; flex: 0 0 auto; }
       button {

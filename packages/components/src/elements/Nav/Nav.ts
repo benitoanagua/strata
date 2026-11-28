@@ -1,11 +1,11 @@
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { StrataElement } from "../StrataBase.js";
+import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 
 @customElement("strata-nav")
 export class StrataNav extends StrataElement {
   static styles = [
-    StrataElement.styles,
+    strataComponentStyles,
     css`
       :host { display: block; width: 100%; }
       .strata-nav { display:flex; align-items:center; justify-content:space-between; gap:16px; width:100%; }

@@ -1,12 +1,12 @@
 import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { StrataElement } from "../StrataBase.js";
+import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 
 /** Sidebar navigation. Uses standard link tab order, not ARIA command-menu semantics. */
 @customElement("strata-menu")
 export class StrataMenu extends StrataElement {
   static styles = [
-    StrataElement.styles,
+    strataComponentStyles,
     css`
       .strata-menu { display:grid; align-content:start; gap:2px; min-width:180px; padding:6px;
         border:1px solid var(--strata-color-border-subtle); border-radius:var(--strata-radius-medium);
