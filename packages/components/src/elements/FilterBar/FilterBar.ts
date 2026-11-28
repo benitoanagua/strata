@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { StrataElement, strataComponentStyles } from "../StrataBase.js";
 import { emitValueEvent } from "../../events.js";
 import { parseItems } from "../../utils/items.js";
-import { resolveHue, tagHueStyles } from "../../utils/hue.js";
+import "../Badge/Badge.js";
 
 export interface StrataFilterState {
   category: string;
@@ -20,7 +20,6 @@ export interface StrataFilterState {
 export class StrataFilterBar extends StrataElement {
   static styles = [
     strataComponentStyles,
-    tagHueStyles,
     css`
       :host {
         display: flex;
@@ -41,28 +40,6 @@ export class StrataFilterBar extends StrataElement {
         margin: 0;
         padding: 0;
         list-style: none;
-      }
-      .chip {
-        min-height: 32px;
-        padding: 0 12px;
-        border: var(--strata-border-medium) solid
-          color-mix(
-            in srgb,
-            var(--_ink, var(--strata-color-text-secondary)) 40%,
-            transparent
-          );
-        border-radius: var(--strata-component-radius);
-        background: var(--_tint, var(--strata-color-surface-subtle));
-        color: var(--_ink, var(--strata-color-text-primary));
-        font: var(--strata-type-label-medium) var(--strata-font-mono);
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-      .chip[aria-pressed="true"] {
-        background: var(--_ink, var(--strata-color-action-primary));
-        border-color: var(--_ink, var(--strata-color-action-primary));
-        color: var(--strata-color-surface-page);
-        font-weight: 700;
       }
       .tools {
         display: flex;
@@ -85,7 +62,6 @@ export class StrataFilterBar extends StrataElement {
         background: var(--strata-color-surface-selected);
         color: var(--strata-color-text-primary);
       }
-      .chip:focus-visible,
       .tool:focus-visible {
         outline: 2px solid var(--strata-color-focus-ring);
         outline-offset: 2px;
@@ -117,16 +93,14 @@ export class StrataFilterBar extends StrataElement {
   }
 
   private chip(label: string, value: string) {
-    const hue = this.hues && value ? resolveHue("auto", value) : "neutral";
     return html`<li>
-      <button
-        type="button"
-        class="chip strata-hue--${hue}"
-        aria-pressed=${String(this.value === value)}
+      <strata-badge
+        label=${label}
+        hue=${this.hues && value ? "auto" : "neutral"}
+        interactive
+        pressed=${this.value === value}
         @click=${() => this.set({ value })}
-      >
-        ${label}
-      </button>
+      ></strata-badge>
     </li>`;
   }
 
