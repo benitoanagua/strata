@@ -16,6 +16,7 @@ export interface OverlayProps {
   aspect_ratio?: CardAspectRatio;
   heading?: CardHeading;
   show_meta?: boolean;
+  show_category?: boolean;
   align?: OverlayAlign;
   position?: OverlayPosition;
   box?: OverlayBox;
