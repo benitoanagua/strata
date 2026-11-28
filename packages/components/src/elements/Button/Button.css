@@ -57,15 +57,6 @@ strata-button[full-width] {
   --btn-line: var(--strata-color-border-subtle);
 }
 
-.strata-button--color-secondary {
-  /* Secondary is the soft solid: the selected surface with primary ink,
-     clearly lighter than the primary fill in both themes. */
-  --btn-fill: var(--strata-color-surface-selected);
-  --btn-on-fill: var(--strata-color-text-primary);
-  --btn-accent: var(--strata-color-text-secondary);
-  --btn-line: var(--strata-color-border-subtle);
-}
-
 .strata-button--color-error {
   --btn-fill: var(--strata-color-status-error);
   --btn-on-fill: var(--strata-color-surface-page);
