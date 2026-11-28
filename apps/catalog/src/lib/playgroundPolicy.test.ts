@@ -30,7 +30,7 @@ describe("rich preview fixture policy", () => {
   it.each(["button", "dialog", "accordion"])(
     "%s uses standard source defaults",
     (id) => {
-      expect(usesPropertyPlayground(id)).toBe(false);
+      expect(usesRichPreviewFixture(id)).toBe(false);
     },
   );
 
