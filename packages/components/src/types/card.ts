@@ -2,6 +2,8 @@ export type CardHeading = 1 | 2 | 3 | 4 | 5 | 6;
 export type CardDensity = "normal" | "compact" | "minimal";
 export type CardMediaAlign = "left" | "right" | "top" | "bottom";
 export type CardMediaWidth =
+  | "is-none"
+  | "is-full"
   | "is-half"
   | "is-two-fifths"
   | "is-one-third"
