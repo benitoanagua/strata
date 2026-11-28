@@ -273,6 +273,24 @@
     if (!entry || OVERLAY_TAGS.has(entry.tagName)) return [];
     const base = demoBaseProps();
     const cells: DemoCell[] = [];
+    // Grille's source API uses numeric column counts, so expose those as
+    // explicit visual examples even though they remain number controls in
+    // the live Properties panel.
+    if (entry.id === "grille") {
+      for (const columns of [1, 2, 3, 4]) {
+        cells.push({
+          key: `variant-desktop-columns-${columns}`,
+          label: `Desktop columns: ${columns}`,
+          group: "Desktop columns",
+          options: {
+            tagName: entry.tagName,
+            props: { ...base, desktop: columns },
+            slotHtml: entry.slotHtml,
+            slotContent: entry.slotContent,
+          },
+        });
+      }
+    }
     for (const control of variantControls(controls)) {
       for (const option of control.options ?? []) {
         cells.push({
