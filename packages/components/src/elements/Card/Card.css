@@ -322,6 +322,7 @@
 
 /* Source elevation: media bleeds to the corresponding outer edge. */
 .strata-card--elevated {
+  box-sizing: border-box;
   padding-inline: 16px;
 }
 .strata-card--elevated .strata-card__container {
