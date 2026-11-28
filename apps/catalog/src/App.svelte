@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
+  import QuickPreview from "./lib/QuickPreview.svelte";
   import { createStoryManifest } from "./stories/storyManifest";
   import EdgeHandle from "./lib/EdgeHandle.svelte";
   import CodeExample from "./lib/CodeExample.svelte";
