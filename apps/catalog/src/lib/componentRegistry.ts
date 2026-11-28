@@ -738,8 +738,7 @@ export const catalog: readonly CatalogEntry[] = [
     slots: [
       { name: "header", description: "Replaces the generated title header." },
       { name: "default", description: "Body content." },
-      { name: "actions", description: "Footer actions (preferred slot)." },
-      { name: "footer", description: "Legacy footer actions slot, retained for compatibility." },
+      { name: "actions", description: "Footer actions." },
     ],
     events: [
       { name: "modal-open", description: "Fired after the modal opens." },
