@@ -247,15 +247,6 @@ export const strataComponentStyles = css`
     background: transparent;
     color: inherit;
   }
-  .strata-snackbar {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 16px;
-    background: var(--strata-color-black);
-    color: var(--strata-color-white);
-    border-radius: var(--strata-radius-small);
-  }
   .strata-tag {
     display: inline-flex;
     align-items: center;

@@ -47,7 +47,6 @@ export { StrataTooltip } from "./Tooltip/Tooltip.js";
 export { StrataPopover } from "./Popover/Popover.js";
 export { StrataDrawer } from "./Drawer/Drawer.js";
 export { StrataBottomSheet } from "./BottomSheet/BottomSheet.js";
-export { StrataSnackbar } from "./Snackbar/Snackbar.js";
 export { StrataList } from "./List/List.js";
 export { StrataListItem } from "./ListItem/ListItem.js";
 export { StrataSpinner } from "./Spinner/Spinner.js";
@@ -176,7 +175,6 @@ declare global {
     "strata-popover": import("./Popover/Popover.js").StrataPopover;
     "strata-drawer": import("./Drawer/Drawer.js").StrataDrawer;
     "strata-bottom-sheet": import("./BottomSheet/BottomSheet.js").StrataBottomSheet;
-    "strata-snackbar": import("./Snackbar/Snackbar.js").StrataSnackbar;
     "strata-list": import("./List/List.js").StrataList;
     "strata-list-item": import("./ListItem/ListItem.js").StrataListItem;
     "strata-spinner": import("./Spinner/Spinner.js").StrataSpinner;
