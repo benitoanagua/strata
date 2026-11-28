@@ -25,3 +25,16 @@ export function initialPlaygroundValues<T extends Record<string, string | number
   }
   return values;
 }
+
+/** Constrain Grille's numeric column props to the source type's 1–6 range. */
+export function normalizePlaygroundValue(
+  id: string,
+  name: string,
+  value: string | number | boolean,
+): string | number | boolean {
+  if (id === "grille" && (name === "desktop" || name === "mobile")) {
+    const numeric = Number(value);
+    return Math.max(1, Math.min(6, Math.round(Number.isFinite(numeric) ? numeric : 1)));
+  }
+  return value;
+}
