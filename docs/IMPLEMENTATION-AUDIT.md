@@ -339,20 +339,21 @@ Audit of all 73 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 | Progress (`progress`) | `strata-progress` | `StrataProgress` | `value`<br>`label`                                            | —                | —        | —         | stable   |
 | Skeleton (`skeleton`) | `strata-skeleton` | `StrataSkeleton` | `width`                                                       | —                | —        | —         | stable   |
 | Spinner (`spinner`)   | `strata-spinner`  | `StrataSpinner`  | `size`<br>`tone`<br>`label`                                   | `size`           | —        | —         | stable   |
-| Snackbar (`snackbar`) | `strata-snackbar` | `StrataSnackbar` | `size`<br>`tone`<br>`open`<br>`message`                       | `size`<br>`open` | —        | `default` | beta     |
 | Tooltip (`tooltip`)   | `strata-tooltip`  | `StrataTooltip`  | `size`<br>`tone`<br>`text`                                    | `size`           | —        | `default` | beta     |
 
 ### Alert — `strata-alert`
 
-- **Purpose:** A semantic message that communicates feedback and status.
+- **Purpose:** Semantic feedback for persistent inline messages and transient snackbar notifications.
 - **Implementation:** `StrataAlert` in `packages/components/src/elements/Alert`
-- **Properties (1):** `tone` (any, reflected)
-- **Slots:** `default`
-- **Accessibility:** role=status; tone is paired with an icon, never color alone.
+- **Properties:** inherited `size`; `tone` (String, reflected), `mode` (inline | snackbar, reflected), `open` (Boolean, reflected), `message` (String), `closable` (Boolean, reflected), `duration` (Number, ms), `placement` (String, reflected).
+- **Events:** `strata-dismiss` with `detail.reason` equal to `manual` or `timeout`.
+- **Slots:** `default` for supplementary content.
+- **Accessibility:** role=status with a live region; errors announce assertively. Tone is paired with a distinct icon. The optional close button is named “Dismiss alert”.
+- **Notes:** Inline mode stays in document flow. Snackbar mode is fixed-position. Duration defaults to 3000 ms; set it to 0 to disable auto-dismiss. `closable` is opt-in.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
-- **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
+- **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; focused behavior tests in `packages/components/test/alert.test.ts`.
 - **Maturity:** stable
 
 ### Badge — `strata-badge`
@@ -405,19 +406,6 @@ Audit of all 73 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
 - **Maturity:** stable
 
-### Snackbar — `strata-snackbar`
-
-- **Purpose:** A transient confirmation message.
-- **Implementation:** `StrataSnackbar` in `packages/components/src/elements/Snackbar`
-- **Properties (4):** `size` (String, reflected), `tone` (String), `open` (Boolean, reflected), `message` (String)
-- **Slots:** `default`
-- **Accessibility:** role=status announces the message politely.
-- **Notes:** No auto-dismiss timer; control open state from the host.
-- **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
-- **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
-- **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
-- **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
-- **Maturity:** beta
 
 ### Tooltip — `strata-tooltip`
 

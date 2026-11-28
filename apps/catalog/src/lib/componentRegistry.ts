@@ -513,13 +513,24 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Alert",
     category: "Feedback",
     tagName: "strata-alert",
-    description: "A semantic message that communicates feedback and status.",
+    description: "A semantic feedback message with inline and transient notification modes.",
     maturity: "stable",
     controls: [
       select("tone", "Tone", "info", ["error", "warning", "success", "info"]),
+      select("mode", "Mode", "inline", ["inline", "snackbar"]),
+      bool("open", "Open", true),
+      text("message", "Message", "Changes saved successfully."),
+      bool("closable", "Closable"),
+      num("duration", "Duration (ms)", 3000),
+      select("placement", "Placement", "bottom-center", ["top-start", "top-center", "top-end", "bottom-start", "bottom-center", "bottom-end"]),
     ],
-    slotContent: "Changes saved successfully.",
-    a11y: "role=status; tone is paired with an icon, never color alone.",
+    events: [{
+      name: "strata-dismiss",
+      detail: '{ reason: "manual" | "timeout" }',
+      description: "Fired when dismissed by the close button or snackbar timer.",
+    }],
+    a11y: "Status tone is paired with an icon. Error messages announce assertively; the optional close button is accessible.",
+    notes: "Inline mode stays in document flow. Snackbar mode is fixed-position and auto-dismisses after duration (default 3000 ms); set duration to 0 to disable the timer. closable is opt-in.",
   },
   {
     id: "badge",
@@ -590,30 +601,6 @@ export const catalog: readonly CatalogEntry[] = [
     maturity: "stable",
     controls: [text("label", "Label", "Loading")],
     a11y: "role=status with an accessible label.",
-  },
-  {
-    id: "snackbar",
-    name: "Snackbar",
-    category: "Feedback",
-    tagName: "strata-snackbar",
-    description:
-      "A transient, non-blocking confirmation message shown after an action.",
-    maturity: "beta",
-    controls: [
-      bool("open", "Open", true),
-      text("message", "Message", "Item saved."),
-      num("duration", "Duration (ms)", 3000),
-    ],
-    slotContent: "Item saved.",
-    events: [
-      {
-        name: "strata-dismiss",
-        description: "Fired when the auto-dismiss timer closes the snackbar.",
-      },
-    ],
-    a11y: "role=status announces the message politely; it never blocks the page.",
-    notes:
-      "Auto-dismisses after `duration` ms (default 3000); set duration to 0 to keep it open until the host closes it.",
   },
   {
     id: "tooltip",

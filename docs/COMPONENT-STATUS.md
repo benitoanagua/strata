@@ -1,6 +1,6 @@
 # Component status
 
-The catalog contains **76 canonical entries** (`STRATA_COMPONENT_CATALOG`),
+The catalog contains **72 canonical entries** (`STRATA_COMPONENT_CATALOG`),
 plus four composition-only elements (`strata-accordion-item`,
 `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) that are
 exported for slot composition but are not standalone catalog entries.
@@ -11,7 +11,7 @@ Maturity counts in the interactive registry
 - **18 stable** — button, icon-button, text-field, checkbox, switch, nav-item,
   alert, badge, progress, skeleton, spinner, surface, theme-toggle, list,
   list-item, avatar, divider, logo.
-- **57 beta** — everything else, including the editorial and article
+- **53 beta** — everything else, including the editorial and article
   navigation families.
 - **1 experimental** — popover (no trigger/anchor API yet).
 

@@ -49,7 +49,6 @@ Coverage matrix for the 76 canonical components. `Mount` = `catalog-components.t
 | Progress  | `strata-progress` | ✓     | ✓   | ✓      | —                     | stable   |
 | Skeleton  | `strata-skeleton` | ✓     | ✓   | ✓      | —                     | stable   |
 | Spinner   | `strata-spinner`  | ✓     | ✓   | ✓      | —                     | stable   |
-| Snackbar  | `strata-snackbar` | ✓     | ✓   | ✓      | —                     | beta     |
 | Tooltip   | `strata-tooltip`  | ✓     | ✓   | ✓      | —                     | beta     |
 
 ## Surfaces

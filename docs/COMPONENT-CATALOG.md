@@ -1,6 +1,6 @@
 # STRATA component catalog
 
-STRATA ships a 76-component catalog. The catalog is deliberately broad enough for mobile product UI and long-form reading while keeping each component small and composable.
+STRATA ships a 72-component catalog. The catalog is deliberately broad enough for mobile product UI and long-form reading while keeping each component small and composable.
 
 ## Actions
 
@@ -18,7 +18,7 @@ NavItem · Tabs · Breadcrumb · Menu · MenuItem · Tree
 
 ## Feedback
 
-Alert · Badge · Tag · Progress · Skeleton · Spinner · Snackbar · Tooltip
+Alert · Badge · Progress · Skeleton · Spinner · Tooltip
 
 ## Surfaces
 

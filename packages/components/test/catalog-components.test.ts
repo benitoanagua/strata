@@ -113,10 +113,11 @@ describe.each(STRATA_COMPONENT_CATALOG.map((name) => [name, `strata-${name}`]))(
 
 
 describe("removed compatibility elements", () => {
-  it("does not register obsolete Tag or Dialog custom elements", () => {
+  it("does not register obsolete Tag, Dialog or Snackbar custom elements", () => {
     expect(customElements.get("strata-tag")).toBeUndefined();
     expect(customElements.get("strata-tag-list")).toBeUndefined();
     expect(customElements.get("strata-dialog")).toBeUndefined();
     expect(customElements.get("strata-button-group")).toBeUndefined();
+    expect(customElements.get("strata-snackbar")).toBeUndefined();
   });
 });

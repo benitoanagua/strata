@@ -1,5 +1,12 @@
 # @strata/components
 
+## Unreleased
+
+### Breaking changes
+
+- Consolidate Snackbar into Alert and remove the standalone `strata-snackbar` custom element. Migrate to `strata-alert mode="snackbar"`; Alert now supports optional close, duration, placement, and a shared `strata-dismiss` event.
+
+
 ## 3.1.0
 
 ### Minor Changes
