@@ -10,7 +10,7 @@
   height: 2.75rem;
   padding: 0;
   border: 1px solid var(--strata-color-border-strong);
-  border-radius: 9999px;
+  border-radius: var(--strata-radius-medium);
 
   color: var(--strata-color-text-primary);
   background-color: var(--strata-color-surface-subtle);
