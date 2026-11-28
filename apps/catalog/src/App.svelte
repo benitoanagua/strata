@@ -255,6 +255,16 @@
   function demoBaseProps(): Record<string, unknown> {
     const base = { ...defaultsFor(controls) } as Record<string, unknown>;
     delete base.open;
+    if (selectedEntry?.id === "card") {
+      // The source Card's media variants need a visible image fixture.
+      base.is_media = true;
+      base.feature_image = "https://picsum.photos/seed/strata-card/1200/900";
+      base.show_excerpt = true;
+      base.excerpt = "A short supporting excerpt with enough text to appreciate the reading measure.";
+    }
+    if (selectedEntry?.id === "overlay") {
+      base.feature_image = "https://picsum.photos/seed/strata-overlay/1200/900";
+    }
     return base;
   }
 
@@ -444,7 +454,7 @@
         </section>
 
         {#if variantDemos.length}
-          <section class="demo-block" aria-labelledby="variants-title">
+          <section class="demo-block" class:demo-roomy={["card", "overlay", "grille"].includes(entry.id)} aria-labelledby="variants-title">
             <div class="section-heading">
               <span class="section-mark">◫</span><h2 id="variants-title">Variants</h2>
               <span class="section-subtitle">{variantDemos.length} combinations</span>
@@ -464,7 +474,7 @@
         {/if}
 
         {#if stateDemos.length}
-          <section class="demo-block" aria-labelledby="states-title">
+          <section class="demo-block" class:demo-roomy={["card", "overlay", "grille"].includes(entry.id)} aria-labelledby="states-title">
             <div class="section-heading">
               <span class="section-mark">◉</span><h2 id="states-title">States</h2>
               <span class="section-subtitle">Boolean properties enabled</span>
