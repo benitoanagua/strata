@@ -1,11 +1,11 @@
 # STRATA — Implementation Audit
 
-Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
+Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked against public exports, Lit property metadata, event dispatch sites, slot usage and the interactive catalog registry.
 
 ## Summary
 
-- **75 canonical entries**, all registered as custom elements (`strata-*`).
-- **79 registered elements**: the four extra tags (`strata-accordion-item`, `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) are composition-only children, not catalog entries.
+- **74 canonical entries**, all registered as custom elements (`strata-*`).
+- **78 registered elements**: the four extra tags (`strata-accordion-item`, `strata-carousel-item`, `strata-grille-item`, `strata-tab-panel`) are composition-only children, not catalog entries.
 - Catalog registry, public exports and `STRATA_COMPONENT_CATALOG` are synchronized (verified by `apps/catalog/test/catalog-registry.test.ts`).
 - Every entry mounts a real element in the catalog canvas; controls are derived from Lit `elementProperties` metadata (`apps/catalog/src/lib/props.ts`).
 
@@ -372,7 +372,8 @@ Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 - **Purpose:** A compact label for status or category, supporting semantic tones, taxonomy hues, links and removal.
 - **Implementation:** `StrataBadge` in `packages/components/src/elements/Badge`
-- **Properties (5):** `tone` (String, reflected), `label` (String), `hue` (String), `href` (String), `removable` (Boolean)
+- **Properties (7):** `tone` (String, reflected), `label` (String), `hue` (String), `href` (String), `removable` (Boolean), `interactive` (Boolean), `pressed` (Boolean)
+- **Sizing:** compact taxonomy label with shared interactive pressed-state styling for filter chips.
 - **Slots:** `default`
 - **Accessibility:** Status tones render a distinct Carbon icon alongside the text.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
@@ -727,7 +728,6 @@ Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 | Entry                            | Tag                     | Class                 | Props                                                                                                                                                           | Reflected                                     | Events                            | Slots                                     | Maturity |
 | -------------------------------- | ----------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | --------------------------------- | ----------------------------------------- | -------- |
 | Meta (`meta`)                    | `strata-meta`           | `StrataMeta`          | `size`<br>`tone`<br>`label`<br>`items`                                                                                                                          | `size`                                        | —                                 | `default`                                 | beta     |
-| TagList (`tag-list`)             | `strata-tag-list`       | `StrataTagList`       | `size`<br>`tone`<br>`label`<br>`items`<br>`hue`<br>`baseHref`                                                                                                   | `size`                                        | —                                 | `default`                                 | beta     |
 | SectionHeader (`section-header`) | `strata-section-header` | `StrataSectionHeader` | `size`<br>`tone`<br>`heading`<br>`subheading`<br>`level`                                                                                                        | `size`                                        | —                                 | `default`                                 | beta     |
 | AuthorBox (`author-box`)         | `strata-author-box`     | `StrataAuthorBox`     | `size`<br>`tone`<br>`name`<br>`avatar`<br>`description`<br>`meta`<br>`href`<br>`eyebrow`                                                                        | `size`                                        | —                                 | `default`<br>`links`                      | beta     |
 | Share (`share`)                  | `strata-share`          | `StrataShare`         | `size`<br>`tone`<br>`label`<br>`networks`<br>`url`<br>`text`<br>`direction`                                                                                     | `size`<br>`direction`                         | `strata-change`                   | —                                         | beta     |
@@ -748,18 +748,6 @@ Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Purpose:** Metadata line (date, category, author) with slanted filete separators.
 - **Implementation:** `StrataMeta` in `packages/components/src/elements/Meta`
 - **Properties (4):** `size` (String, reflected), `tone` (String), `label` (String), `items` (String)
-- **Slots:** `default`
-- **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
-- **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
-- **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
-- **Tests:** catalog mount + axe (both themes) + visual baseline (both themes) in `packages/testing/visual/components.spec.ts`; unit/contract coverage in `packages/components/test/`.
-- **Maturity:** beta
-
-### TagList — `strata-tag-list`
-
-- **Purpose:** Wrapping group of tags; hue=auto gives every category a stable rainbow hue.
-- **Implementation:** `StrataTagList` in `packages/components/src/elements/TagList`
-- **Properties (6):** `size` (String, reflected), `tone` (String), `label` (String), `items` (String), `hue` (String), `baseHref` (String)
 - **Slots:** `default`
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
@@ -848,7 +836,8 @@ Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 - **Purpose:** Listing row for articles, search results and recent changes.
 - **Implementation:** `StrataEntry` in `packages/components/src/elements/Entry`
-- **Properties (14):** `size` (String, reflected), `tone` (String), `heading` (String), `href` (String), `excerpt` (String), `category` (String), `author` (String), `date` (String), `meta` (String), `tags` (String), `image` (String), `imageAlt` (String), `layout` (String, reflected), `mediaEnd` (Boolean, reflected)
+- **Properties (14):** `size` (String, reflected), `tone` (String), `heading` (String), `href` (String), `excerpt` (String), `category` (String), `author` (String), `date` (String), `meta` (String), `tags` (String, parsed into Badge instances), `image` (String), `imageAlt` (String), `layout` (String, reflected), `mediaEnd` (Boolean, reflected)
+- **Notes:** Category and tags use `strata-badge`; use repeated Badge elements for a tag group instead of the removed TagList.
 - **Slots:** `default`
 - **Accessibility:** Article element with configurable heading level.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
@@ -884,11 +873,11 @@ Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 
 ### FilterBar — `strata-filter-bar`
 
-- **Purpose:** Category chips with view and sort toggles; emits strata-change.
+- **Purpose:** Badge-based category chips with view and sort toggles; emits strata-change.
 - **Implementation:** `StrataFilterBar` in `packages/components/src/elements/FilterBar`
 - **Properties (10):** `size` (String, reflected), `tone` (String), `label` (String), `items` (String), `value` (String), `view` (String, reflected), `sort` (String), `allLabel` (String), `hues` (Boolean), `hideTools` (Boolean)
 - **Events:** `strata-change` — Fired when a chip or tool toggles.
-- **Accessibility:** Chips use aria-pressed; view/sort tools are toggle buttons.
+- **Accessibility:** Interactive Badge chips expose `aria-pressed`; view/sort tools are toggle buttons.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
 - **Theme:** rendered and axe-scanned in light and dark themes by the visual suite.
 - **Tokens:** styles consume `--strata-*` tokens only; enforced by `pnpm audit`.
