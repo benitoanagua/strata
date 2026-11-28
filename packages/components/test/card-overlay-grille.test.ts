@@ -148,7 +148,7 @@ describe("strata-overlay contract", () => {
     };
     overlay.feature_image = "/sample.jpg";
     await overlay.updateComplete;
-    let root = overlay.querySelector(".strata-overlay")!;
+    let root = overlay.querySelector(".strata-overlay") as HTMLElement;
     expect(root.classList.contains("strata-overlay--has-image")).toBe(true);
     expect(root.classList.contains("strata-overlay--monochrome")).toBe(true);
     expect(root.style.getPropertyValue("--strata-overlay-image")).toContain("sample.jpg");
