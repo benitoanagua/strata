@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
+  import QuickPreview from "./lib/QuickPreview.svelte";
   import CodeExample from "./lib/CodeExample.svelte";
   import { deriveControls, type PropInfo } from "./lib/props";
   import {
@@ -109,53 +110,60 @@
   }
 
   interface PlaygroundPreset {
+    key: string;
     label: string;
     values: Record<string, ControlValue>;
   }
 
-  // One shared quick-preview model for every catalog entry. Each component
-  // contributes only its public controls; the UI and interaction stay global.
+  function quickViewDefaults() {
+    const base = defaults();
+    return selectedEntry && usesRichPreviewFixture(selectedEntry.id)
+      ? initialPlaygroundValues(selectedEntry.id, base)
+      : base;
+  }
+
+  // Show one live preview per meaningful public-property variant.
   const playgroundPresets = $derived.by<PlaygroundPreset[]>(() => {
     if (!selectedEntry) return [];
     const presets: PlaygroundPreset[] = [
-      { label: "Default", values: defaults() },
+      { key: "default", label: "Default", values: quickViewDefaults() },
     ];
-    const disabled = controls.find((control) => control.name === "disabled");
-    if (disabled && !disabled.defaultValue) {
-      presets.push({ label: "Disabled", values: { disabled: true } });
-    }
     for (const control of controls) {
       if (control.type === "select" && control.options?.length) {
-        const alternate = control.options.find((option) => option !== control.defaultValue);
-        if (alternate !== undefined) {
+        for (const option of control.options) {
+          if (option === control.defaultValue) continue;
           presets.push({
-            label: alternate,
-            values: { [control.name]: alternate },
+            key: control.name + ":" + option,
+            label: control.label + " · " + option,
+            values: { [control.name]: option },
           });
         }
-      } else if (
-        control.type === "boolean" &&
-        control.name !== "disabled" &&
-        !control.defaultValue
-      ) {
+      } else if (control.type === "boolean" && control.name !== "disabled") {
+        const alternate = !Boolean(control.defaultValue);
         presets.push({
-          label: control.label,
-          values: { [control.name]: true },
+          key: control.name + ":" + String(alternate),
+          label: control.label + " · " + (alternate ? "On" : "Off"),
+          values: { [control.name]: alternate, ...(control.demoProps ?? {}) },
         });
       }
-      if (presets.length >= 4) break;
     }
-    return presets.slice(0, 4);
+    const disabled = controls.find((control) => control.name === "disabled");
+    if (disabled && !disabled.defaultValue) {
+      presets.push({ key: "disabled:true", label: "Disabled", values: { disabled: true } });
+    }
+    return presets;
   });
 
-  function applyPreset(preset: Record<string, ControlValue>) {
-    const next = { ...values };
-    for (const [name, value] of Object.entries(preset)) {
-      next[name] = selectedEntry
-        ? normalizePlaygroundValue(selectedEntry.id, name, value)
-        : value;
-    }
-    values = next;
+  function presetProps(preset: Record<string, ControlValue>) {
+    const next = { ...quickViewDefaults(), ...preset };
+    return Object.fromEntries(
+      Object.entries(next).map(([name, value]) => [
+        name,
+        selectedEntry
+          ? normalizePlaygroundValue(selectedEntry.id, name, value)
+          : value,
+      ]),
+    ) as Record<string, ControlValue>;
   }
 
   function onHashChange() {
@@ -443,10 +451,16 @@
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
           </div>
-          <div class="playground-presets" aria-label="Quick view variants">
+          <div class="playground-presets" aria-label="Quick view component instances">
             <span class="playground-presets-label">Quick view</span>
-            {#each playgroundPresets as preset (preset.label)}
-              <button type="button" class="preset-chip" onclick={() => applyPreset(preset.values)}>{preset.label}</button>
+            {#each playgroundPresets as preset (preset.key)}
+              <QuickPreview
+                tagName={entry.tagName}
+                props={presetProps(preset.values)}
+                slotHtml={entry.slotHtml}
+                slotContent={entry.slotContent}
+                label={preset.label}
+              />
             {/each}
           </div>
         </section>
