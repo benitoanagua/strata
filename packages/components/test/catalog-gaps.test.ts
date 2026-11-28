@@ -655,3 +655,50 @@ describe("strata-heading-anchors", () => {
     el.remove();
   });
 });
+
+describe("responsive navigation and shared close", () => {
+  it("toggles the mobile nav panel and renders navigation links", async () => {
+    const nav = (await mount("strata-nav")) as HTMLElement & { updateComplete: Promise<unknown> };
+    const item = document.createElement("strata-nav-item") as HTMLElement & { href: string; label: string; selected: boolean; updateComplete: Promise<unknown> };
+    item.href = "/";
+    item.label = "Home";
+    item.selected = true;
+    nav.append(item);
+    await nav.updateComplete;
+    await item.updateComplete;
+    const toggle = nav.shadowRoot?.querySelector<HTMLButtonElement>(".strata-nav__toggle");
+    expect(toggle?.getAttribute("aria-expanded")).toBe("false");
+    toggle?.click();
+    await nav.updateComplete;
+    expect(toggle?.getAttribute("aria-expanded")).toBe("true");
+    expect(item.shadowRoot?.querySelector('a[href="/"]')?.getAttribute("aria-current")).toBe("page");
+    nav.remove();
+  });
+
+  it("uses a navigation landmark for the sidebar and supports selected links", async () => {
+    const menu = (await mount("strata-menu")) as HTMLElement & { updateComplete: Promise<unknown> };
+    const item = document.createElement("strata-menu-item") as HTMLElement & { href: string; label: string; selected: boolean; updateComplete: Promise<unknown> };
+    item.href = "/settings";
+    item.label = "Settings";
+    item.selected = true;
+    menu.append(item);
+    await menu.updateComplete;
+    await item.updateComplete;
+    expect(menu.shadowRoot?.querySelector("nav[aria-label]")).toBeTruthy();
+    expect(menu.shadowRoot?.querySelector('[role="menu"]')).toBeNull();
+    expect(item.shadowRoot?.querySelector('a[href="/settings"]')?.getAttribute("aria-current")).toBe("page");
+    menu.remove();
+  });
+
+  it("emits the shared close event from an accessible control", async () => {
+    const close = (await mount("strata-close-button")) as HTMLElement & { updateComplete: Promise<unknown> };
+    await close.updateComplete;
+    const button = close.shadowRoot?.querySelector<HTMLButtonElement>("button");
+    expect(button?.getAttribute("aria-label")).toBe("Close");
+    const handler = vi.fn();
+    close.addEventListener("strata-close", handler);
+    button?.click();
+    expect(handler).toHaveBeenCalledTimes(1);
+    close.remove();
+  });
+});
