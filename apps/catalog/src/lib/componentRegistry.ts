@@ -644,7 +644,7 @@ export const catalog: readonly CatalogEntry[] = [
       text("feature_image", "Feature image", "https://picsum.photos/seed/strata-card/1200/900"),
       bool("is_media", "Media", false, { feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
       select("media_align", "Media align", "left", ["top", "left", "right", "bottom"]),
-      select("media_width", "Media width", "is-half", ["is-half", "is-two-fifths", "is-one-third", "is-one-quarter", "is-one-fifth"]),
+      select("media_width", "Media width", "is-half", ["is-none", "is-full", "is-half", "is-two-fifths", "is-one-third", "is-one-quarter", "is-one-fifth"]),
       select("aspect_ratio", "Aspect ratio", "monitor", ["monitor", "square", "video"]),
       select("density", "Density", "normal", ["normal", "compact", "minimal"]),
       bool("show_excerpt", "Show excerpt", false, { excerpt: "A short supporting excerpt with enough text to appreciate the reading measure.", is_media: true, feature_image: "https://picsum.photos/seed/strata-card/1200/900" }),
