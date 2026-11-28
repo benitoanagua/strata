@@ -2,7 +2,6 @@
   import { mountStrataElement, type StrataMountHandle } from "./renderer";
 
   let {
-    root = null,
     tagName,
     props,
     slotHtml,
@@ -10,7 +9,6 @@
     label,
     group = "States",
   }: {
-    root?: HTMLElement | null;
     tagName: string;
     props: Record<string, unknown>;
     slotHtml?: string;
@@ -27,7 +25,6 @@
   // horizontal viewport are mounted, keeping custom-element work bounded.
   $effect(() => {
     const target = card;
-    const scrollRoot = root;
     if (!target) return;
 
     if (typeof IntersectionObserver === "undefined") {
@@ -40,8 +37,7 @@
         nearViewport = entry?.isIntersecting ?? false;
       },
       {
-        root: scrollRoot,
-        rootMargin: "260px 0px",
+        rootMargin: "260px",
         threshold: 0,
       },
     );
