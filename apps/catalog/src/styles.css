@@ -1028,3 +1028,71 @@ h1 {
     margin-left: 0;
   }
 }
+
+
+/* Quick view tiles render live custom-element instances, not preset buttons. */
+.playground-presets {
+  display: grid;
+  grid-template-columns: 88px repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--strata-color-border-subtle);
+  background: var(--strata-color-surface-page);
+}
+.playground-presets-label {
+  align-self: start;
+  padding-top: 8px;
+  color: var(--strata-color-text-secondary);
+  font: 9px var(--strata-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.quick-view-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--strata-color-border-subtle);
+  border-radius: var(--strata-radius-small);
+  background: var(--strata-color-surface-raised);
+}
+.quick-view-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 112px;
+  max-height: 180px;
+  overflow: hidden;
+  padding: 10px;
+  color: var(--strata-color-text-primary);
+}
+.quick-view-stage > * {
+  max-width: 100%;
+}
+.quick-view-caption {
+  padding: 7px 9px;
+  border-top: 1px solid var(--strata-color-border-subtle);
+  color: var(--strata-color-text-secondary);
+  font: 9px var(--strata-font-mono);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .playground-presets {
+    grid-template-columns: 1fr 1fr;
+  }
+  .playground-presets-label {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 480px) {
+  .playground-presets {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 10px;
+  }
+  .quick-view-stage {
+    min-height: 90px;
+  }
+}
