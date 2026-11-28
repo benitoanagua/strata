@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
-  import QuickPreview from "./lib/QuickPreview.svelte";
+  import { createStoryManifest } from "./stories/storyManifest";
   import EdgeHandle from "./lib/EdgeHandle.svelte";
   import CodeExample from "./lib/CodeExample.svelte";
   import { deriveControls, type PropInfo } from "./lib/props";
@@ -109,12 +109,6 @@
     ) as Record<string, ControlValue>;
   }
 
-  interface PlaygroundPreset {
-    key: string;
-    label: string;
-    values: Record<string, ControlValue>;
-  }
-
   function quickViewDefaults() {
     const base = defaults();
     return selectedEntry && usesRichPreviewFixture(selectedEntry.id)
@@ -122,40 +116,18 @@
       : base;
   }
 
-  // Show one live preview per meaningful public-property variant.
-  const playgroundPresets = $derived.by<PlaygroundPreset[]>(() => {
+  let quickViewTrack = $state<HTMLDivElement>();
+
+  const quickViewStories = $derived.by(() => {
     if (!selectedEntry) return [];
-    const presets: PlaygroundPreset[] = [
-      { key: "default", label: "Default", values: quickViewDefaults() },
-    ];
-    for (const control of controls) {
-      if (control.type === "select" && control.options?.length) {
-        for (const option of control.options) {
-          if (option === control.defaultValue) continue;
-          presets.push({
-            key: control.name + ":" + option,
-            label: control.label + " · " + option,
-            values: { [control.name]: option },
-          });
-        }
-      } else if (control.type === "boolean" && control.name !== "disabled") {
-        const alternate = !Boolean(control.defaultValue);
-        presets.push({
-          key: control.name + ":" + String(alternate),
-          label: control.label + " · " + (alternate ? "On" : "Off"),
-          values: { [control.name]: alternate, ...(control.demoProps ?? {}) },
-        });
-      }
-    }
-    const disabled = controls.find((control) => control.name === "disabled");
-    if (disabled && !disabled.defaultValue) {
-      presets.push({ key: "disabled:true", label: "Disabled", values: { disabled: true } });
-    }
-    return presets;
+    return createStoryManifest(selectedEntry).map((story) => ({
+      ...story,
+      props: presetProps(story.args),
+    }));
   });
 
   function presetProps(preset: Record<string, ControlValue>) {
-    const next = { ...quickViewDefaults(), ...preset };
+    const next: Record<string, ControlValue> = { ...quickViewDefaults(), ...preset };
     return Object.fromEntries(
       Object.entries(next).map(([name, value]) => [
         name,
@@ -445,15 +417,23 @@
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
           </div>
-          <div class="playground-presets" aria-label="Quick view component instances">
+        </section>
+
+        <section class="quick-view-gallery" aria-label="Quick view story gallery">
+          <header class="quick-view-gallery-heading">
             <span class="playground-presets-label">Quick view</span>
-            {#each playgroundPresets as preset (preset.key)}
+            <span class="quick-view-gallery-count">{quickViewStories.length} stories</span>
+          </header>
+          <div class="quick-view-gallery-track" bind:this={quickViewTrack}>
+            {#each quickViewStories as story (story.id)}
               <QuickPreview
+                root={quickViewTrack}
                 tagName={entry.tagName}
-                props={presetProps(preset.values)}
+                props={story.props}
                 slotHtml={entry.slotHtml}
                 slotContent={entry.slotContent}
-                label={preset.label}
+                label={story.title}
+                group={story.group}
               />
             {/each}
           </div>
