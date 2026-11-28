@@ -235,21 +235,23 @@ describe("strata-popover", () => {
   });
 });
 
-describe("strata-snackbar", () => {
-  it("announces via role=status and auto-dismisses after duration", async () => {
+describe("strata-alert snackbar mode", () => {
+  it("announces and auto-dismisses through the unified Alert API", async () => {
     vi.useFakeTimers();
-    const el = (await mount("strata-snackbar")) as HTMLElement & {
+    const el = (await mount("strata-alert")) as HTMLElement & {
       open: boolean;
+      mode: "inline" | "snackbar";
       duration: number;
       message: string;
       updateComplete: Promise<unknown>;
     };
+    el.mode = "snackbar";
     el.message = "Item saved.";
     el.duration = 1000;
-    let dismissed = 0;
-    el.addEventListener("strata-dismiss", () => dismissed++);
     el.open = true;
     await el.updateComplete;
+    let dismissed = 0;
+    el.addEventListener("strata-dismiss", () => dismissed++);
     const region = el.shadowRoot?.querySelector("[role=status]");
     expect(region?.textContent).toContain("Item saved.");
     vi.advanceTimersByTime(1000);
@@ -261,11 +263,13 @@ describe("strata-snackbar", () => {
 
   it("stays open when duration is 0", async () => {
     vi.useFakeTimers();
-    const el = (await mount("strata-snackbar")) as HTMLElement & {
+    const el = (await mount("strata-alert")) as HTMLElement & {
       open: boolean;
+      mode: "inline" | "snackbar";
       duration: number;
       updateComplete: Promise<unknown>;
     };
+    el.mode = "snackbar";
     el.duration = 0;
     el.open = true;
     await el.updateComplete;

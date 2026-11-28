@@ -32,8 +32,8 @@ describe("buildTreeNodes", () => {
     const byId = new Map(
       entryNodes(buildTreeNodes()).map((n) => [n.id.slice("entry:".length), n]),
     );
-    // Alert exposes four tones; Badge has five tones and nine taxonomy hues.
-    expect(byId.get("alert")?.meta).toBe("4");
+    // Alert exposes four tones, two modes and six placements; Badge has five tones and nine taxonomy hues.
+    expect(byId.get("alert")?.meta).toBe("12");
     expect(byId.get("badge")?.meta).toBe("14");
     expect(byId.get("tag")).toBeUndefined();
     // No meta repeats the element tag anymore.
