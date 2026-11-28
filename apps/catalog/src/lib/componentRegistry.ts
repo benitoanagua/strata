@@ -547,7 +547,7 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Badge",
     category: "Feedback",
     tagName: "strata-badge",
-    description: "A compact label for status and classification, with optional taxonomy hue, link, or removal.",
+    description: "A compact label for status or taxonomy, also used as an interactive filter chip, link, or removable item.",
     maturity: "stable",
     controls: [
       select("tone", "Tone", "neutral", [
@@ -571,6 +571,8 @@ export const catalog: readonly CatalogEntry[] = [
       text("label", "Label", "In review"),
       text("href", "Href"),
       bool("removable", "Removable"),
+      bool("interactive", "Interactive"),
+      bool("pressed", "Pressed"),
     ],
     events: [
       {
@@ -1077,31 +1079,6 @@ export const catalog: readonly CatalogEntry[] = [
     ],
   },
   {
-    id: "tag-list",
-    name: "TagList",
-    category: "Editorial",
-    tagName: "strata-tag-list",
-    description:
-      "Wrapping group of tags; hue=auto gives every category a stable rainbow hue.",
-    maturity: "beta",
-    controls: [
-      list("items", "Items (JSON or pipe)", "Historia|Ciencia|Arte|Geografía"),
-      select("hue", "Hue", "auto", [
-        "auto",
-        "neutral",
-        "red",
-        "orange",
-        "yellow",
-        "green",
-        "blue",
-        "indigo",
-        "violet",
-      ]),
-      text("baseHref", "Base href"),
-      text("label", "Label", "Tags"),
-    ],
-  },
-  {
     id: "section-header",
     name: "SectionHeader",
     category: "Editorial",
@@ -1244,7 +1221,7 @@ export const catalog: readonly CatalogEntry[] = [
     name: "Entry",
     category: "Editorial",
     tagName: "strata-entry",
-    description: "Listing row for articles, search results and recent changes.",
+    description: "Listing row for articles, search results and recent changes; categories and tags render as Badge.",
     maturity: "beta",
     controls: [
       text("heading", "Heading", "Crónica de una cuenca"),
@@ -1303,7 +1280,7 @@ export const catalog: readonly CatalogEntry[] = [
     category: "Editorial",
     tagName: "strata-filter-bar",
     description:
-      "Category chips with view and sort toggles; emits strata-change.",
+      "Badge-based category filters with view and sort toggles; emits strata-change.",
     maturity: "beta",
     controls: [
       list("items", "Items (JSON or pipe)", "Historia|Ciencia|Arte|Geografía"),
@@ -1392,7 +1369,7 @@ export const catalog: readonly CatalogEntry[] = [
     slotHtml:
       '<strata-ranked-list slot="aside-start" label="Contenido" items="Introducción|Historia|Geografía" variant="none"></strata-ranked-list>' +
       "<strata-prose><p>Cuerpo del artículo con medida de lectura.</p></strata-prose>" +
-      '<strata-tag-list slot="aside-end" items="Historia|Geografía"></strata-tag-list>',
+      '<strata-badge slot="aside-end" label="Historia" hue="auto"></strata-badge> <strata-badge slot="aside-end" label="Geografía" hue="auto"></strata-badge>',
     slots: [
       { name: "aside-start", description: "Left rail (TOC, index)." },
       { name: "default", description: "Article body." },

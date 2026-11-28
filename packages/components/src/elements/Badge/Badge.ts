@@ -30,10 +30,10 @@ export class StrataBadge extends StrataElement {
         align-items: center;
         gap: 4px;
         font: var(--strata-type-label-medium) var(--strata-font-mono);
-        font-weight: 600;
-        padding: 4px 7px;
-        border-radius: var(--strata-radius-small);
-        border: var(--strata-border-medium) solid transparent;
+        font-weight: 500;
+        padding: 3px 6px;
+        border-radius: var(--strata-radius-micro);
+        border: var(--strata-border-small) solid transparent;
         background: var(--_tint, var(--strata-color-surface-subtle));
         color: var(--_ink, var(--strata-color-text-primary));
       }
@@ -64,6 +64,17 @@ export class StrataBadge extends StrataElement {
         outline-offset: 1px;
       }
       .strata-badge iconify-icon { font-size: 0.9em; }
+      .strata-badge--interactive { cursor: pointer; text-transform: uppercase; letter-spacing: 0.03em; }
+      .strata-badge--interactive[aria-pressed="true"] {
+        background: var(--_ink, var(--strata-color-action-primary));
+        border-color: var(--_ink, var(--strata-color-action-primary));
+        color: var(--strata-color-surface-page);
+        font-weight: 700;
+      }
+      .strata-badge--interactive:focus-visible {
+        outline: 2px solid var(--strata-color-focus-ring);
+        outline-offset: 2px;
+      }
       .strata-badge button {
         display: inline-flex;
         align-items: center;
@@ -81,6 +92,9 @@ export class StrataBadge extends StrataElement {
   @property({ type: String }) hue: TagHueInput = "neutral";
   @property({ type: String }) href = "";
   @property({ type: Boolean }) removable = false;
+  /** Render as an accessible pressed-state control (e.g. a filter chip). */
+  @property({ type: Boolean }) interactive = false;
+  @property({ type: Boolean }) pressed = false;
 
   private content() {
     const icon = TONE_ICONS[this.tone as keyof typeof TONE_ICONS];
@@ -96,6 +110,9 @@ export class StrataBadge extends StrataElement {
     const href = safeHref(this.href);
     const classes = `strata-badge strata-badge--${this.tone} strata-hue--${hue}`;
     const role = this.tone === "neutral" ? nothing : "status";
+    if (this.interactive && !this.removable) {
+      return html`<button type="button" class="${classes} strata-badge--interactive" data-hue=${hue} aria-pressed=${String(this.pressed)}>${this.content()}</button>`;
+    }
     if (href && !this.removable) {
       return html`<a class=${classes} data-hue=${hue} href=${href} role=${role}>${this.content()}</a>`;
     }

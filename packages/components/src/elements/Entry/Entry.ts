@@ -1,10 +1,9 @@
 import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { StrataElement, strataComponentStyles } from "../StrataBase.js";
-import "../Tag/Tag.js";
+import "../Badge/Badge.js";
 import "../Meta/Meta.js";
-import "../TagList/TagList.js";
-import { safeHref } from "../../utils/items.js";
+import { parseItems, safeHref } from "../../utils/items.js";
 
 /**
  * Listing row for articles, search results, category pages and recent
@@ -66,8 +65,10 @@ export class StrataEntry extends StrataElement {
         font: var(--strata-type-reading-small) var(--strata-font-serif);
         color: var(--strata-color-text-secondary);
       }
-      .kicker strata-tag {
-        --strata-component-radius: var(--strata-radius-micro);
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 6px;
       }
     `,
   ];
@@ -92,6 +93,7 @@ export class StrataEntry extends StrataElement {
     const metaItems = [this.date, this.author, ...this.meta.split("|")]
       .map((s) => s.trim())
       .filter(Boolean);
+    const tagItems = parseItems(this.tags);
     return html`<article>
       ${
         src
@@ -104,11 +106,7 @@ export class StrataEntry extends StrataElement {
         ${
           this.category
             ? html`<div class="kicker">
-                <strata-tag
-                  size="small"
-                  label=${this.category}
-                  hue="auto"
-                ></strata-tag>
+                <strata-badge label=${this.category} hue="auto"></strata-badge>
               </div>`
             : ""
         }
@@ -125,12 +123,10 @@ export class StrataEntry extends StrataElement {
             : ""
         }
         ${
-          this.tags
-            ? html`<strata-tag-list
-                size="small"
-                label="Tags"
-                .items=${this.tags}
-              ></strata-tag-list>`
+          tagItems.length
+            ? html`<div class="tags" role="group" aria-label="Tags">
+                ${tagItems.map((item) => html`<strata-badge label=${item.label} hue="auto" href=${item.href || ""}></strata-badge>`)}
+              </div>`
             : ""
         }
         <slot></slot>

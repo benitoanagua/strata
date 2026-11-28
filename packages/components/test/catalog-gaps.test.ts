@@ -129,7 +129,7 @@ describe("strata-nav-item standalone", () => {
     await el.updateComplete;
     const button = el.shadowRoot?.querySelector("button")!;
     expect(button.textContent).toContain("Docs");
-    expect(button.getAttribute("aria-current")).toBe("false");
+    expect(button.getAttribute("aria-current")).toBeNull();
     el.selected = true;
     await el.updateComplete;
     expect(button.getAttribute("aria-current")).toBe("page");
@@ -228,6 +228,7 @@ describe("strata-popover", () => {
     await el.updateComplete;
     expect(el.open).toBe(true);
     anchor.dispatchEvent(new MouseEvent("mouseleave"));
+    await new Promise((resolve) => setTimeout(resolve, 160));
     await el.updateComplete;
     expect(el.open).toBe(false);
     el.remove();
@@ -285,11 +286,9 @@ describe("strata-modal close affordance", () => {
     el.open = true;
     await el.updateComplete;
     await flush();
-    const close = el.shadowRoot?.querySelector<HTMLButtonElement>(
-      ".strata-modal__close",
-    );
+    const close = el.shadowRoot?.querySelector<HTMLElement>("strata-close-button");
     expect(close).toBeTruthy();
-    expect(close?.getAttribute("aria-label")).toBe("Close modal");
+    expect(close?.getAttribute("label")).toBe("Close modal");
     el.showClose = false;
     await el.updateComplete;
     expect(el.shadowRoot?.querySelector(".strata-modal__close")).toBeNull();
@@ -308,10 +307,9 @@ describe("overlay close affordances", () => {
       el.title = "Panel";
       el.open = true;
       await el.updateComplete;
-      const button =
-        el.shadowRoot?.querySelector<HTMLButtonElement>("header button");
-      expect(button?.getAttribute("aria-label")).toBe("Close");
-      button?.click();
+      const close = el.shadowRoot?.querySelector<HTMLElement>("header strata-close-button");
+      expect(close?.getAttribute("label")).toBe(tag === "strata-drawer" ? "Close drawer" : "Close bottom sheet");
+      close?.shadowRoot?.querySelector<HTMLButtonElement>("button")?.click();
       await el.updateComplete;
       expect(el.open).toBe(false);
       el.remove();
@@ -673,18 +671,18 @@ describe("responsive navigation and shared close", () => {
 });
 
 describe("floating surface close composition", () => {
-  it("provides a shared close button and action slot in Dialog", async () => {
-    const dialog = (await mount("strata-dialog")) as HTMLElement & { open: boolean; title: string; updateComplete: Promise<unknown> };
-    dialog.title = "Confirm";
-    dialog.open = true;
-    dialog.innerHTML = '<strata-button slot="actions" label="Confirm"></strata-button>';
-    await dialog.updateComplete;
+  it("provides the shared close button and actions slot in Modal", async () => {
+    const modal = (await mount("strata-modal")) as HTMLElement & { open: boolean; title: string; updateComplete: Promise<unknown> };
+    modal.title = "Confirm";
+    modal.open = true;
+    modal.innerHTML = "<strata-button slot=actions label=Confirm></strata-button>";
+    await modal.updateComplete;
     await flush();
-    expect(dialog.shadowRoot?.querySelector("strata-close-button")).toBeTruthy();
-    expect(dialog.shadowRoot?.querySelector('slot[name="actions"]')).toBeTruthy();
-    dialog.open = false;
-    await dialog.updateComplete;
-    dialog.remove();
+    expect(modal.shadowRoot?.querySelector("strata-close-button")).toBeTruthy();
+    expect(modal.shadowRoot?.querySelector("slot[name=actions]")).toBeTruthy();
+    modal.open = false;
+    await modal.updateComplete;
+    modal.remove();
   });
 
   it("uses the same close element in Modal, Drawer, BottomSheet and Popover", async () => {
