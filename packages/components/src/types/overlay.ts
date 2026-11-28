@@ -14,7 +14,8 @@ export interface OverlayProps {
   published_at?: string;
   reading_time?: string;
   aspect_ratio?: CardAspectRatio;
-  heading?: CardHeading;\n  font_group?: FontGroup;
+  heading?: CardHeading;
+  font_group?: "default" | "supplement" | "sans" | "serif";
   show_meta?: boolean;
   show_category?: boolean;
   align?: OverlayAlign;
