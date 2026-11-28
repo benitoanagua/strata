@@ -23,7 +23,7 @@
   let previewFailed = $state(false);
 
   // All stories are known and listed immediately; only previews near the
-  // horizontal viewport are mounted, keeping custom-element work bounded.
+  // viewport-adjacent previews are mounted, keeping custom-element work bounded.
   $effect(() => {
     const target = card;
     if (!target) return;
