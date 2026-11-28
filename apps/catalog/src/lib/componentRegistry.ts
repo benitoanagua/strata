@@ -973,11 +973,18 @@ export const catalog: readonly CatalogEntry[] = [
       select("gap", "Gap", "large", ["small", "medium", "large"]),
       select("color", "Divider color", "soft", ["soft", "muted", "hard"]),
     ],
-    slotHtml:
-      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">01 / FIELD</small><p style="margin:8px 0 0">Alpha tile</p></div></strata-grille-item>' +
-      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">02 / FIELD</small><p style="margin:8px 0 0">Beta tile</p></div></strata-grille-item>' +
-      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">03 / FIELD</small><p style="margin:8px 0 0">Gamma tile</p></div></strata-grille-item>' +
-      '<strata-grille-item><div style="padding:24px;min-height:140px;display:flex;flex-direction:column;justify-content:center"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">04 / FIELD</small><p style="margin:8px 0 0">Delta tile</p></div></strata-grille-item>',
+    slotHtml: [
+      ["Alpha", "01"],
+      ["Beta", "02"],
+      ["Gamma", "03"],
+      ["Delta", "04"],
+      ["Epsilon", "05"],
+      ["Zeta", "06"],
+    ].map(([name, index]) =>
+      '<strata-grille-item><div style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">' +
+      index + ' / FIELD</small><div><strong style="font:var(--strata-type-headline-small) var(--strata-font-serif)">' +
+      name + '</strong><p style="margin:8px 0 0;max-width:24ch;line-height:1.5">A distinct content cell for an editorial composition.</p></div></div></strata-grille-item>'
+    ).join(""),
     slots: [{ name: "default", description: "strata-grille-item children." }],
   },
   {
