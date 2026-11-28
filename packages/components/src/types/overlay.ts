@@ -20,4 +20,5 @@ export interface OverlayProps {
   position?: OverlayPosition;
   box?: OverlayBox;
   fill?: OverlayFill;
+  is_dark?: boolean;
 }
