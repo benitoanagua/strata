@@ -42,6 +42,7 @@ export class StrataDrawer extends StrataElement {
   render() {
     return html`<aside
       class="strata-drawer"
+      @strata-close=${() => (this.open = false)}
       ?hidden=${!this.open}
       role="dialog"
       aria-modal="true"
@@ -49,13 +50,7 @@ export class StrataDrawer extends StrataElement {
     >
       <header>
         <strong>${this.title}</strong
-        ><button
-          type="button"
-          aria-label="Close"
-          @click=${() => (this.open = false)}
-        >
-          <iconify-icon icon="carbon:close"></iconify-icon>
-        </button>
+        ><strata-close-button label="Close drawer"></strata-close-button>
       </header>
       <slot></slot>
     </aside>`;

@@ -257,28 +257,11 @@ export class StrataModal extends LitElement {
           aria-modal="true"
           aria-labelledby=${this.title ? this.titleId : undefined}
           aria-label=${this.title ? undefined : "Modal"}
-          @click="${(e: Event) => e.stopPropagation()}"
+          @click="${(e: Event) => e.stopPropagation()}" @strata-close="${this.closeModal}"
           @keydown="${this.handleModalKeydown}"
           tabindex="-1"
         >
-          <!-- Close Button -->
-          ${
-            this.showClose
-              ? html`
-                  <button
-                    class="strata-modal__close"
-                    @click="${this.closeModal}"
-                    aria-label="Close modal"
-                  >
-                    <iconify-icon
-                      class="strata-modal__close-icon"
-                      icon="carbon:close"
-                      aria-hidden="true"
-                    ></iconify-icon>
-                  </button>
-                `
-              : ""
-          }
+          ${this.showClose ? html`<strata-close-button label="Close modal" @strata-close=${this.closeModal}></strata-close-button>` : ""}
 
           <!-- Header -->
           ${
@@ -299,7 +282,7 @@ export class StrataModal extends LitElement {
           </div>
 
           <!-- Footer -->
-          <slot name="footer"></slot>
+          <slot name="actions"><slot name="footer"></slot></slot>
         </div>
       </div>
     `;

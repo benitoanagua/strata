@@ -117,10 +117,10 @@ export class StrataPopover extends StrataElement {
         class="strata-popover"
         role="dialog"
         aria-label=${this.label}
-        @click=${(event: Event) => event.stopPropagation()}
+        @click=${(event: Event) => event.stopPropagation()}\n        @strata-close=${() => (this.open = false)}
         ?hidden=${!this.open}
       >
-        <slot></slot>
+        <header class="strata-popover__header"><strong>${this.label}</strong><strata-close-button label="Close popover"></strata-close-button></header>\n        <div class="strata-popover__body"><slot></slot></div>
       </div>
     </div>`;
   }
