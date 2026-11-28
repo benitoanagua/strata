@@ -4,6 +4,7 @@ import "iconify-icon";
 export { StrataAccordion } from "./Accordion/Accordion.js";
 export { StrataAccordionItem } from "./Accordion/AccordionItem.js";
 export { StrataButton } from "./Button/Button.js";
+export { StrataCloseButton } from "./CloseButton/CloseButton.js";
 export { StrataCard } from "./Card/Card.js";
 export { StrataCarousel } from "./Carousel/Carousel.js";
 export { StrataCarouselItem } from "./Carousel/CarouselItem.js";
@@ -138,6 +139,7 @@ declare global {
     "strata-accordion": import("./Accordion/Accordion.js").StrataAccordion;
     "strata-accordion-item": import("./Accordion/AccordionItem.js").StrataAccordionItem;
     "strata-button": import("./Button/Button.js").StrataButton;
+    "strata-close-button": import("./CloseButton/CloseButton.js").StrataCloseButton;
     "strata-card": import("./Card/Card.js").StrataCard;
     "strata-carousel": import("./Carousel/Carousel.js").StrataCarousel;
     "strata-carousel-item": import("./Carousel/CarouselItem.js").StrataCarouselItem;
