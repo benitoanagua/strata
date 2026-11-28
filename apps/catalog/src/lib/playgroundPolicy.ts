@@ -3,9 +3,7 @@ export const RICH_PREVIEW_FIXTURE_IDS = ["card", "overlay", "grille"] as const;
 
 export type RichPreviewFixtureId = (typeof RICH_PREVIEW_FIXTURE_IDS)[number];
 
-export function usesRichPreviewFixture(
-  id: string,
-): id is RichPreviewFixtureId {
+export function usesRichPreviewFixture(id: string): id is RichPreviewFixtureId {
   return (RICH_PREVIEW_FIXTURE_IDS as readonly string[]).includes(id);
 }
 

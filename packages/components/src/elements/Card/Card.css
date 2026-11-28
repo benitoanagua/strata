@@ -369,7 +369,6 @@
   }
 }
 
-
 /* Editorial image treatment: monochrome by default, opt-out with monochrome=false. */
 .strata-card__image--monochrome {
   filter: grayscale(1);

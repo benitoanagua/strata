@@ -15,6 +15,7 @@ test("Lit custom elements register and receive property updates", async ({
   page,
 }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: "Open Playground" }).click();
   await page.getByLabel("Label", { exact: true }).fill("Icon action");
   await expect(page.locator(".preview-stage > strata-button")).toHaveJSProperty(
     "label",
@@ -24,8 +25,9 @@ test("Lit custom elements register and receive property updates", async ({
 
 test("controls reset to their declared defaults", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: "Open Playground" }).click();
   await page.getByLabel("Label", { exact: true }).fill("Changed");
-  await page.getByRole("button", { name: "Reset" }).click();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
   await expect(page.locator(".preview-stage > strata-button")).toHaveJSProperty(
     "label",
     "Continue",

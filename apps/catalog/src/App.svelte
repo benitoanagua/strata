@@ -470,10 +470,6 @@
           <div class="quick-view-gallery-track">
             {#each quickViewStories as story (story.id)}
               <QuickPreview
-                tagName={entry.tagName}
-                props={story.props}
-                slotHtml={story.slotHtml}
-                slotContent={story.slotContent}
                 label={story.title}
                 group={story.group}
                 selected={selectedQuickViewStoryId === story.id}

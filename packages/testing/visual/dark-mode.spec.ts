@@ -38,6 +38,7 @@ test.describe("dark mode", () => {
     await seedPrefs(page, { theme: "light", surface: "auto" });
     await page.goto("/#/button");
     await page.locator("strata-tab", { hasText: "Examples" }).click();
+    await page.getByRole("button", { name: "Open Playground" }).click();
     const light = {
       sidebar: await bg(page, ".sidebar"),
       topbar: await bg(page, ".topbar"),
@@ -50,6 +51,7 @@ test.describe("dark mode", () => {
     await seedPrefs(page, { theme: "dark", surface: "auto" });
     await page.reload();
     await page.locator("strata-tab", { hasText: "Examples" }).click();
+    await page.getByRole("button", { name: "Open Playground" }).click();
     const dark = {
       sidebar: await bg(page, ".sidebar"),
       topbar: await bg(page, ".topbar"),

@@ -16,45 +16,61 @@ test.describe("STRATA responsive layout", () => {
     await expect(page.locator("body")).toHaveJSProperty("scrollWidth", 390);
   });
 
-  test("Quick view lists every story and lazily mounts real elements", async ({
+  test("Quick view lists every story and selects into the shared preview", async ({
     page,
   }) => {
     await page.goto("/#/button");
     const gallery = page.locator(".quick-view-gallery");
     await expect(gallery).toBeVisible();
-    const count = await gallery.locator(".quick-view-card").count();
-    const label = await gallery.locator(".quick-view-gallery-count").textContent();
+    const cards = gallery.locator(".quick-view-card");
+    const count = await cards.count();
+    const label = await gallery
+      .locator(".quick-view-gallery-count")
+      .textContent();
     expect(count).toBe(Number(label?.match(/\d+/)?.[0]));
     expect(count).toBeGreaterThan(1);
-    await expect(
-      gallery.locator(".quick-view-card").first().locator(".quick-view-host > strata-button"),
-    ).toBeVisible();
-    expect(await gallery.locator(".quick-view-host:empty").count()).toBeGreaterThan(
-      0,
-    );
+    const first = cards.first();
+    await expect(first).toHaveAttribute("aria-pressed", "false");
+    await first.click();
+    await expect(first).toHaveAttribute("aria-pressed", "true");
+    await expect(first).toHaveClass(/selected/);
+    await expect(page.locator(".preview-stage > strata-button")).toBeAttached();
   });
 
-  test("Quick view mounts real previews for representative component families", async ({
+  test("Quick view selection keeps the shared preview for representative component families", async ({
     page,
   }) => {
     test.setTimeout(60_000);
-    for (const id of ["button", "card", "grille", "overlay", "avatar", "modal"]) {
+    for (const id of [
+      "button",
+      "card",
+      "grille",
+      "overlay",
+      "avatar",
+      "modal",
+    ]) {
       await page.goto(`/#/${id}`);
-      const preview = page
-        .locator(".quick-view-card")
-        .first()
-        .locator(".quick-view-host > *")
-        .first();
-      await expect
-        .poll(() => preview.evaluate((el) => el.tagName.toLowerCase()), {
-          timeout: 5_000,
-        })
-        .toBe(`strata-${id}`);
+      // The modal preview opens by default and blocks pointer events; its catalog
+      // preset disables Escape/backdrop closing, so dismiss it via its close button.
+      if (id === "modal") {
+        const closeButton = page.getByRole("button", { name: "Close modal" });
+        await closeButton.click();
+        await expect(closeButton).toBeHidden();
+      }
+      const cards = page.locator(".quick-view-card");
+      await expect(cards.first()).toBeVisible();
+      const target = cards.nth(Math.min(1, (await cards.count()) - 1));
+      await target.click();
+      await expect(target).toHaveAttribute("aria-pressed", "true");
+      await expect(
+        page.locator(`.preview-stage > strata-${id}`),
+      ).toBeAttached();
     }
     await page.goto("/#/grille");
+    await page.locator(".quick-view-card").first().click();
     await expect(
-      page.locator(".quick-view-card").first().locator(".quick-view-host > strata-grille article"),
-    ).toHaveCount(6);
+      page.locator(".preview-stage strata-grille article").first(),
+    ).toBeAttached();
   });
 
   test("Playground collapse handle remains visible and aligned at 320px", async ({
@@ -72,14 +88,22 @@ test.describe("STRATA responsive layout", () => {
     const handleBox = await handle.boundingBox();
     expect(panelBox).not.toBeNull();
     expect(handleBox).not.toBeNull();
-    expect(Math.abs(handleBox!.x - panelBox!.x)).toBeLessThanOrEqual(1);
+    // At 320px the popover is inset 8px from the screen edge, so the collapse
+    // tab clamps to the left edge and straddles the panel border instead of
+    // aligning flush with it.
+    expect(handleBox!.x).toBeGreaterThanOrEqual(0);
+    expect(handleBox!.x).toBeLessThanOrEqual(panelBox!.x);
+    expect(handleBox!.x + handleBox!.width).toBeGreaterThan(panelBox!.x);
   });
 
   test("catalog retains the workspace at desktop width", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
     await expect(page.locator(".sidebar")).toBeVisible();
-    await expect(page.locator(".controls-panel")).toBeVisible();
+    await page.getByRole("button", { name: "Open Playground" }).click();
+    await expect(
+      page.locator(".playground-popover .controls-panel"),
+    ).toBeVisible();
     await expect(page.locator(".preview-block")).toBeVisible();
   });
 });

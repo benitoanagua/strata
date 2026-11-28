@@ -991,11 +991,23 @@ h1 {
 @media (max-width: 640px) {
   .topbar {
     height: 48px;
+    gap: 8px;
     padding: 0 16px 0 56px;
+  }
+  .breadcrumbs {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .breadcrumbs span {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   /* Keep viewer settings reachable on small screens; hide decorative metadata. */
   .topbar-meta {
     display: flex;
+    flex: none;
   }
   .topbar-meta .maturity,
   .topbar-meta .topbar-divider,
@@ -1036,7 +1048,6 @@ h1 {
     margin-left: 0;
   }
 }
-
 
 /* Quick view is a story selector grid; only the selected story mounts in the preview area. */
 .quick-view-gallery {
@@ -1084,7 +1095,9 @@ h1 {
   text-align: left;
   font: inherit;
   cursor: pointer;
-  transition: border-color var(--strata-motion-fast), background-color var(--strata-motion-fast);
+  transition:
+    border-color var(--strata-motion-fast),
+    background-color var(--strata-motion-fast);
 }
 .quick-view-card:hover {
   border-color: var(--strata-color-border-strong);

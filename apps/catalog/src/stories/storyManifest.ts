@@ -1,11 +1,7 @@
 import type { CatalogEntry, ControlValue } from "../lib/componentRegistry";
 
 export type StoryGroup =
-  | "Base"
-  | "Appearance"
-  | "States"
-  | "Composition"
-  | "Responsive";
+  "Base" | "Appearance" | "States" | "Composition" | "Responsive";
 
 export interface CatalogStory {
   id: string;
@@ -41,7 +37,9 @@ const QUICK_VIEW_GRILLE = ["A", "B", "C", "D", "E", "F"]
 
 const curated: Record<string, CatalogStory[]> = {
   button: [
-    story("icon-leading", "Leading icon", "Composition", { icon: "carbon:add" }),
+    story("icon-leading", "Leading icon", "Composition", {
+      icon: "carbon:add",
+    }),
     story("icon-trailing", "Trailing icon", "Composition", {
       icon: "carbon:arrow-right",
       trailingIcon: true,
@@ -105,9 +103,7 @@ const curated: Record<string, CatalogStory[]> = {
 
 /** Resolve a complete, deterministic story list before rendering the gallery. */
 export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
-  const stories: CatalogStory[] = [
-    story("default", "Default", "Base", {}),
-  ];
+  const stories: CatalogStory[] = [story("default", "Default", "Base", {})];
 
   for (const control of entry.controls) {
     if (control.type === "select" && control.options?.length) {
@@ -121,7 +117,9 @@ export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
               control.name,
             )
               ? "Appearance"
-              : /media|icon|meta|category|image|content|slot|show/i.test(control.name)
+              : /media|icon|meta|category|image|content|slot|show/i.test(
+                    control.name,
+                  )
                 ? "Composition"
                 : /fullwidth|inline|mobile|desktop|columns/i.test(control.name)
                   ? "Responsive"
@@ -144,14 +142,23 @@ export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
       );
     } else if (control.type === "number") {
       const values =
-        control.name === "value" ? [0, 50, 100] :
-        /columns|desktop|mobile/i.test(control.name) ? [1, 2, 3, 4] :
-        /heading/i.test(control.name) ? [1, 2, 3, 4] : [];
+        control.name === "value"
+          ? [0, 50, 100]
+          : /columns|desktop|mobile/i.test(control.name)
+            ? [1, 2, 3, 4]
+            : /heading/i.test(control.name)
+              ? [1, 2, 3, 4]
+              : [];
       for (const value of values) {
         stories.push(
-          story(`${control.name}-${value}`, `${control.label} · ${value}`, "States", {
-            [control.name]: value,
-          }),
+          story(
+            `${control.name}-${value}`,
+            `${control.label} · ${value}`,
+            "States",
+            {
+              [control.name]: value,
+            },
+          ),
         );
       }
     }
@@ -168,7 +175,16 @@ export function createStoryManifest(entry: CatalogEntry): CatalogStory[] {
   // Keep one story per effective argument set. Preserve authored ordering.
   const seen = new Set<string>();
   return stories.filter((item) => {
-    if (item.id !== "default" && Object.entries(item.args).length > 0 && Object.entries(item.args).every(([name, value]) => entry.controls.find((control) => control.name === name)?.defaultValue === value)) return false;
+    if (
+      item.id !== "default" &&
+      Object.entries(item.args).length > 0 &&
+      Object.entries(item.args).every(
+        ([name, value]) =>
+          entry.controls.find((control) => control.name === name)
+            ?.defaultValue === value,
+      )
+    )
+      return false;
     const normalized = Object.fromEntries(
       Object.entries(item.args).sort(([a], [b]) => a.localeCompare(b)),
     );

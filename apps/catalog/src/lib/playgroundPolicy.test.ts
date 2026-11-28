@@ -119,7 +119,13 @@ describe("Vue source API parity: Card", () => {
       ]),
     );
     expect(entry("card").controlAllowlist).not.toEqual(
-      expect.arrayContaining(["density", "bordered", "reading_time", "elevation", "font_group"]),
+      expect.arrayContaining([
+        "density",
+        "bordered",
+        "reading_time",
+        "elevation",
+        "font_group",
+      ]),
     );
     expect(control("card", "monochrome").defaultValue).toBe(true);
   });
@@ -185,7 +191,11 @@ describe("Vue source API parity: Overlay", () => {
     );
     expect(control("overlay", "monochrome").defaultValue).toBe(true);
     expect(control("overlay", "theme").defaultValue).toBe("auto");
-    expect(control("overlay", "theme").options).toEqual(["auto", "light", "dark"]);
+    expect(control("overlay", "theme").options).toEqual([
+      "auto",
+      "light",
+      "dark",
+    ]);
   });
 
   it("preserves Vue enum choices and defaults", () => {

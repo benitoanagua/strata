@@ -18,6 +18,7 @@ test.describe("STRATA component contracts in the catalog", () => {
     page,
   }) => {
     await page.goto("/");
+    await page.getByRole("button", { name: "Open Playground" }).click();
     await page.getByLabel("Label", { exact: true }).fill("Save changes");
     await expect(
       page.locator(".preview-stage > strata-button"),

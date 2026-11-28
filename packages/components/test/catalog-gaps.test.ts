@@ -833,7 +833,7 @@ describe("source parity: Card, Overlay and Grille", () => {
     expect(root?.classList.contains("strata-overlay--font-supplement")).toBe(
       true,
     );
-    expect(root?.classList.contains("strata-overlay--theme-light")).toBe(true);
+    expect(root?.classList.contains("strata-overlay--theme-auto")).toBe(true);
     expect(root?.classList.contains("strata-overlay--fill-gradient")).toBe(
       true,
     );

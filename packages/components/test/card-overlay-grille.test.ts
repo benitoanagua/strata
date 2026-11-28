@@ -76,10 +76,18 @@ describe("strata-card contract", () => {
     card.is_media = true;
     card.feature_image = "/sample.jpg";
     await card.updateComplete;
-    expect(card.querySelector("img")?.classList.contains("strata-card__image--monochrome")).toBe(true);
+    expect(
+      card
+        .querySelector("img")
+        ?.classList.contains("strata-card__image--monochrome"),
+    ).toBe(true);
     card.monochrome = false;
     await card.updateComplete;
-    expect(card.querySelector("img")?.classList.contains("strata-card__image--monochrome")).toBe(false);
+    expect(
+      card
+        .querySelector("img")
+        ?.classList.contains("strata-card__image--monochrome"),
+    ).toBe(false);
     card.remove();
   });
 
@@ -119,7 +127,7 @@ describe("strata-overlay contract", () => {
     expect(root.classList.contains("strata-overlay--box-background")).toBe(
       true,
     );
-    expect(root.classList.contains("strata-overlay--theme-light")).toBe(true);
+    expect(root.classList.contains("strata-overlay--theme-auto")).toBe(true);
     expect(overlay.querySelector("h1")?.textContent).toBe("Hero");
     overlay.remove();
   });
@@ -151,7 +159,9 @@ describe("strata-overlay contract", () => {
     let root = overlay.querySelector(".strata-overlay") as HTMLElement;
     expect(root.classList.contains("strata-overlay--has-image")).toBe(true);
     expect(root.classList.contains("strata-overlay--monochrome")).toBe(true);
-    expect(root.style.getPropertyValue("--strata-overlay-image")).toContain("sample.jpg");
+    expect(root.style.getPropertyValue("--strata-overlay-image")).toContain(
+      "sample.jpg",
+    );
     overlay.monochrome = false;
     overlay.theme = "dark";
     await overlay.updateComplete;

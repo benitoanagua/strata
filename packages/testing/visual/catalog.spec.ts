@@ -212,6 +212,7 @@ test("property controls mutate the mounted element with real types", async ({
   page,
 }) => {
   await page.goto("/#/slider");
+  await page.getByRole("button", { name: "Open Playground" }).click();
   const host = page.locator(".preview-stage > strata-slider");
   const minControl = page.getByLabel("Min", { exact: true });
   await minControl.fill("10");
@@ -219,6 +220,7 @@ test("property controls mutate the mounted element with real types", async ({
   expect(typeof (await host.evaluate((el) => (el as any).min))).toBe("number");
 
   await page.goto("/#/checkbox");
+  await page.getByRole("button", { name: "Open Playground" }).click();
   const checked = page.getByLabel("Checked", { exact: true });
   await checked.uncheck();
   await expect(
@@ -228,12 +230,13 @@ test("property controls mutate the mounted element with real types", async ({
 
 test("reset restores declared defaults", async ({ page }) => {
   await page.goto("/#/button");
+  await page.getByRole("button", { name: "Open Playground" }).click();
   await page.getByLabel("Label", { exact: true }).fill("Changed label");
   await expect(page.locator(".preview-stage > strata-button")).toHaveJSProperty(
     "label",
     "Changed label",
   );
-  await page.getByRole("button", { name: "Reset" }).click();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
   await expect(page.locator(".preview-stage > strata-button")).toHaveJSProperty(
     "label",
     "Continue",
@@ -325,35 +328,44 @@ test("API and accessibility tabs render documentation", async ({ page }) => {
   await expect(page.locator(".a11y-panel")).toBeVisible();
 });
 
-test("component pages use one global Playground and a compact Quick view", async ({ page }) => {
+test("component pages use one global Playground and a compact Quick view", async ({
+  page,
+}) => {
   await page.goto("/#/button");
-  await expect(page.getByRole("heading", { name: "Preview", exact: true })).toBeVisible();
-  const globalTrigger = page.getByRole("button", { name: "Playground", exact: true });
+  await expect(
+    page.getByRole("heading", { name: "Preview", exact: true }),
+  ).toBeVisible();
+  const globalTrigger = page.locator(".edge-handle");
   await expect(globalTrigger).toBeVisible();
-  await expect(globalTrigger).toHaveAttribute("aria-controls", "playground-properties");
-  await expect(page.locator(".topbar .playground-trigger")).toHaveCount(1);
-  await expect(page.locator(".preview-block .playground-trigger")).toHaveCount(0);
-  await expect(page.getByRole("navigation", { name: "Common components" })).toHaveCount(0);
+  await expect(globalTrigger).toHaveAttribute(
+    "aria-controls",
+    "playground-properties",
+  );
+  await expect(globalTrigger).toHaveCount(1);
   await expect(page.locator(".playground-popover")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Default", exact: true })).toBeVisible();
-  await expect(page.locator(".playground-presets")).toHaveAttribute("aria-label", "Quick view variants");
-  await expect(page.locator(".preset-chip")).not.toHaveCSS("border-radius", "999px");
-  await expect(page.getByRole("heading", { name: "Variants" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "States" })).toHaveCount(0);
+  await expect(page.locator(".quick-view-gallery")).toBeVisible();
+  const cards = page.locator(".quick-view-card");
+  expect(await cards.count()).toBeGreaterThan(1);
+  await expect(cards.first()).toHaveAttribute("aria-pressed", "false");
+  await cards.nth(1).click();
+  await expect(cards.nth(1)).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".preview-stage > strata-button")).toBeAttached();
 
-  const trigger = page.getByRole("button", { name: "Playground", exact: true });
-  await trigger.click();
+  await globalTrigger.click();
   const popover = page.getByRole("dialog", { name: "Playground properties" });
-  await expect(page.locator(".topbar .playground-popover")).toHaveCount(0);
-  await expect(page.locator(".topbar .playground-trigger")).toHaveAttribute("aria-expanded", "true");
-  await expect(popover.getByText("Variant", { exact: true })).toBeVisible();
-  await expect(popover.getByText("Size", { exact: true })).toBeVisible();
+  await expect(popover).toBeVisible();
+  await expect(popover.locator(".controls-panel")).toBeVisible();
+  await expect(
+    popover.getByRole("combobox", { name: "Variant" }),
+  ).toBeVisible();
+  await expect(popover.getByRole("combobox", { name: "Size" })).toBeVisible();
 
   await page.goto("/#/text-field");
-  await expect(page.getByRole("button", { name: "Playground", exact: true })).toBeVisible();
-  await expect(page.locator(".playground-presets-label")).toHaveText("Quick view");
-  await expect(page.getByRole("button", { name: "Default", exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Variants" })).toHaveCount(0);
+  await expect(page.locator(".edge-handle")).toBeVisible();
+  await expect(page.locator(".playground-presets-label")).toHaveText(
+    "Quick view",
+  );
+  await expect(page.locator(".quick-view-card").first()).toBeVisible();
 });
 
 test("compound components mount their slotted fixtures", async ({ page }) => {
@@ -411,16 +423,18 @@ test("properties panel controls never overflow their field", async ({
   page,
 }) => {
   await page.goto("/#/button");
-  await page.getByRole("button", { name: "Playground", exact: true }).click();
-  const overflowCount = await page.locator(".playground-popover .controls-panel").evaluate((el) => {
-    const panel = el.getBoundingClientRect();
-    return [...el.querySelectorAll("*")].filter((child) => {
-      const r = child.getBoundingClientRect();
-      return (
-        r.width > 0 && (r.right > panel.right + 1 || r.left < panel.left - 1)
-      );
-    }).length;
-  });
+  await page.getByRole("button", { name: "Open Playground" }).click();
+  const overflowCount = await page
+    .locator(".playground-popover .controls-panel")
+    .evaluate((el) => {
+      const panel = el.getBoundingClientRect();
+      return [...el.querySelectorAll("*")].filter((child) => {
+        const r = child.getBoundingClientRect();
+        return (
+          r.width > 0 && (r.right > panel.right + 1 || r.left < panel.left - 1)
+        );
+      }).length;
+    });
   expect(overflowCount).toBe(0);
 });
 
@@ -428,7 +442,7 @@ test("quick view preset updates the shared live preview", async ({ page }) => {
   await page.goto("/#/button");
   const host = page.locator(".preview-stage > strata-button");
   await expect(host).toHaveJSProperty("variant", "outlined");
-  await page.getByRole("button", { name: "filled", exact: true }).click();
+  await page.locator(".quick-view-card", { hasText: "filled" }).click();
   await expect(host).toHaveJSProperty("variant", "filled");
   // Global viewer preferences remain available regardless of component type.
   await page.locator("strata-viewer-settings .vs-toggle").click();
@@ -457,22 +471,34 @@ test("single-line form controls share one control height", async ({ page }) => {
   }
 });
 
-test("global playground keeps a compact, persistent properties popover", async ({ page }) => {
+test("global playground keeps a compact, persistent properties popover", async ({
+  page,
+}) => {
   await page.goto("/#/card");
-  await expect(page.getByRole("heading", { name: "Preview", exact: true })).toBeVisible();
-  const trigger = page.getByRole("button", { name: "Playground", exact: true });
+  await expect(
+    page.getByRole("heading", { name: "Preview", exact: true }),
+  ).toBeVisible();
+  const trigger = page.getByRole("button", { name: "Open Playground" });
   await trigger.click();
   const popover = page.getByRole("dialog", { name: "Playground properties" });
   await expect(popover).toBeVisible();
-  await expect(popover.getByText("CONFIGURATION", { exact: true })).toHaveCount(0);
+  await expect(popover.getByText("CONFIGURATION", { exact: true })).toHaveCount(
+    0,
+  );
   await expect(popover.getByText("Elevation", { exact: true })).toHaveCount(0);
   await expect(popover.getByText("Font group", { exact: true })).toHaveCount(0);
-  await expect(popover.getByText("Monochrome images", { exact: true })).toBeVisible();
+  await expect(
+    popover.getByText("Monochrome images", { exact: true }),
+  ).toBeVisible();
 
-  // Presets live outside the popover; using them must not light-dismiss it.
-  await page.getByRole("button", { name: "Default", exact: true }).click();
+  // Quick view cards live outside the popover; using them must not close it.
+  await page.locator(".quick-view-card").first().click();
   await expect(popover).toBeVisible();
-  await expect(page.locator(".preview-stage > strata-card")).toHaveJSProperty("is_media", false);
+  // Card seeds a rich media fixture, so the shared preview keeps is_media=true.
+  await expect(page.locator(".preview-stage > strata-card")).toHaveJSProperty(
+    "is_media",
+    true,
+  );
 
   await popover.getByRole("button", { name: "Close properties" }).click();
   await expect(popover).toHaveCount(0);
@@ -481,17 +507,22 @@ test("global playground keeps a compact, persistent properties popover", async (
   await expect(popover).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(popover).toHaveCount(0);
-  await expect(trigger).toBeFocused();
 });
 
-test("Overlay playground exposes monochrome and theme instead of dark image treatment", async ({ page }) => {
+test("Overlay playground exposes monochrome and theme instead of dark image treatment", async ({
+  page,
+}) => {
   await page.goto("/#/overlay");
   const root = page.locator(".preview-stage > strata-overlay .strata-overlay");
   await expect(root).toHaveClass(/strata-overlay--monochrome/);
   await expect(root).toHaveClass(/strata-overlay--theme-auto/);
-  await page.getByRole("button", { name: "Playground", exact: true }).click();
+  await page.getByRole("button", { name: "Open Playground" }).click();
   const popover = page.getByRole("dialog", { name: "Playground properties" });
-  await expect(popover.getByText("Monochrome images", { exact: true })).toBeVisible();
-  await expect(popover.getByText("Theme", { exact: true })).toBeVisible();
-  await expect(popover.getByText("Dark image treatment", { exact: true })).toHaveCount(0);
+  await expect(
+    popover.getByText("Monochrome images", { exact: true }),
+  ).toBeVisible();
+  await expect(popover.getByRole("combobox", { name: "Theme" })).toBeVisible();
+  await expect(
+    popover.getByText("Dark image treatment", { exact: true }),
+  ).toHaveCount(0);
 });

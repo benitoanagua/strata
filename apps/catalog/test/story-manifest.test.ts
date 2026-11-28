@@ -4,7 +4,9 @@ import { createStoryManifest } from "../src/stories/storyManifest";
 
 function signature(args: Record<string, unknown>): string {
   return JSON.stringify(
-    Object.fromEntries(Object.entries(args).sort(([a], [b]) => a.localeCompare(b))),
+    Object.fromEntries(
+      Object.entries(args).sort(([a], [b]) => a.localeCompare(b)),
+    ),
   );
 }
 
@@ -45,7 +47,8 @@ describe("Quick view story manifest", () => {
         if (control.type !== "boolean") continue;
         expect(
           stories.some(
-            (item) => item.args[control.name] === !Boolean(control.defaultValue),
+            (item) =>
+              item.args[control.name] === !Boolean(control.defaultValue),
           ),
           `${entry.id} / ${control.name}`,
         ).toBe(true);
@@ -56,9 +59,9 @@ describe("Quick view story manifest", () => {
   it("uses compact real content for Grille thumbnails", () => {
     const grille = catalog.find((entry) => entry.id === "grille")!;
     const stories = createStoryManifest(grille);
-    expect(stories.every((item) => item.slotHtml === stories[0]?.slotHtml)).toBe(
-      true,
-    );
+    expect(
+      stories.every((item) => item.slotHtml === stories[0]?.slotHtml),
+    ).toBe(true);
     expect(stories[0]?.slotHtml).toContain("min-height:56px");
   });
 

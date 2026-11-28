@@ -42,4 +42,5 @@ The Svelte catalog is a private development tool under `apps/catalog`. It render
 ## Documentation
 
 Start at [`docs/README.md`](docs/README.md) for the maintained documentation index. The component registry, public Lit metadata and test suites are the sources of truth for current API, maturity and coverage; the repository does not maintain static audit or coverage snapshots.
+
 - `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/COMPONENT-CONTRACT.md`, `docs/COMPONENT-UX-CONTRACT.md`, `docs/DESIGN-LAWS.md`.
