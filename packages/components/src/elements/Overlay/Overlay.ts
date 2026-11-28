@@ -20,6 +20,10 @@ export class StrataOverlay extends BaseClass {
   static styles = [unsafeCSS(baseCSS), unsafeCSS(componentCSS)];
 
   @property({ type: String }) title = "";
+  /** Grayscale the image layer without affecting overlay text. */
+  @property({ type: Boolean }) monochrome = true;
+  /** Use the active token theme by default, or force light/dark presentation. */
+  @property({ type: String }) theme: "auto" | "light" | "dark" = "auto";
   @property({ type: String }) url = "";
   @property({ type: String, attribute: "feature-image" }) feature_image = "";
   @property({ type: String, attribute: "tag-name" }) tag_name = "";
@@ -51,7 +55,10 @@ export class StrataOverlay extends BaseClass {
       `strata-overlay--position-${this.position}`,
       `strata-overlay--aspect-${this.aspect_ratio}`,
       `strata-overlay--font-${this.font_group}`,
+      `strata-overlay--theme-${this.is_dark ? "dark" : this.theme}`,
     ];
+    if (this.feature_image) classes.push("strata-overlay--has-image");
+    if (this.monochrome) classes.push("strata-overlay--monochrome");
 
     if (this.fill !== "none") {
       classes.push(`strata-overlay--fill-${this.fill}`);
@@ -59,19 +66,13 @@ export class StrataOverlay extends BaseClass {
 
     // Añadir la clase del tipo de box al contenedor principal
     classes.push(`strata-overlay--box-${this.box}`);
-    classes.push(
-      this.is_dark
-        ? "strata-overlay--theme-dark"
-        : "strata-overlay--theme-light",
-    );
-
     return classes.join(" ");
   }
 
   render() {
     const url = safeHref(this.url);
     const image = this.feature_image
-      ? `background-image: url("${this.feature_image.replace(/["\\\n\r]/g, "")}")`
+      ? `--strata-overlay-image: url("${this.feature_image.replace(/["\\\n\r()]/g, "")}")`
       : "";
     return html`
       <div class="${this.getOverlayClasses()}" style="${image}">
