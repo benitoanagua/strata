@@ -15,7 +15,7 @@ only ever answer to one of them:
 | Axis    | Question it answers         | Button example                                                    |
 | ------- | --------------------------- | ----------------------------------------------------------------- |
 | variant | What does it look like?     | `filled`, `outlined`, `text`, `elevated`, `tonal`                 |
-| color   | What does it mean?          | `primary`, `error`, `success`, `warning` (`secondary` deprecated) |
+| color   | What does it mean?          | `primary`, `error`, `success`, `warning` |
 | size    | How big is it?              | `small`, `medium`, `large`                                        |
 | type    | How does it behave in HTML? | `button`, `submit`, `reset`                                       |
 
@@ -47,13 +47,6 @@ Monochrome establishes structure; semantic color communicates intent.
 - An active variant must never look accidentally disabled. Disabled is
   communicated by the disabled contract (§4), not by draining the color
   weight of live variants.
-
-### Deprecated: `color="secondary"`
-
-`secondary` mixed hierarchy into the color axis and duplicated the soft
-neutral surface that `tonal` already provides. It still renders for
-compatibility but is deprecated: use `variant="tonal"` with `color="primary"`
-or a semantic color. Removal is planned for the next major version.
 
 ## 3. Variant contract
 
@@ -133,7 +126,7 @@ The catalog must represent the real component, not an idealized one.
 - States get explicit demos; booleans that need supporting props use
   `demoProps`.
 - Controls reflect the real API: types, options and defaults come from the
-  element. Deprecated API values are not offered as demo options.
+  element. Removed API values are not offered as demo options.
 - Examples must be complete and accessible — never a button without its
   required icon or label.
 
