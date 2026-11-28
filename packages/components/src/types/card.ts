@@ -14,8 +14,6 @@ export interface CardProps {
   url: string;
   excerpt: string;
   is_media?: boolean;
-  media_width?: CardMediaWidth;
-  aspect_ratio?: CardAspectRatio;
   show_meta?: boolean;
   show_category?: boolean;
   show_excerpt?: boolean;
