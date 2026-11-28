@@ -20,6 +20,7 @@
   let card = $state<HTMLElement>();
   let host = $state<HTMLDivElement>();
   let nearViewport = $state(false);
+  let previewFailed = $state(false);
 
   // All stories are known and listed immediately; only previews near the
   // horizontal viewport are mounted, keeping custom-element work bounded.
@@ -55,6 +56,7 @@
     let cancelled = false;
     let mounted: StrataMountHandle | undefined;
     target.replaceChildren();
+    previewFailed = false;
 
     if (!active) return;
 
@@ -73,6 +75,8 @@
       handle.element.style.width = "100%";
       handle.element.style.minWidth = "0";
       handle.element.style.maxWidth = "100%";
+    }).catch(() => {
+      if (!cancelled) previewFailed = true;
     });
 
     return () => {
@@ -84,6 +88,9 @@
 
 <article class="quick-view-card" aria-label={`${group}: ${label}`} bind:this={card}>
   <div class="quick-view-stage" bind:this={host}></div>
+  {#if previewFailed}
+    <span class="quick-view-error" role="status">Preview unavailable</span>
+  {/if}
   <div class="quick-view-caption">
     <span>{label}</span>
     <small>{group}</small>
