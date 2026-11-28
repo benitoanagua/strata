@@ -1038,7 +1038,7 @@ h1 {
 }
 
 
-/* QuickViewGallery lists every story up front and mounts previews near view. */
+/* Quick view is a story selector grid; only the selected story mounts in the preview area. */
 .quick-view-gallery {
   min-width: 0;
   margin: 14px 0 18px;
@@ -1062,83 +1062,62 @@ h1 {
   white-space: nowrap;
 }
 .quick-view-gallery-track {
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
   gap: 12px;
   min-width: 0;
-  padding: 4px 0 12px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: thin;
-  scroll-snap-type: x proximity;
 }
 .quick-view-card {
+  appearance: none;
   display: flex;
-  flex: 0 0 250px;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 12px;
   min-width: 0;
-  height: 180px;
-  overflow: hidden;
+  min-height: 148px;
+  padding: 16px;
   border: 1px solid var(--strata-color-border-subtle);
   border-radius: var(--strata-radius-small);
   background: var(--strata-color-surface-raised);
-  scroll-snap-align: start;
-}
-.quick-view-stage {
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  padding: 8px;
   color: var(--strata-color-text-primary);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color var(--strata-motion-fast), background-color var(--strata-motion-fast);
 }
-.quick-view-error {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: var(--strata-color-surface-raised);
-  color: var(--strata-color-text-secondary);
-  font: 10px var(--strata-font-sans);
+.quick-view-card:hover {
+  border-color: var(--strata-color-border-strong);
+  background: var(--strata-color-surface-hover);
 }
-.quick-view-host {
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
+.quick-view-card:focus-visible {
+  outline: 2px solid var(--strata-color-focus-ring);
+  outline-offset: 2px;
 }
-.quick-view-host:empty::before {
-  content: "";
-  width: 48%;
-  height: 38%;
-  border-radius: 2px;
-  background: var(--strata-color-surface-sunken);
-  opacity: 0.55;
+.quick-view-card.selected {
+  border-color: var(--strata-color-action-primary);
+  background: var(--strata-color-surface-selected);
 }
-.quick-view-stage > * {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
+.quick-view-card-title {
+  font: var(--strata-type-title-medium) var(--strata-font-serif);
+  line-height: 1.35;
+}
+.quick-view-card-action {
+  align-self: flex-start;
+  padding: 7px 10px;
+  border: 1px solid var(--strata-color-border-subtle);
+  border-radius: var(--strata-radius-small);
+  font: 10px var(--strata-font-mono);
 }
 .quick-view-caption {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  flex: 0 0 auto;
-  min-height: 32px;
-  padding: 7px 9px;
+  margin-top: auto;
+  padding-top: 10px;
   border-top: 1px solid var(--strata-color-border-subtle);
-  color: var(--strata-color-text-primary);
+  color: var(--strata-color-text-secondary);
   font: 9px var(--strata-font-mono);
 }
 .quick-view-caption span {
@@ -1149,21 +1128,32 @@ h1 {
 }
 .quick-view-caption small {
   flex: 0 0 auto;
-  color: var(--strata-color-text-secondary);
+  color: inherit;
   font: inherit;
   font-size: 8px;
 }
-@media (max-width: 700px) {
-  .quick-view-card {
-    flex-basis: 220px;
-    height: 160px;
-  }
+.preview-selection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-@media (max-width: 420px) {
+.preview-reset {
+  border: 1px solid var(--strata-color-border-subtle);
+  background: var(--strata-color-surface-page);
+  color: var(--strata-color-text-primary);
+  padding: 3px 6px;
+  font: 8px var(--strata-font-mono);
+  cursor: pointer;
+}
+.preview-reset:hover {
+  border-color: var(--strata-color-border-strong);
+}
+@media (max-width: 700px) {
   .quick-view-gallery-track {
-    padding: 4px 0 8px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
   }
-  .quick-view-stage {
-    padding: 6px;
+  .quick-view-card {
+    min-height: 136px;
+    padding: 12px;
   }
 }
