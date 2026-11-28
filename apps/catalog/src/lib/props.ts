@@ -78,9 +78,11 @@ export function deriveControls(entry: CatalogEntry): PropInfo[] {
   const props = elementProperties(entry.tagName);
   const defaults = elementDefaults(entry.tagName);
   const curated = new Map(entry.controls.map((c) => [c.name, c]));
+  const allowlist = entry.controlAllowlist ? new Set(entry.controlAllowlist) : undefined;
   const result: PropInfo[] = [];
 
   for (const [name, decl] of props) {
+    if (allowlist && !allowlist.has(name)) continue;
     if (decl.state) continue;
     if (typeof name !== "string" || name.startsWith("_")) continue;
     const override = curated.get(name);
