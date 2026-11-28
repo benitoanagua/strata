@@ -445,19 +445,21 @@
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
           </div>
-          <div class="playground-presets" aria-label="Quick view component instances">
-            <span class="playground-presets-label">Quick view</span>
-            {#each playgroundPresets as preset (preset.key)}
-              <QuickPreview
-                tagName={entry.tagName}
-                props={presetProps(preset.values)}
-                slotHtml={entry.slotHtml}
-                slotContent={entry.slotContent}
-                label={preset.label}
-              />
-            {/each}
-          </div>
         </section>
+
+        <div class="playground-presets" aria-label="Quick view component instances">
+          <span class="playground-presets-label">Quick view</span>
+          {#each playgroundPresets as preset (preset.key)}
+            <QuickPreview
+              tagName={entry.tagName}
+              props={presetProps(preset.values)}
+              slotHtml={entry.slotHtml}
+              slotContent={entry.slotContent}
+              label={preset.label}
+            />
+          {/each}
+        </div>
+
 
         <strata-tabs class="detail-tabs">
           <strata-tab slot="tabs">Properties</strata-tab>
