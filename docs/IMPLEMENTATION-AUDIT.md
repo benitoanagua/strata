@@ -837,7 +837,7 @@ Audit of all 74 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Purpose:** Listing row for articles, search results and recent changes.
 - **Implementation:** `StrataEntry` in `packages/components/src/elements/Entry`
 - **Properties (14):** `size` (String, reflected), `tone` (String), `heading` (String), `href` (String), `excerpt` (String), `category` (String), `author` (String), `date` (String), `meta` (String), `tags` (String, parsed into Badge instances), `image` (String), `imageAlt` (String), `layout` (String, reflected), `mediaEnd` (Boolean, reflected)
-- **Notes:** Category and tags use `strata-badge`; use repeated Badge elements for a tag group instead of the removed TagList.
+- **Notes:** Category and tags use `strata-badge`; use repeated Badge elements for a tag group as a wrapping group.
 - **Slots:** `default`
 - **Accessibility:** Article element with configurable heading level.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
