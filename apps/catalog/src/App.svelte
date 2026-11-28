@@ -127,6 +127,19 @@
     }));
   });
 
+  let selectedQuickViewStoryId = $state<string | null>(null);
+  const selectedQuickViewStory = $derived(
+    quickViewStories.find((story) => story.id === selectedQuickViewStoryId),
+  );
+
+  function selectQuickViewStory(storyId: string) {
+    selectedQuickViewStoryId = storyId;
+  }
+
+  function resetPreview() {
+    selectedQuickViewStoryId = null;
+  }
+
   function presetProps(preset: Record<string, ControlValue>) {
     const next: Record<string, ControlValue> = { ...quickViewDefaults(), ...preset };
     return Object.fromEntries(
@@ -141,6 +154,7 @@
 
   function onHashChange() {
     route = parseHash();
+    selectedQuickViewStoryId = null;
     sidebarOpen = false;
     propertyPopoverOpen = false;
   }
@@ -178,9 +192,11 @@
   // through handle.update() so the instance is never recreated.
   let previewHandle: StrataMountHandle | undefined;
   let mountedTag = "";
+  let mountedStoryId = "";
 
   $effect(() => {
     const entry = selectedEntry;
+    const story = selectedQuickViewStory;
     const host = previewHost;
     if (route.kind !== "component" || !entry || !host) {
       previewHandle?.destroy();
@@ -188,17 +204,26 @@
       mountedTag = "";
       return;
     }
-    const props: Record<string, unknown> = {};
-    for (const control of controls) {
-      const value = values[control.name];
-      if (value !== undefined) props[control.name] = value;
+    const props: Record<string, unknown> = story
+      ? { ...story.props }
+      : {};
+    if (!story) {
+      for (const control of controls) {
+        const value = values[control.name];
+        if (value !== undefined) props[control.name] = value;
+      }
     }
 
     const articleEnhancers = new Set(["toc", "reading-progress", "heading-anchors"]);
     const needsArticleFixture = articleEnhancers.has(entry.id);
     if (needsArticleFixture) props.target = "#strata-catalog-article";
 
-    if (previewHandle && mountedTag === entry.tagName) {
+    const storyId = story?.id ?? "__default";
+    if (
+      previewHandle &&
+      mountedTag === entry.tagName &&
+      mountedStoryId === storyId
+    ) {
       previewHandle.update(props);
       return;
     }
@@ -247,13 +272,14 @@
     }
 
     mountedTag = entry.tagName;
+    mountedStoryId = storyId;
     void mountStrataElement(host, {
       tagName: entry.tagName,
       props,
-      slotHtml: entry.slotHtml,
-      slotContent: entry.slotContent,
+      slotHtml: story?.slotHtml ?? entry.slotHtml,
+      slotContent: story?.slotContent ?? entry.slotContent,
     }).then((handle) => {
-      if (mountedTag !== entry.tagName) {
+      if (mountedTag !== entry.tagName || mountedStoryId !== storyId) {
         handle.destroy();
         return;
       }
@@ -264,7 +290,7 @@
         host.insertBefore(handle.element, article);
       }
     }).catch(() => {
-      if (mountedTag === entry.tagName) {
+      if (mountedTag === entry.tagName && mountedStoryId === storyId) {
         host.textContent = "Preview unavailable";
         host.setAttribute("role", "status");
       }
@@ -418,7 +444,18 @@
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
             <div class="preview-viewport viewport-{prefs.viewport}">
-              <div class="canvas-labels"><span>PREVIEW AREA</span><span>{prefs.viewport.toUpperCase()} / 01</span></div>
+              <div class="canvas-labels">
+                <span>PREVIEW AREA</span>
+                <span class="preview-selection">
+                  {#if selectedQuickViewStory}
+                    {selectedQuickViewStory.title.toUpperCase()}
+                    <button type="button" class="preview-reset" onclick={resetPreview}>Reset</button>
+                  {:else}
+                    DEFAULT COMPONENT
+                  {/if}
+                  <span>{prefs.viewport.toUpperCase()} / 01</span>
+                </span>
+              </div>
               <div class="preview-stage" bind:this={previewHost}></div>
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
@@ -439,6 +476,8 @@
                 slotContent={story.slotContent}
                 label={story.title}
                 group={story.group}
+                selected={selectedQuickViewStoryId === story.id}
+                onSelect={() => selectQuickViewStory(story.id)}
               />
             {/each}
           </div>
