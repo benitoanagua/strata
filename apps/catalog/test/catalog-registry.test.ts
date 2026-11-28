@@ -87,7 +87,7 @@ describe("catalog registry", () => {
     expect(derived.demoProps?.icon).toBe(trailing.demoProps?.icon);
   });
 
-  it("does not offer the deprecated secondary color as a demo option", () => {
+  it("excludes the removed secondary color from Button demo options", () => {
     const button = entryById("button")!;
     const color = button.controls.find((c) => c.name === "color")!;
     expect(color.options).not.toContain("secondary");
