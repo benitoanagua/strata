@@ -19,6 +19,10 @@ export interface CardProps {
   show_meta?: boolean;
   show_category?: boolean;
   show_excerpt?: boolean;
+  inline_mobile?: boolean;
+  elevation?: boolean;
+  font_group?: "default" | "supplement" | "sans" | "serif";
+  icon?: "none" | "photo" | "video" | "gallery";
   feature_image: string;
   tag_name: string;
   tag_url: string;
