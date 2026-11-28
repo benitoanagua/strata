@@ -20,7 +20,6 @@
 <section class="controls-panel" aria-labelledby="controls-heading">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">CONFIGURATION</p>
       <h2 id="controls-heading">Properties</h2>
     </div>
     <!-- svelte-ignore a11y_click_events_have_key_events -->

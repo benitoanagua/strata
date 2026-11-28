@@ -23,6 +23,8 @@ export interface CardProps {
   elevation?: boolean;
   font_group?: "default" | "supplement" | "sans" | "serif";
   icon?: "none" | "photo" | "video" | "gallery";
+  /** Apply grayscale to the feature image; defaults to true. */
+  monochrome?: boolean;
   feature_image: string;
   tag_name: string;
   tag_url: string;
