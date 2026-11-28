@@ -261,6 +261,11 @@
         if (entry.id === "heading-anchors") handle.element.style.display = "none";
         host.insertBefore(handle.element, article);
       }
+    }).catch(() => {
+      if (mountedTag === entry.tagName) {
+        host.textContent = "Preview unavailable";
+        host.setAttribute("role", "status");
+      }
     });
   });
 
