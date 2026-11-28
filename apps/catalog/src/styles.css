@@ -1074,10 +1074,10 @@ h1 {
 }
 .quick-view-card {
   display: flex;
-  flex: 0 0 210px;
+  flex: 0 0 250px;
   flex-direction: column;
   min-width: 0;
-  height: 166px;
+  height: 180px;
   overflow: hidden;
   border: 1px solid var(--strata-color-border-subtle);
   border-radius: var(--strata-radius-small);
@@ -1155,8 +1155,8 @@ h1 {
 }
 @media (max-width: 700px) {
   .quick-view-card {
-    flex-basis: 180px;
-    height: 150px;
+    flex-basis: 220px;
+    height: 160px;
   }
 }
 @media (max-width: 420px) {
