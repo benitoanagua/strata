@@ -662,6 +662,7 @@ export const catalog: readonly CatalogEntry[] = [
       select("icon", "Media icon", "none", ["none", "photo", "video", "gallery"]),
     ],
     a11y: "Title renders as a configurable heading level (h1–h6). Media is optional and metadata/excerpt are opt-in.",
+    notes: "Mirrors the Vue Card API. Catalog names map imageUrl→feature_image, sectionTitle→tag_name, author→author_name, createdAt→published_at and introduction→excerpt. Vue defaults are retained; non-source density, bordered and reading-time controls are omitted.",
   },
   {
     id: "modal",
@@ -820,6 +821,7 @@ export const catalog: readonly CatalogEntry[] = [
       bool("is_dark", "Dark image treatment"),
     ],
     a11y: "Title renders at a configurable heading level over the media.",
+    notes: "Mirrors the Vue Overlay API and Post fields using the same catalog mappings as Card. Reading-time metadata is not part of the source component and is omitted.",
   },
   {
     id: "theme-toggle",
