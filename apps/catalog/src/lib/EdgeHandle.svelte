@@ -84,18 +84,6 @@
     text-transform: uppercase;
   }
 
-  @media (max-width: 700px) {
-    .edge-handle-open {
-      right: min(100vw, 420px);
-    }
-  }
-
-  @media (max-width: 420px) {
-    .edge-handle-open {
-      right: 100vw;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .edge-handle {
       transition: none;
