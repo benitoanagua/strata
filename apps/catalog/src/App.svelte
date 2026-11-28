@@ -2,6 +2,7 @@
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
   import QuickPreview from "./lib/QuickPreview.svelte";
+  import EdgeHandle from "./lib/EdgeHandle.svelte";
   import CodeExample from "./lib/CodeExample.svelte";
   import { deriveControls, type PropInfo } from "./lib/props";
   import {
@@ -49,7 +50,6 @@
   let previewHost = $state<HTMLDivElement>();
   let searchField = $state<HTMLElement>();
   let propertyPopoverOpen = $state(false);
-  let propertyTrigger = $state<HTMLButtonElement>();
 
   // Viewer preferences: persisted under `strata-catalog-viewer`, never under
   // the global `strata-theme` key used by strata-theme-toggle.
@@ -199,7 +199,6 @@
 
   function closePropertyPopover() {
     propertyPopoverOpen = false;
-    propertyTrigger?.focus();
   }
 
   // Mount the real element once per entry; subsequent property updates go
@@ -395,15 +394,10 @@
           <strong>{entry.name}</strong>
         </div>
         <div class="topbar-meta">
-          <button
-            class="playground-trigger"
-            type="button"
-            bind:this={propertyTrigger}
-            aria-expanded={propertyPopoverOpen}
-            aria-controls="playground-properties"
-            aria-haspopup="dialog"
-            onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
-          >Playground</button>
+          <EdgeHandle
+            open={propertyPopoverOpen}
+            onToggle={() => (propertyPopoverOpen = !propertyPopoverOpen)}
+          />
           <strata-viewer-settings
             theme={prefs.theme}
             surface={prefs.surface}
