@@ -521,7 +521,7 @@
                 aria-controls="playground-properties"
                 aria-haspopup="dialog"
                 onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
-              >{propertyPopoverOpen ? "Properties open" : "Configure"}</button>
+              >Configure</button>
             {/if}
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
