@@ -325,10 +325,15 @@ test("API and accessibility tabs render documentation", async ({ page }) => {
   await expect(page.locator(".a11y-panel")).toBeVisible();
 });
 
-test("every component shares Preview, Playground and compact quick views", async ({ page }) => {
+test("every component uses the automatic Playground from one global topbar entry", async ({ page }) => {
   await page.goto("/#/button");
   await expect(page.getByRole("heading", { name: "Preview", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Playground", exact: true })).toBeVisible();
+  const globalTrigger = page.getByRole("button", { name: "Playground", exact: true });
+  await expect(globalTrigger).toBeVisible();
+  await expect(globalTrigger).toHaveAttribute("aria-controls", "playground-properties");
+  await expect(page.locator(".topbar").getByRole("button", { name: "Playground", exact: true })).toHaveCount(1);
+  await expect(page.locator(".preview-block .playground-trigger")).toHaveCount(0);
+  await expect(page.locator(".playground-popover")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Default", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Variants" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "States" })).toHaveCount(0);
@@ -336,6 +341,8 @@ test("every component shares Preview, Playground and compact quick views", async
   const trigger = page.getByRole("button", { name: "Playground", exact: true });
   await trigger.click();
   const popover = page.getByRole("dialog", { name: "Playground properties" });
+  await expect(page.locator(".preview-block .playground-popover")).toHaveCount(0);
+  await expect(page.locator(".topbar").getByRole("button", { name: "Playground", exact: true })).toHaveAttribute("aria-expanded", "true");
   await expect(popover.getByText("Variant", { exact: true })).toBeVisible();
   await expect(popover.getByText("Size", { exact: true })).toBeVisible();
 
