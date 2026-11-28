@@ -79,11 +79,11 @@ export class StrataGrille extends LitElement implements GrilleProps {
   private rememberAndRestore(element: HTMLElement) {
     let original = this.originalStyles.get(element);
     if (!original) {
-      original = new Map(
+      original = new Map<string, string>(
         STYLE_PROPERTIES.map((name) => [
           name,
           element.style.getPropertyValue(name),
-        ]),
+        ] as [string, string]),
       );
       this.originalStyles.set(element, original);
     }
