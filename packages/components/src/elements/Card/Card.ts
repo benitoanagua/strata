@@ -21,6 +21,12 @@ export class StrataCard extends BaseClass {
   @property({ type: String }) title = "";
   @property({ type: String }) url = "";
   @property({ type: String }) excerpt = "";
+  @property({ type: Boolean, attribute: "is-media" }) is_media = false;
+  @property({ type: String, attribute: "media-width" }) media_width: CardMediaWidth = "is-half";
+  @property({ type: String, attribute: "aspect-ratio" }) aspect_ratio: CardAspectRatio = "monitor";
+  @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
+  @property({ type: Boolean, attribute: "show-category" }) show_category = false;
+  @property({ type: Boolean, attribute: "show-excerpt" }) show_excerpt = false;
   @property({ type: String, attribute: "feature-image" }) feature_image = "";
   @property({ type: String, attribute: "tag-name" }) tag_name = "";
   @property({ type: String, attribute: "tag-url" }) tag_url = "";
@@ -105,8 +111,7 @@ export class StrataCard extends BaseClass {
     const isHorizontal =
       this.media_align === "left" || this.media_align === "right";
     const isNormalDensity = this.density === "normal";
-    if (!isHorizontal || (isHorizontal && isNormalDensity))
-      return "strata-card__figure--flexible";
+    if (!isHorizontal) return "strata-card__figure--flexible";
     switch (this.media_width) {
       case "is-one-fifth":
         return "strata-card__figure--one-fifth";
@@ -142,7 +147,7 @@ export class StrataCard extends BaseClass {
       <div class="${this.getCardClasses()}">
         <div class="strata-card__container ${this.getFlexClass()}">
           ${
-            this.feature_image
+            this.is_media && this.feature_image
               ? html`
                   <figure class="strata-card__figure ${this.getFigureClass()}">
                     <a href="${this.url}">
@@ -158,8 +163,9 @@ export class StrataCard extends BaseClass {
           }
 
           <div class="strata-card__content">
+            ${this.show_category && this.tag_name ? html`<div class="strata-card__category">${this.tag_name}</div>` : ""}
             ${
-              this.author_name
+              this.show_meta && this.author_name
                 ? html`
                     <div class="strata-card__author">
                       ${
@@ -191,12 +197,12 @@ export class StrataCard extends BaseClass {
             </a>
 
             ${
-              this.density === "normal"
+              this.show_excerpt && this.density === "normal"
                 ? html`<p class="strata-card__excerpt">${this.excerpt}</p>`
                 : ""
             }
             ${
-              this.tag_name && this.density !== "minimal"
+              this.show_meta && this.tag_name && this.density !== "minimal"
                 ? html`
                     <div class="strata-card__meta">
                       <span class="strata-card__meta-item"
