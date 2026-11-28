@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { StrataTreeNode } from "@strata/components";
   import Controls from "./lib/PropertyControls.svelte";
-  import QuickViewGallery from "./stories/QuickViewGallery.svelte";
   import { createStoryManifest } from "./stories/storyManifest";
   import EdgeHandle from "./lib/EdgeHandle.svelte";
   import CodeExample from "./lib/CodeExample.svelte";
@@ -116,6 +115,8 @@
       ? initialPlaygroundValues(selectedEntry.id, base)
       : base;
   }
+
+  let quickViewTrack = $state<HTMLDivElement>();
 
   const quickViewStories = $derived.by(() => {
     if (!selectedEntry) return [];
@@ -418,12 +419,25 @@
           </div>
         </section>
 
-        <QuickViewGallery
-          tagName={entry.tagName}
-          stories={quickViewStories}
-          slotHtml={entry.slotHtml}
-          slotContent={entry.slotContent}
-        />
+        <section class="quick-view-gallery" aria-label="Quick view story gallery">
+          <header class="quick-view-gallery-heading">
+            <span class="playground-presets-label">Quick view</span>
+            <span class="quick-view-gallery-count">{quickViewStories.length} stories</span>
+          </header>
+          <div class="quick-view-gallery-track" bind:this={quickViewTrack}>
+            {#each quickViewStories as story (story.id)}
+              <QuickPreview
+                root={quickViewTrack}
+                tagName={entry.tagName}
+                props={story.props}
+                slotHtml={entry.slotHtml}
+                slotContent={entry.slotContent}
+                label={story.title}
+                group={story.group}
+              />
+            {/each}
+          </div>
+        </section>
 
         <strata-tabs class="detail-tabs">
           <strata-tab slot="tabs">Properties</strata-tab>
