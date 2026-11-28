@@ -64,7 +64,10 @@ describe("Quick view story manifest", () => {
           }
           if (control.type === "boolean") return count + 1;
           if (control.type === "number") {
-            return count + (control.name === "value" ? 3 : 0);
+            if (control.name === "value") return count + 3;
+            if (/columns|desktop|mobile|heading/i.test(control.name))
+              return count + 4;
+            return count;
           }
           return count;
         }, 0) +
