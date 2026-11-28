@@ -292,6 +292,13 @@
     return base;
   }
 
+  function grilleShowcaseSlot(columns: number): string {
+    const names = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta"];
+    return names.map((name, index) =>
+      `<strata-grille-item><div style="box-sizing:border-box;min-height:176px;padding:24px 18px;display:flex;flex-direction:column;justify-content:space-between;background:var(--strata-color-surface-page)"><small style="font:var(--strata-type-label-small) var(--strata-font-mono);color:var(--strata-color-text-secondary)">0${index + 1} / FIELD</small><div><strong style="display:block;font:var(--strata-type-headline-small) var(--strata-font-serif);color:var(--strata-color-text-primary)">${name}</strong><p style="margin:8px 0 0;max-width:24ch;color:var(--strata-color-text-secondary);font-size:13px;line-height:1.5">A distinct content cell for a ${columns}-column composition.</p></div></div></strata-grille-item>`
+    ).join("");
+  }
+
   const variantDemos = $derived.by<DemoCell[]>(() => {
     const entry = selectedEntry;
     if (!entry || OVERLAY_TAGS.has(entry.tagName)) return [];
@@ -309,7 +316,7 @@
           options: {
             tagName: entry.tagName,
             props: { ...base, desktop: columns },
-            slotHtml: entry.slotHtml,
+            slotHtml: grilleShowcaseSlot(columns),
             slotContent: entry.slotContent,
           },
         });
