@@ -13,7 +13,7 @@ export interface StrataFilterState {
 
 /**
  * Category chips + view (list/grid) + sort toggles for listing pages.
- * The active chip is marked by inversion and weight, not by a border.
+ * The category chip appearance and pressed state are provided by Badge.
  * Emits `strata-change` with `{ category, view, sort }`.
  */
 @customElement("strata-filter-bar")
@@ -75,7 +75,7 @@ export class StrataFilterBar extends StrataElement {
   @property({ type: String, reflect: true }) view: "list" | "grid" = "list";
   @property({ type: String }) sort: "asc" | "desc" = "desc";
   @property({ type: String, attribute: "all-label" }) allLabel = "All";
-  /** Colour category chips from the taxonomy rainbow. */
+  /** Use Badge taxonomy hues for category chips. */
   @property({ type: Boolean }) hues = true;
   @property({ type: Boolean, attribute: "hide-tools" }) hideTools = false;
 
