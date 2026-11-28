@@ -1,5 +1,11 @@
 # @strata/prose
 
+## 5.0.0
+
+### Patch Changes
+
+- @strata/tokens@5.0.0
+
 ## 4.1.0
 
 ### Patch Changes
