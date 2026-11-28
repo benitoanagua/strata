@@ -32,6 +32,9 @@
         return;
       }
       mounted = handle;
+      handle.element.style.display = "block";
+      handle.element.style.width = "100%";
+      handle.element.style.minWidth = "0";
       handle.element.style.maxWidth = "100%";
     });
 
