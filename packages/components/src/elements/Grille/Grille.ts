@@ -12,11 +12,13 @@ const STYLE_PROPERTIES = [
   "border-right-width",
   "border-right-style",
   "border-right-color",
+  "border-right",
   "padding-bottom",
   "margin-bottom",
   "border-bottom-width",
   "border-bottom-style",
   "border-bottom-color",
+  "border-bottom",
   "border-image",
 ] as const;
 
