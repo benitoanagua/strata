@@ -93,7 +93,7 @@ export class StrataCard extends BaseClass {
   private getCardClasses() {
     const classes = ["strata-card", `strata-card--size-${this.size}`];
     if (this.bordered) classes.push("strata-card--bordered");
-    if (this.elevation) classes.push("strata-card--elevated");
+    if (this.elevation) classes.push("strata-card--elevated");\n    if (this.elevation && this.is_media) classes.push(`strata-card--elevated-media-${this.media_align}`);
     if (this.inline_mobile) classes.push("strata-card--inline-mobile");
     classes.push(`strata-card--font-${this.font_group}`);
     classes.push(`strata-card--density-${this.density}`);
