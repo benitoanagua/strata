@@ -291,7 +291,9 @@ describe("strata-modal close affordance", () => {
     el.open = true;
     await el.updateComplete;
     await flush();
-    const close = el.shadowRoot?.querySelector<HTMLElement>("strata-close-button");
+    const close = el.shadowRoot?.querySelector<HTMLElement>(
+      "strata-close-button",
+    );
     expect(close).toBeTruthy();
     expect(close?.getAttribute("label")).toBe("Close modal");
     el.showClose = false;
@@ -312,8 +314,12 @@ describe("overlay close affordances", () => {
       el.title = "Panel";
       el.open = true;
       await el.updateComplete;
-      const close = el.shadowRoot?.querySelector<HTMLElement>("header strata-close-button");
-      expect(close?.getAttribute("label")).toBe(tag === "strata-drawer" ? "Close drawer" : "Close bottom sheet");
+      const close = el.shadowRoot?.querySelector<HTMLElement>(
+        "header strata-close-button",
+      );
+      expect(close?.getAttribute("label")).toBe(
+        tag === "strata-drawer" ? "Close drawer" : "Close bottom sheet",
+      );
       close?.shadowRoot?.querySelector<HTMLButtonElement>("button")?.click();
       await el.updateComplete;
       expect(el.open).toBe(false);
@@ -663,26 +669,46 @@ describe("strata-heading-anchors", () => {
 
 describe("responsive navigation and shared close", () => {
   it("toggles the mobile nav panel and renders navigation links", async () => {
-    const nav = (await mount("strata-nav")) as HTMLElement & { updateComplete: Promise<unknown> };
-    const item = document.createElement("strata-nav-item") as HTMLElement & { href: string; label: string; selected: boolean; updateComplete: Promise<unknown> };
+    const nav = (await mount("strata-nav")) as HTMLElement & {
+      updateComplete: Promise<unknown>;
+    };
+    const item = document.createElement("strata-nav-item") as HTMLElement & {
+      href: string;
+      label: string;
+      selected: boolean;
+      updateComplete: Promise<unknown>;
+    };
     item.href = "/";
     item.label = "Home";
     item.selected = true;
     nav.append(item);
     await nav.updateComplete;
     await item.updateComplete;
-    const toggle = nav.shadowRoot?.querySelector<HTMLButtonElement>(".strata-nav__toggle");
+    const toggle = nav.shadowRoot?.querySelector<HTMLButtonElement>(
+      ".strata-nav__toggle",
+    );
     expect(toggle?.getAttribute("aria-expanded")).toBe("false");
     toggle?.click();
     await nav.updateComplete;
     expect(toggle?.getAttribute("aria-expanded")).toBe("true");
-    expect(item.shadowRoot?.querySelector('a[href="/"]')?.getAttribute("aria-current")).toBe("page");
+    expect(
+      item.shadowRoot
+        ?.querySelector('a[href="/"]')
+        ?.getAttribute("aria-current"),
+    ).toBe("page");
     nav.remove();
   });
 
   it("uses a navigation landmark for the sidebar and supports selected links", async () => {
-    const menu = (await mount("strata-menu")) as HTMLElement & { updateComplete: Promise<unknown> };
-    const item = document.createElement("strata-menu-item") as HTMLElement & { href: string; label: string; selected: boolean; updateComplete: Promise<unknown> };
+    const menu = (await mount("strata-menu")) as HTMLElement & {
+      updateComplete: Promise<unknown>;
+    };
+    const item = document.createElement("strata-menu-item") as HTMLElement & {
+      href: string;
+      label: string;
+      selected: boolean;
+      updateComplete: Promise<unknown>;
+    };
     item.href = "/settings";
     item.label = "Settings";
     item.selected = true;
@@ -691,12 +717,18 @@ describe("responsive navigation and shared close", () => {
     await item.updateComplete;
     expect(menu.shadowRoot?.querySelector("nav[aria-label]")).toBeTruthy();
     expect(menu.shadowRoot?.querySelector('[role="menu"]')).toBeNull();
-    expect(item.shadowRoot?.querySelector('a[href="/settings"]')?.getAttribute("aria-current")).toBe("page");
+    expect(
+      item.shadowRoot
+        ?.querySelector('a[href="/settings"]')
+        ?.getAttribute("aria-current"),
+    ).toBe("page");
     menu.remove();
   });
 
   it("emits the shared close event from an accessible control", async () => {
-    const close = (await mount("strata-close-button")) as HTMLElement & { updateComplete: Promise<unknown> };
+    const close = (await mount("strata-close-button")) as HTMLElement & {
+      updateComplete: Promise<unknown>;
+    };
     await close.updateComplete;
     const button = close.shadowRoot?.querySelector<HTMLButtonElement>("button");
     expect(button?.getAttribute("aria-label")).toBe("Close");
@@ -710,10 +742,15 @@ describe("responsive navigation and shared close", () => {
 
 describe("floating surface close composition", () => {
   it("provides the shared close button and actions slot in Modal", async () => {
-    const modal = (await mount("strata-modal")) as HTMLElement & { open: boolean; title: string; updateComplete: Promise<unknown> };
+    const modal = (await mount("strata-modal")) as HTMLElement & {
+      open: boolean;
+      title: string;
+      updateComplete: Promise<unknown>;
+    };
     modal.title = "Confirm";
     modal.open = true;
-    modal.innerHTML = "<strata-button slot=actions label=Confirm></strata-button>";
+    modal.innerHTML =
+      "<strata-button slot=actions label=Confirm></strata-button>";
     await modal.updateComplete;
     await flush();
     expect(modal.shadowRoot?.querySelector("strata-close-button")).toBeTruthy();
@@ -724,9 +761,17 @@ describe("floating surface close composition", () => {
   });
 
   it("uses the same close element in Modal, Drawer, BottomSheet and Popover", async () => {
-    const tags = ["strata-modal", "strata-drawer", "strata-bottom-sheet", "strata-popover"];
+    const tags = [
+      "strata-modal",
+      "strata-drawer",
+      "strata-bottom-sheet",
+      "strata-popover",
+    ];
     for (const tag of tags) {
-      const el = (await mount(tag)) as HTMLElement & { open: boolean; updateComplete: Promise<unknown> };
+      const el = (await mount(tag)) as HTMLElement & {
+        open: boolean;
+        updateComplete: Promise<unknown>;
+      };
       el.open = true;
       await el.updateComplete;
       await flush();
@@ -737,7 +782,6 @@ describe("floating surface close composition", () => {
     }
   });
 });
-
 
 describe("source parity: Card, Overlay and Grille", () => {
   it("Card supports full/none media widths and keeps excerpts across density variants", async () => {
@@ -757,9 +801,15 @@ describe("source parity: Card, Overlay and Grille", () => {
     card.show_excerpt = true;
     card.excerpt = "Source excerpt remains available in compact densities.";
     await card.updateComplete;
-    expect(card.querySelector(".strata-card__container")?.classList.contains("strata-card__container--column")).toBe(true);
+    expect(
+      card
+        .querySelector(".strata-card__container")
+        ?.classList.contains("strata-card__container--column"),
+    ).toBe(true);
     expect(card.querySelector(".strata-card__figure--full")).toBeTruthy();
-    expect(card.querySelector(".strata-card__excerpt")?.textContent).toContain("Source excerpt");
+    expect(card.querySelector(".strata-card__excerpt")?.textContent).toContain(
+      "Source excerpt",
+    );
     card.media_width = "is-none";
     await card.updateComplete;
     expect(card.querySelector(".strata-card__figure")).toBeNull();
@@ -780,9 +830,13 @@ describe("source parity: Card, Overlay and Grille", () => {
     overlay.position = "top";
     await overlay.updateComplete;
     const root = overlay.querySelector(".strata-overlay");
-    expect(root?.classList.contains("strata-overlay--font-supplement")).toBe(true);
+    expect(root?.classList.contains("strata-overlay--font-supplement")).toBe(
+      true,
+    );
     expect(root?.classList.contains("strata-overlay--theme-light")).toBe(true);
-    expect(root?.classList.contains("strata-overlay--fill-gradient")).toBe(true);
+    expect(root?.classList.contains("strata-overlay--fill-gradient")).toBe(
+      true,
+    );
     overlay.remove();
   });
 
@@ -797,7 +851,12 @@ describe("source parity: Card, Overlay and Grille", () => {
     const first = document.createElement("strata-grille-item");
     first.style.width = "77px";
     first.style.color = "red";
-    grid.append(first, document.createElement("strata-grille-item"), document.createElement("strata-grille-item"), document.createElement("strata-grille-item"));
+    grid.append(
+      first,
+      document.createElement("strata-grille-item"),
+      document.createElement("strata-grille-item"),
+      document.createElement("strata-grille-item"),
+    );
     document.body.appendChild(grid);
     await grid.updateComplete;
     await flush();

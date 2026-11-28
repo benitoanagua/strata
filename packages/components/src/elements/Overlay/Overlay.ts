@@ -10,6 +10,7 @@ import type {
 } from "../../types/overlay.js";
 import type { CardHeading, CardAspectRatio } from "../../types/card.js";
 import { TitleRendererMixin } from "../../mixins/TitleRenderer.js";
+import { safeHref } from "../../utils/items.js";
 
 // Aplicar el mixin a la clase base
 const BaseClass = TitleRendererMixin(LitElement);
@@ -29,8 +30,10 @@ export class StrataOverlay extends BaseClass {
   aspect_ratio: CardAspectRatio = "monitor";
   @property({ type: Number, reflect: true }) heading: CardHeading = 1;
   @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
-  @property({ type: Boolean, attribute: "show-category" }) show_category = false;
-  @property({ type: String, attribute: "font-group" }) font_group: "default" | "supplement" | "sans" | "serif" = "default";
+  @property({ type: Boolean, attribute: "show-category" }) show_category =
+    false;
+  @property({ type: String, attribute: "font-group" }) font_group:
+    "default" | "supplement" | "sans" | "serif" = "default";
   @property({ type: String }) align: OverlayAlign = "center";
   @property({ type: String }) position: OverlayPosition = "center";
   @property({ type: String }) box: OverlayBox = "background";
@@ -56,21 +59,22 @@ export class StrataOverlay extends BaseClass {
 
     // Añadir la clase del tipo de box al contenedor principal
     classes.push(`strata-overlay--box-${this.box}`);
-    classes.push(this.is_dark ? "strata-overlay--theme-dark" : "strata-overlay--theme-light");
+    classes.push(
+      this.is_dark
+        ? "strata-overlay--theme-dark"
+        : "strata-overlay--theme-light",
+    );
 
     return classes.join(" ");
   }
 
   render() {
+    const url = safeHref(this.url);
+    const image = this.feature_image
+      ? `background-image: url("${this.feature_image.replace(/["\\\n\r]/g, "")}")`
+      : "";
     return html`
-      <div
-        class="${this.getOverlayClasses()}"
-        style="${
-          this.feature_image
-            ? `background-image: url(${this.feature_image})`
-            : ""
-        }"
-      >
+      <div class="${this.getOverlayClasses()}" style="${image}">
         <div class="strata-overlay__content">
           ${
             this.show_category && this.tag_name
@@ -80,7 +84,7 @@ export class StrataOverlay extends BaseClass {
               : ""
           }
 
-          <a href="${this.url}" class="strata-overlay__title-link">
+          <a href="${url}" class="strata-overlay__title-link">
             ${this.renderTitle()}
           </a>
 

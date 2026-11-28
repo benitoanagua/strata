@@ -71,7 +71,10 @@ function humanize(name: string): string {
 }
 
 /** Returns whether a reactive property belongs in the public catalog API. */
-export function allowsCatalogControl(entry: CatalogEntry, name: string): boolean {
+export function allowsCatalogControl(
+  entry: CatalogEntry,
+  name: string,
+): boolean {
   return !entry.controlAllowlist || entry.controlAllowlist.includes(name);
 }
 

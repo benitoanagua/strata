@@ -27,5 +27,21 @@
   "publishConfig": {
     "access": "public"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "description": "STRATA Design System core utilities and theme helpers",
+  "keywords": [
+    "design-system",
+    "strata",
+    "theme",
+    "tokens"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benitoanagua/strata.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/benitoanagua/strata/issues"
+  },
+  "homepage": "https://github.com/benitoanagua/strata#readme"
 }

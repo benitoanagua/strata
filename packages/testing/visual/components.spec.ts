@@ -41,7 +41,7 @@ async function seedViewerPrefs(page: Page, surface: string) {
 
 async function openComponent(page: Page, entryId: string, surface: string) {
   await seedViewerPrefs(page, surface);
-  await page.goto(`/#/${entryId}`);
+  await page.goto(`/#/${entryId}`, { waitUntil: "domcontentloaded" });
   const preview = page.locator(".preview-stage > *").last();
   await expect(preview).toBeAttached();
   // Shadow-DOM CSS animations (e.g. strata-modal's 300ms transitions) are not
@@ -58,7 +58,7 @@ test.describe("STRATA component axe coverage", () => {
       }) => {
         await stubRemoteFonts(page);
         await seedViewerPrefs(page, theme);
-        await page.goto(`/#/${entry.id}`);
+        await page.goto(`/#/${entry.id}`, { waitUntil: "domcontentloaded" });
 
         const fixture = PARENT_FIXTURES[entry.id];
         if (fixture) {
@@ -99,12 +99,22 @@ test.describe("STRATA component screenshots", () => {
       }) => {
         await stubRemoteFonts(page);
         await openComponent(page, entry.id, theme);
+        // Sparse previews (divider, skeleton, …) legitimately compress to
+        // <1 kB PNGs and overlay-type hosts can have a 0×0 box, so byte size
+        // and bounding box cannot prove rendering. Assert the previewed
+        // element actually produced DOM (shadow or light) instead.
+        const preview = page.locator(".preview-stage > *").last();
+        await expect(preview).toBeAttached();
+        const renderedLength = await preview.evaluate((el) => {
+          const host = el as HTMLElement;
+          const root = host.shadowRoot ?? host;
+          return root.innerHTML.trim().length;
+        });
+        expect(renderedLength).toBeGreaterThan(0);
         const screenshot = await page
           .locator(".preview-stage")
           .screenshot({ animations: "disabled" });
-        // Baselines are local-only artifacts (see AGENTS.md); CI verifies
-        // that every component renders and can be captured in both themes.
-        expect(screenshot.byteLength).toBeGreaterThan(1_000);
+        expect(screenshot.byteLength).toBeGreaterThan(200);
       });
     }
   }

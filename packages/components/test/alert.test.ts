@@ -18,7 +18,9 @@ async function mountAlert(): Promise<AlertElement> {
 
 afterEach(() => {
   vi.useRealTimers();
-  document.body.querySelectorAll("strata-alert").forEach((element) => element.remove());
+  document.body
+    .querySelectorAll("strata-alert")
+    .forEach((element) => element.remove());
 });
 
 describe("strata-alert unified feedback API", () => {

@@ -211,7 +211,6 @@
   }
 }
 
-
 /* Source Card media controls */
 .strata-card--elevated {
   background: var(--strata-color-surface-selected);
@@ -269,17 +268,30 @@
   .strata-card--inline-mobile .strata-card__container--column-reverse {
     flex-direction: row-reverse;
   }
-  .strata-card--inline-mobile .strata-card__figure--one-fifth { width: 20%; }
-  .strata-card--inline-mobile .strata-card__figure--one-quarter { width: 25%; }
-  .strata-card--inline-mobile .strata-card__figure--one-third { width: 33.333333%; }
-  .strata-card--inline-mobile .strata-card__figure--two-fifths { width: 40%; }
-  .strata-card--inline-mobile .strata-card__figure--one-half { width: 50%; }
-  .strata-card--inline-mobile .strata-card__container--responsive-row .strata-card__content,
-  .strata-card--inline-mobile .strata-card__container--responsive-row-reverse .strata-card__content {
+  .strata-card--inline-mobile .strata-card__figure--one-fifth {
+    width: 20%;
+  }
+  .strata-card--inline-mobile .strata-card__figure--one-quarter {
+    width: 25%;
+  }
+  .strata-card--inline-mobile .strata-card__figure--one-third {
+    width: 33.333333%;
+  }
+  .strata-card--inline-mobile .strata-card__figure--two-fifths {
+    width: 40%;
+  }
+  .strata-card--inline-mobile .strata-card__figure--one-half {
+    width: 50%;
+  }
+  .strata-card--inline-mobile
+    .strata-card__container--responsive-row
+    .strata-card__content,
+  .strata-card--inline-mobile
+    .strata-card__container--responsive-row-reverse
+    .strata-card__content {
     flex: 1 1 0;
   }
 }
-
 
 /* Source parity: responsive media placement and media-width options. */
 .strata-card__container--responsive-row,

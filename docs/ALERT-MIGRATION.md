@@ -24,13 +24,13 @@ After:
 ></strata-alert>
 ```
 
-| Former Snackbar API | Unified Alert API |
-| --- | --- |
-| `strata-snackbar` | `strata-alert mode="snackbar"` |
-| `message` | `message` |
-| `open` | `open` |
-| `duration` | `duration` |
-| auto-dismiss event | `strata-dismiss` with `detail.reason = "timeout"` |
+| Former Snackbar API | Unified Alert API                                 |
+| ------------------- | ------------------------------------------------- |
+| `strata-snackbar`   | `strata-alert mode="snackbar"`                    |
+| `message`           | `message`                                         |
+| `open`              | `open`                                            |
+| `duration`          | `duration`                                        |
+| auto-dismiss event  | `strata-dismiss` with `detail.reason = "timeout"` |
 
 ## Optional close button
 

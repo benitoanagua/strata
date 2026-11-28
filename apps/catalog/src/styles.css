@@ -1021,7 +1021,6 @@ h1 {
   font: 12px/1.45 var(--strata-font-sans);
 }
 
-
 /* More generous editorial component variant previews. */
 .demo-roomy .demo-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1134,7 +1133,6 @@ h1 {
     min-height: 260px;
   }
 }
-
 
 /* Large, uncluttered editorial previews plus one shared property playground. */
 .preview-editorial .canvas {

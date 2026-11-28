@@ -22,5 +22,21 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "prose",
+    "typography",
+    "design-system",
+    "strata",
+    "css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benitoanagua/strata.git",
+    "directory": "packages/prose"
+  },
+  "bugs": {
+    "url": "https://github.com/benitoanagua/strata/issues"
+  },
+  "homepage": "https://github.com/benitoanagua/strata#readme"
 }

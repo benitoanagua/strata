@@ -41,5 +41,21 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "design-system",
+    "web-components",
+    "lit",
+    "strata",
+    "ui"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benitoanagua/strata.git",
+    "directory": "packages/components"
+  },
+  "bugs": {
+    "url": "https://github.com/benitoanagua/strata/issues"
+  },
+  "homepage": "https://github.com/benitoanagua/strata#readme"
 }

@@ -101,7 +101,6 @@ export class StrataThemeToggle extends LitElement {
                 ></iconify-icon>
               `
         }
-
       </button>
     `;
   }

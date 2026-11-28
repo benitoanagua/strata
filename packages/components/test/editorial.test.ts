@@ -35,10 +35,15 @@ describe("taxonomy hues", () => {
     expect(resolveHue("auto", "x")).toBe(hueForLabel("x"));
   });
   it("Badge renders its label with a deterministic taxonomy hue", async () => {
-    const badge = await mount("strata-badge", { label: "Ciencia", hue: "auto" });
+    const badge = await mount("strata-badge", {
+      label: "Ciencia",
+      hue: "auto",
+    });
     const rendered = badge.shadowRoot!.querySelector(".strata-badge")!;
     expect(rendered.textContent).toContain("Ciencia");
-    expect(rendered.className).toContain(`strata-hue--${hueForLabel("Ciencia")}`);
+    expect(rendered.className).toContain(
+      `strata-hue--${hueForLabel("Ciencia")}`,
+    );
   });
 
   it("Badge exposes an accessible pressed state for interactive chips", async () => {
@@ -47,7 +52,8 @@ describe("taxonomy hues", () => {
       interactive: "",
       pressed: "",
     });
-    const button = badge.shadowRoot!.querySelector<HTMLButtonElement>("button")!;
+    const button =
+      badge.shadowRoot!.querySelector<HTMLButtonElement>("button")!;
     expect(button.getAttribute("aria-pressed")).toBe("true");
     button.click();
   });

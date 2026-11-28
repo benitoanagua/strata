@@ -10,6 +10,7 @@ import type {
   CardAspectRatio,
 } from "../../types/card.js";
 import { TitleRendererMixin } from "../../mixins/TitleRenderer.js";
+import { safeHref } from "../../utils/items.js";
 
 // Aplicar el mixin a la clase base
 const BaseClass = TitleRendererMixin(LitElement);
@@ -23,12 +24,16 @@ export class StrataCard extends BaseClass {
   @property({ type: String }) excerpt = "";
   @property({ type: Boolean, attribute: "is-media" }) is_media = false;
   @property({ type: Boolean, attribute: "show-meta" }) show_meta = false;
-  @property({ type: Boolean, attribute: "show-category" }) show_category = false;
+  @property({ type: Boolean, attribute: "show-category" }) show_category =
+    false;
   @property({ type: Boolean, attribute: "show-excerpt" }) show_excerpt = false;
-  @property({ type: Boolean, attribute: "inline-mobile" }) inline_mobile = false;
+  @property({ type: Boolean, attribute: "inline-mobile" }) inline_mobile =
+    false;
   @property({ type: Boolean }) elevation = false;
-  @property({ type: String, attribute: "font-group" }) font_group: "default" | "supplement" | "sans" | "serif" = "default";
-  @property({ type: String }) icon: "none" | "photo" | "video" | "gallery" = "none";
+  @property({ type: String, attribute: "font-group" }) font_group:
+    "default" | "supplement" | "sans" | "serif" = "default";
+  @property({ type: String }) icon: "none" | "photo" | "video" | "gallery" =
+    "none";
   @property({ type: String, attribute: "feature-image" }) feature_image = "";
   @property({ type: String, attribute: "tag-name" }) tag_name = "";
   @property({ type: String, attribute: "tag-url" }) tag_url = "";
@@ -94,7 +99,8 @@ export class StrataCard extends BaseClass {
     const classes = ["strata-card", `strata-card--size-${this.size}`];
     if (this.bordered) classes.push("strata-card--bordered");
     if (this.elevation) classes.push("strata-card--elevated");
-    if (this.elevation && this.is_media) classes.push(`strata-card--elevated-media-${this.media_align}`);
+    if (this.elevation && this.is_media)
+      classes.push(`strata-card--elevated-media-${this.media_align}`);
     if (this.inline_mobile) classes.push("strata-card--inline-mobile");
     classes.push(`strata-card--font-${this.font_group}`);
     classes.push(`strata-card--density-${this.density}`);
@@ -102,13 +108,20 @@ export class StrataCard extends BaseClass {
   }
 
   private getFlexClass() {
-    if (this.is_media && this.media_width === "is-full") return "strata-card__container--column";
-    if (this.media_align === "left" && this.inline_mobile) return "strata-card__container--row";
-    if (this.media_align === "right" && this.inline_mobile) return "strata-card__container--row-reverse";
+    if (this.is_media && this.media_width === "is-full")
+      return "strata-card__container--column";
+    if (this.media_align === "left" && this.inline_mobile)
+      return "strata-card__container--row";
+    if (this.media_align === "right" && this.inline_mobile)
+      return "strata-card__container--row-reverse";
     if (this.media_align === "left")
-      return this.inline_mobile ? "strata-card__container--row" : "strata-card__container--responsive-row";
+      return this.inline_mobile
+        ? "strata-card__container--row"
+        : "strata-card__container--responsive-row";
     if (this.media_align === "right")
-      return this.inline_mobile ? "strata-card__container--row-reverse" : "strata-card__container--responsive-row-reverse";
+      return this.inline_mobile
+        ? "strata-card__container--row-reverse"
+        : "strata-card__container--responsive-row-reverse";
     if (this.media_align === "top") return "strata-card__container--column";
     return "strata-card__container--column-reverse";
   }
@@ -150,14 +163,19 @@ export class StrataCard extends BaseClass {
   }
 
   render() {
+    const url = safeHref(this.url);
+    const authorUrl = safeHref(this.author_url);
+    const tagUrl = safeHref(this.tag_url);
     return html`
       <div class="${this.getCardClasses()}">
         <div class="strata-card__container ${this.getFlexClass()}">
           ${
-            this.is_media && this.feature_image && this.media_width !== "is-none"
+            this.is_media &&
+            this.feature_image &&
+            this.media_width !== "is-none"
               ? html`
                   <figure class="strata-card__figure ${this.getFigureClass()}">
-                    <a href="${this.url}">
+                    <a href="${url}">
                       <img
                         src="${this.feature_image}"
                         alt="${this.title}"
@@ -166,11 +184,35 @@ export class StrataCard extends BaseClass {
                     </a>
                     ${
                       this.icon === "photo"
-                        ? html`<span class="strata-card__media-shade" aria-hidden="true"></span><iconify-icon class="strata-card__media-icon" icon="carbon:grid" aria-hidden="true"></iconify-icon>`
+                        ? html`<span
+                              class="strata-card__media-shade"
+                              aria-hidden="true"
+                            ></span
+                            ><iconify-icon
+                              class="strata-card__media-icon"
+                              icon="carbon:grid"
+                              aria-hidden="true"
+                            ></iconify-icon>`
                         : this.icon === "video"
-                          ? html`<span class="strata-card__media-shade" aria-hidden="true"></span><iconify-icon class="strata-card__media-icon" icon="carbon:play" aria-hidden="true"></iconify-icon>`
+                          ? html`<span
+                                class="strata-card__media-shade"
+                                aria-hidden="true"
+                              ></span
+                              ><iconify-icon
+                                class="strata-card__media-icon"
+                                icon="carbon:play"
+                                aria-hidden="true"
+                              ></iconify-icon>`
                           : this.icon === "gallery"
-                            ? html`<span class="strata-card__media-shade" aria-hidden="true"></span><iconify-icon class="strata-card__media-icon" icon="carbon:grid" aria-hidden="true"></iconify-icon>`
+                            ? html`<span
+                                  class="strata-card__media-shade"
+                                  aria-hidden="true"
+                                ></span
+                                ><iconify-icon
+                                  class="strata-card__media-icon"
+                                  icon="carbon:grid"
+                                  aria-hidden="true"
+                                ></iconify-icon>`
                             : ""
                     }
                   </figure>
@@ -197,10 +239,7 @@ export class StrataCard extends BaseClass {
                               class="strata-card__author-bullet"
                             ></span>`
                       }
-                      <a
-                        href="${this.author_url}"
-                        class="strata-card__author-link"
-                      >
+                      <a href="${authorUrl}" class="strata-card__author-link">
                         ${this.author_name}
                       </a>
                     </div>
@@ -208,7 +247,7 @@ export class StrataCard extends BaseClass {
                 : ""
             }
 
-            <a href="${this.url}" class="strata-card__title-link">
+            <a href="${url}" class="strata-card__title-link">
               ${this.renderTitle()}
             </a>
 
@@ -227,7 +266,7 @@ export class StrataCard extends BaseClass {
                       <span class="strata-card__meta-item"
                         >${this.reading_time}</span
                       >
-                      <a href="${this.tag_url}" class="strata-card__tag">
+                      <a href="${tagUrl}" class="strata-card__tag">
                         ${this.tag_name}
                       </a>
                     </div>
