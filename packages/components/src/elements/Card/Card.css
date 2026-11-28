@@ -319,3 +319,39 @@
     flex-basis: auto;
   }
 }
+
+/* Source elevation: media bleeds to the corresponding outer edge. */
+.strata-card--elevated {
+  border-inline: 16px solid var(--strata-color-surface-selected);
+}
+.strata-card--elevated .strata-card__container {
+  gap: var(--strata-space-4);
+  padding: var(--strata-space-4);
+}
+.strata-card--elevated-media-left .strata-card__figure {
+  margin-top: calc(-1 * var(--strata-space-4));
+  margin-left: calc(-1 * var(--strata-space-4));
+  margin-bottom: var(--strata-space-4);
+}
+.strata-card--elevated-media-right .strata-card__figure {
+  margin-top: calc(-1 * var(--strata-space-4));
+  margin-right: calc(-1 * var(--strata-space-4));
+  margin-bottom: var(--strata-space-4);
+}
+.strata-card--elevated-media-top .strata-card__figure {
+  margin-top: calc(-1 * var(--strata-space-4));
+  margin-right: var(--strata-space-4);
+}
+.strata-card--elevated-media-bottom .strata-card__figure {
+  margin-left: calc(-1 * var(--strata-space-4));
+  margin-bottom: calc(-1 * var(--strata-space-4));
+}
+@media (min-width: 769px) {
+  .strata-card--elevated {
+    border-inline: 0;
+  }
+  .strata-card--elevated-media-left .strata-card__figure,
+  .strata-card--elevated-media-right .strata-card__figure {
+    margin-bottom: 0;
+  }
+}
