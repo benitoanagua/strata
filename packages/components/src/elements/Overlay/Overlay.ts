@@ -55,7 +55,7 @@ export class StrataOverlay extends BaseClass {
       `strata-overlay--position-${this.position}`,
       `strata-overlay--aspect-${this.aspect_ratio}`,
       `strata-overlay--font-${this.font_group}`,
-      `strata-overlay--theme-${this.is_dark ? "dark" : this.theme}`,
+      `strata-overlay--theme-${this.is_dark ? "dark" : this.theme === "auto" ? "light" : this.theme}`,
     ];
     if (this.feature_image) classes.push("strata-overlay--has-image");
     if (this.monochrome) classes.push("strata-overlay--monochrome");
@@ -72,7 +72,7 @@ export class StrataOverlay extends BaseClass {
   render() {
     const url = safeHref(this.url);
     const image = this.feature_image
-      ? `--strata-overlay-image: url("${this.feature_image.replace(/["\\\n\r()]/g, "")}")`
+      ? `--strata-overlay-image: url("${this.feature_image.replace(/["\\\n\r]/g, "")}")`
       : "";
     return html`
       <div class="${this.getOverlayClasses()}" style="${image}">
