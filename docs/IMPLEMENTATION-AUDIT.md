@@ -490,7 +490,7 @@ Audit of all 75 canonical entries in `STRATA_COMPONENT_CATALOG`, cross-checked a
 - **Implementation:** `StrataModal` in `packages/components/src/elements/Modal`
 - **Properties (10):** `open` (Boolean, reflected), `title` (String), `size` (String), `position` (String), `variant` (String), `animation` (String), `closeOnOverlay` (Boolean), `closeOnEscape` (Boolean), `showClose` (Boolean), `preventScroll` (Boolean)
 - **Events:** `modal-open` — Fired after the modal opens.; `modal-before-close` — Fired before closing; preventDefault cancels.; `modal-close` — Fired after the modal closes.
-- **Slots:** `header` — Replaces the generated title header.; `default` — Body content.; `footer` — Footer actions.
+- **Slots:** `header` — Replaces the generated title header.; `default` — Body content.; `actions` — Footer actions.
 - **Keyboard:** Escape, Tab, @keydown
 - **Accessibility:** role=dialog aria-modal; scroll lock, focus trap and Escape handling; focus restored on close.
 - **Responsive:** fluid layout verified at mobile (390px) and desktop (1280px) catalog widths.
