@@ -166,10 +166,13 @@ export class StrataCard extends BaseClass {
                       />
                     </a>
                     ${
-                      this.icon !== "none"
-                        ? html`<span class="strata-card__media-shade" aria-hidden="true"></span>
-                            <iconify-icon class="strata-card__media-icon" icon="${this.icon === "photo" ? "carbon:image" : this.icon === "video" ? "carbon:play" : "carbon:images"}" aria-hidden="true"></iconify-icon>`
-                        : ""
+                      this.icon === "photo"
+                        ? html`<span class="strata-card__media-shade" aria-hidden="true"></span><iconify-icon class="strata-card__media-icon" icon="carbon:image" aria-hidden="true"></iconify-icon>`
+                        : this.icon === "video"
+                          ? html`<span class="strata-card__media-shade" aria-hidden="true"></span><iconify-icon class="strata-card__media-icon" icon="carbon:play" aria-hidden="true"></iconify-icon>`
+                          : this.icon === "gallery"
+                            ? html`<span class="strata-card__media-shade" aria-hidden="true"></span><iconify-icon class="strata-card__media-icon" icon="carbon:images" aria-hidden="true"></iconify-icon>`
+                            : ""
                     }
                   </figure>
                 `
