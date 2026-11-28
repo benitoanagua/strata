@@ -49,6 +49,8 @@
   let sidebarOpen = $state(false);
   let previewHost = $state<HTMLDivElement>();
   let searchField = $state<HTMLElement>();
+  let propertyPopoverOpen = $state(false);
+  let propertyTrigger: HTMLButtonElement | undefined;
 
   // Viewer preferences: persisted under `strata-catalog-viewer`, never under
   // the global `strata-theme` key used by strata-theme-toggle.
@@ -108,6 +110,35 @@
     ) as Record<string, ControlValue>;
   }
 
+  const playgroundPresets = $derived.by(() => {
+    if (!selectedEntry || !usesPropertyPlayground(selectedEntry.id)) return [];
+    if (selectedEntry.id === "card") return [
+      { label: "Editorial", values: { is_media: true, show_excerpt: true, show_meta: true, show_category: true, monochrome: true } },
+      { label: "Minimal", values: { is_media: false, show_excerpt: false, show_meta: false, show_category: false } },
+      { label: "Media first", values: { is_media: true, media_align: "top", media_width: "is-full", show_excerpt: true } },
+    ];
+    if (selectedEntry.id === "overlay") return [
+      { label: "Editorial", values: { show_meta: true, show_category: true, fill: "full", monochrome: true, theme: "auto" } },
+      { label: "Gradient", values: { fill: "gradient", show_meta: true, show_category: true } },
+      { label: "Image only", values: { fill: "none", show_meta: false, show_category: false } },
+    ];
+    return [
+      { label: "1 column", values: { desktop: 1, mobile: 1 } },
+      { label: "2 columns", values: { desktop: 2, mobile: 1 } },
+      { label: "3 columns", values: { desktop: 3, mobile: 2 } },
+    ];
+  });
+
+  function applyPreset(preset: Record<string, ControlValue>) {
+    const next = { ...values };
+    for (const [name, value] of Object.entries(preset)) {
+      next[name] = selectedEntry
+        ? normalizePlaygroundValue(selectedEntry.id, name, value)
+        : value;
+    }
+    values = next;
+  }
+
   function onHashChange() {
     route = parseHash();
     sidebarOpen = false;
@@ -122,7 +153,9 @@
   $effect(() => {
     selectedEntry;
     controls;
-    values = defaults();
+    values = selectedEntry && usesPropertyPlayground(selectedEntry.id)
+      ? initialPlaygroundValues(selectedEntry.id, defaults())
+      : defaults();
   });
 
   function updateValue(name: string, value: ControlValue) {
@@ -134,6 +167,11 @@
 
   function resetValues() {
     values = defaults();
+  }
+
+  function closePropertyPopover() {
+    propertyPopoverOpen = false;
+    propertyTrigger?.focus();
   }
 
   // Mount the real element once per entry; subsequent property updates go
@@ -356,6 +394,11 @@
   });
 
   function onKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape" && propertyPopoverOpen) {
+      event.preventDefault();
+      closePropertyPopover();
+      return;
+    }
     if (
       event.key === "/" &&
       !(event.target instanceof HTMLInputElement) &&
@@ -466,32 +509,48 @@
         <section class="preview-block" class:preview-editorial={usesPropertyPlayground(entry.id)} aria-labelledby="preview-title">
           <div class="section-toolbar">
             <div class="section-heading">
-              <span class="section-mark">▣</span><h2 id="preview-title">Preview</h2>
-              <span class="section-subtitle">Live canvas</span>
+              <span class="section-mark">▣</span><h2 id="preview-title">{usesPropertyPlayground(entry.id) ? "Playground" : "Preview"}</h2>
+              <span class="section-subtitle">{usesPropertyPlayground(entry.id) ? "Live preview · adjust source properties" : "Live canvas"}</span>
             </div>
+            {#if usesPropertyPlayground(entry.id)}
+              <button
+                class="playground-trigger"
+                type="button"
+                bind:this={propertyTrigger}
+                aria-expanded={propertyPopoverOpen}
+                aria-controls="playground-properties"
+                aria-haspopup="dialog"
+                onclick={() => (propertyPopoverOpen = !propertyPopoverOpen)}
+              >{propertyPopoverOpen ? "Properties open" : "Configure"}</button>
+            {/if}
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
             <div class="preview-viewport viewport-{prefs.viewport}">
-              <div class="canvas-labels"><span>PREVIEW AREA</span><span>{prefs.viewport.toUpperCase()} / 01</span></div>
+              <div class="canvas-labels"><span>{usesPropertyPlayground(entry.id) ? "PLAYGROUND PREVIEW" : "PREVIEW AREA"}</span><span>{prefs.viewport.toUpperCase()} / 01</span></div>
               <div class="preview-stage" bind:this={previewHost}></div>
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
           </div>
-        </section>
-
-        {#if usesPropertyPlayground(entry.id)}
-          <section class="property-playground" aria-labelledby="playground-title">
-            <div class="section-heading">
-              <span class="section-mark">⌘</span><h2 id="playground-title">Playground</h2>
-              <span class="section-subtitle">Adjust properties · preview updates live</span>
+          {#if usesPropertyPlayground(entry.id)}
+            <div class="playground-presets" aria-label="Basic component states">
+              <span class="playground-presets-label">Quick states</span>
+              {#each playgroundPresets as preset (preset.label)}
+                <button type="button" class="preset-chip" onclick={() => applyPreset(preset.values)}>{preset.label}</button>
+              {/each}
+              <button type="button" class="preset-chip preset-reset" onclick={resetValues}>Reset defaults</button>
             </div>
-            <p class="playground-description">
-              Explore the source component's public properties in one place. The preview starts with
-              a populated editorial fixture; Reset restores the component defaults.
-            </p>
-            <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
-          </section>
-        {/if}
+            {#if propertyPopoverOpen}
+              <section class="playground-popover" id="playground-properties" role="dialog" aria-label="Playground properties">
+                <div class="playground-popover-heading">
+                  <div><p class="eyebrow">PLAYGROUND</p><h2>Properties</h2></div>
+                  <button type="button" class="popover-close" aria-label="Close properties" onclick={closePropertyPopover}>×</button>
+                </div>
+                <p class="playground-description">Adjust the public properties. The preview updates live; this panel stays open while you interact with the canvas or other controls.</p>
+                <Controls {controls} {values} onValueChange={updateValue} onReset={resetValues} />
+              </section>
+            {/if}
+          {/if}
+        </section>
 
         {#if variantDemos.length}
           <section class="demo-block" class:demo-roomy={["card", "overlay", "grille"].includes(entry.id)} aria-labelledby="variants-title">
