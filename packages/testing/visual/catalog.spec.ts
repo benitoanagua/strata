@@ -325,29 +325,32 @@ test("API and accessibility tabs render documentation", async ({ page }) => {
   await expect(page.locator(".a11y-panel")).toBeVisible();
 });
 
-test("every component uses the automatic Playground from one global topbar entry", async ({ page }) => {
+test("every component uses one prominent global Playground and common component shortcuts", async ({ page }) => {
   await page.goto("/#/button");
   await expect(page.getByRole("heading", { name: "Preview", exact: true })).toBeVisible();
-  const globalTrigger = page.getByRole("button", { name: "Playground", exact: true });
+  const globalTrigger = page.getByRole("button", { name: /Open Playground/ });
   await expect(globalTrigger).toBeVisible();
   await expect(globalTrigger).toHaveAttribute("aria-controls", "playground-properties");
-  await expect(page.locator(".topbar").getByRole("button", { name: "Playground", exact: true })).toHaveCount(1);
-  await expect(page.locator(".preview-block .playground-trigger")).toHaveCount(0);
+  await expect(page.locator(".preview-block .playground-trigger")).toHaveCount(1);
+  await expect(page.locator(".topbar .playground-trigger")).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "Common components" }).getByRole("link", { name: "TextField" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Common components" }).getByRole("link", { name: "Card" })).toBeVisible();
   await expect(page.locator(".playground-popover")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Default", exact: true })).toBeVisible();
+  await expect(page.locator(".preset-chip")).not.toHaveCSS("border-radius", "999px");
   await expect(page.getByRole("heading", { name: "Variants" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "States" })).toHaveCount(0);
 
-  const trigger = page.getByRole("button", { name: "Playground", exact: true });
+  const trigger = page.getByRole("button", { name: /Open Playground/ });
   await trigger.click();
   const popover = page.getByRole("dialog", { name: "Playground properties" });
   await expect(page.locator(".preview-block .playground-popover")).toHaveCount(0);
-  await expect(page.locator(".topbar").getByRole("button", { name: "Playground", exact: true })).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator(".preview-block .playground-trigger")).toHaveAttribute("aria-expanded", "true");
   await expect(popover.getByText("Variant", { exact: true })).toBeVisible();
   await expect(popover.getByText("Size", { exact: true })).toBeVisible();
 
   await page.goto("/#/text-field");
-  await expect(page.getByRole("button", { name: "Playground", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Open Playground/ })).toBeVisible();
   await expect(page.locator(".playground-presets-label")).toHaveText("Quick view");
   await expect(page.getByRole("button", { name: "Default", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Variants" })).toHaveCount(0);
@@ -408,7 +411,7 @@ test("properties panel controls never overflow their field", async ({
   page,
 }) => {
   await page.goto("/#/button");
-  await page.getByRole("button", { name: "Playground", exact: true }).click();
+  await page.getByRole("button", { name: /Open Playground/ }).click();
   const overflowCount = await page.locator(".playground-popover .controls-panel").evaluate((el) => {
     const panel = el.getBoundingClientRect();
     return [...el.querySelectorAll("*")].filter((child) => {
