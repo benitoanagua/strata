@@ -1,13 +1,13 @@
 <script lang="ts">
   import { mountStrataElement, type StrataMountHandle } from "./renderer";
 
-  let { tagName, props, slotHtml, slotContent, label } = $props<{
+  let { tagName, props, slotHtml, slotContent, label }: {
     tagName: string;
     props: Record<string, unknown>;
     slotHtml?: string;
     slotContent?: string;
     label: string;
-  }>();
+  } = $props();
 
   let host = $state<HTMLDivElement>();
 
