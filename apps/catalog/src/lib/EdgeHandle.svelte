@@ -56,7 +56,7 @@
   }
 
   .edge-handle-open {
-    right: clamp(320px, 30vw, 440px);
+    right: max(0px, calc(var(--catalog-playground-width) - 34px));
     border-right: 1px solid var(--strata-color-border-strong);
     border-radius: var(--strata-radius-small) 0 0 var(--strata-radius-small);
   }
