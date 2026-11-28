@@ -438,7 +438,7 @@
           </div>
           <div class="canvas" class:canvas-grid={canvas.grid} data-theme={canvas.theme}>
             <div class="preview-viewport viewport-{prefs.viewport}">
-              <div class="canvas-labels"><span>"PREVIEW AREA"</span><span>{prefs.viewport.toUpperCase()} / 01</span></div>
+              <div class="canvas-labels"><span>PREVIEW AREA</span><span>{prefs.viewport.toUpperCase()} / 01</span></div>
               <div class="preview-stage" bind:this={previewHost}></div>
             </div>
             <span class="canvas-footer">STRATA COMPONENT CATALOG</span>
