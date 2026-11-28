@@ -680,11 +680,10 @@ export const catalog: readonly CatalogEntry[] = [
       "media_width",
       "aspect_ratio",
       "inline_mobile",
-      "elevation",
+      "monochrome",
       "show_excerpt",
       "show_meta",
       "show_category",
-      "font_group",
       "icon",
     ],
     controls: [
@@ -743,13 +742,7 @@ export const catalog: readonly CatalogEntry[] = [
         feature_image: "https://picsum.photos/seed/strata-card/1200/900",
       }),
       bool("inline_mobile", "Inline on mobile"),
-      bool("elevation", "Elevation"),
-      select("font_group", "Font group", "default", [
-        "default",
-        "supplement",
-        "sans",
-        "serif",
-      ]),
+      bool("monochrome", "Monochrome images", true),
       select("icon", "Media icon", "none", [
         "none",
         "photo",
@@ -759,7 +752,7 @@ export const catalog: readonly CatalogEntry[] = [
     ],
     a11y: "Title renders as a configurable heading level (h1–h6). Media is optional and metadata/excerpt are opt-in.",
     notes:
-      "Mirrors the Vue Card API. Catalog names map imageUrl→feature_image, sectionTitle→tag_name, author→author_name, createdAt→published_at and introduction→excerpt. Vue defaults are retained; non-source density, bordered and reading-time controls are omitted.",
+      "Mirrors the Vue Card content API. Catalog-only monochrome image treatment defaults to grayscale; theme colors inherit the active design tokens. Elevation and font group remain component API options but are intentionally not playground controls.",
   },
   {
     id: "modal",
@@ -894,11 +887,11 @@ export const catalog: readonly CatalogEntry[] = [
       "aspect_ratio",
       "show_meta",
       "show_category",
-      "font_group",
+      "monochrome",
+      "theme",
       "align",
       "position",
       "box",
-      "is_dark",
       "fill",
     ],
     controls: [
@@ -913,12 +906,6 @@ export const catalog: readonly CatalogEntry[] = [
       text("tag_name", "Tag", "Reportaje"),
       text("author_name", "Author", "Ana Ríos"),
       text("published_at", "Published", "12 Nov 2026"),
-      select("font_group", "Font group", "default", [
-        "default",
-        "supplement",
-        "sans",
-        "serif",
-      ]),
       bool("show_meta", "Show meta", false),
       bool("show_category", "Show category", false, { tag_name: "Reportaje" }),
       select("aspect_ratio", "Aspect ratio", "monitor", [
@@ -934,11 +921,12 @@ export const catalog: readonly CatalogEntry[] = [
         "transparent",
       ]),
       select("fill", "Fill", "full", ["full", "gradient", "none"]),
-      bool("is_dark", "Dark image treatment"),
+      bool("monochrome", "Monochrome images", true),
+      select("theme", "Theme", "auto", ["auto", "light", "dark"]),
     ],
     a11y: "Title renders at a configurable heading level over the media.",
     notes:
-      "Mirrors the Vue Overlay API and Post fields using the same catalog mappings as Card. Reading-time metadata is not part of the source component and is omitted.",
+      "Mirrors the Vue Overlay content API and Post field mappings. Monochrome is a Strata presentation extension (default true); theme supports auto/light/dark and defaults to auto. Font group and legacy dark-image treatment are intentionally not playground controls.",
   },
   {
     id: "theme-toggle",
