@@ -207,7 +207,7 @@ test("every component is selectable and mounts a real element", async ({
     const quickPreview = page
       .locator(".quick-view-card")
       .first()
-      .locator(".quick-view-stage > *")
+      .locator(".quick-view-stage .quick-view-host > *")
       .first();
     await expect
       .poll(() => quickPreview.evaluate((el) => el.tagName.toLowerCase()), {
