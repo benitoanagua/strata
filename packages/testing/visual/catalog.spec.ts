@@ -460,7 +460,7 @@ test("single-line form controls share one control height", async ({ page }) => {
 test("global playground keeps a compact, persistent properties popover", async ({ page }) => {
   await page.goto("/#/card");
   await expect(page.getByRole("heading", { name: "Preview", exact: true })).toBeVisible();
-  const trigger = page.getByRole("button", { name: "Playground", exact: true });
+  const trigger = page.getByRole("button", { name: /Open Playground/ });
   await trigger.click();
   const popover = page.getByRole("dialog", { name: "Playground properties" });
   await expect(popover).toBeVisible();
@@ -489,7 +489,7 @@ test("Overlay playground exposes monochrome and theme instead of dark image trea
   const root = page.locator(".preview-stage > strata-overlay .strata-overlay");
   await expect(root).toHaveClass(/strata-overlay--monochrome/);
   await expect(root).toHaveClass(/strata-overlay--theme-auto/);
-  await page.getByRole("button", { name: "Playground", exact: true }).click();
+  await page.getByRole("button", { name: /Open Playground/ }).click();
   const popover = page.getByRole("dialog", { name: "Playground properties" });
   await expect(popover.getByText("Monochrome images", { exact: true })).toBeVisible();
   await expect(popover.getByText("Theme", { exact: true })).toBeVisible();
