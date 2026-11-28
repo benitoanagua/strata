@@ -110,18 +110,18 @@ describe("Vue source API parity: Card", () => {
         "media_width",
         "aspect_ratio",
         "inline_mobile",
-        "elevation",
+        "monochrome",
         "show_excerpt",
         "show_meta",
         "show_category",
         "heading",
-        "font_group",
         "icon",
       ]),
     );
     expect(entry("card").controlAllowlist).not.toEqual(
-      expect.arrayContaining(["density", "bordered", "reading_time"]),
+      expect.arrayContaining(["density", "bordered", "reading_time", "elevation", "font_group"]),
     );
+    expect(control("card", "monochrome").defaultValue).toBe(true);
   });
 
   it("preserves Vue enum choices and defaults", () => {
@@ -150,8 +150,6 @@ describe("Vue source API parity: Card", () => {
     expect(control("card", "aspect_ratio").defaultValue).toBe("monitor");
     expect(control("card", "media_align").defaultValue).toBe("left");
     expect(control("card", "inline_mobile").defaultValue).toBe(false);
-    expect(control("card", "elevation").defaultValue).toBe(false);
-    expect(control("card", "font_group").defaultValue).toBe("default");
     expect(control("card", "icon").defaultValue).toBe("none");
     expect(control("card", "is_media").defaultValue).toBe(false);
     expect(control("card", "show_meta").defaultValue).toBe(false);
@@ -174,17 +172,20 @@ describe("Vue source API parity: Overlay", () => {
         "aspect_ratio",
         "show_meta",
         "show_category",
-        "font_group",
+        "monochrome",
+        "theme",
         "align",
         "position",
         "box",
-        "is_dark",
         "fill",
       ]),
     );
     expect(entry("overlay").controlAllowlist).not.toEqual(
-      expect.arrayContaining(["reading_time"]),
+      expect.arrayContaining(["reading_time", "font_group", "is_dark"]),
     );
+    expect(control("overlay", "monochrome").defaultValue).toBe(true);
+    expect(control("overlay", "theme").defaultValue).toBe("auto");
+    expect(control("overlay", "theme").options).toEqual(["auto", "light", "dark"]);
   });
 
   it("preserves Vue enum choices and defaults", () => {
@@ -213,8 +214,6 @@ describe("Vue source API parity: Overlay", () => {
     expect(control("overlay", "position").defaultValue).toBe("center");
     expect(control("overlay", "box").defaultValue).toBe("background");
     expect(control("overlay", "fill").defaultValue).toBe("full");
-    expect(control("overlay", "is_dark").defaultValue).toBe(false);
-    expect(control("overlay", "font_group").defaultValue).toBe("default");
     expect(control("overlay", "show_meta").defaultValue).toBe(false);
     expect(control("overlay", "show_category").defaultValue).toBe(false);
   });
