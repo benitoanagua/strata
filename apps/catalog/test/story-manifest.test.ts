@@ -53,6 +53,15 @@ describe("Quick view story manifest", () => {
     }
   });
 
+  it("uses compact real content for Grille thumbnails", () => {
+    const grille = catalog.find((entry) => entry.id === "grille")!;
+    const stories = createStoryManifest(grille);
+    expect(stories.every((item) => item.slotHtml === stories[0]?.slotHtml)).toBe(
+      true,
+    );
+    expect(stories[0]?.slotHtml).toContain("min-height:56px");
+  });
+
   it("does not generate a Cartesian product of component properties", () => {
     for (const entry of catalog) {
       const controls = entry.controls;
